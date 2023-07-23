@@ -49,6 +49,9 @@ Looks quite simple, but the "magic" starts when adding a title and color. The fo
   sep: (
     dash: "dashed"
   ),
+  shadow: (
+	offset: 3pt
+  ),
   [This is an important message!],
   [Be careful outside. There are dangerous bananas!]
 )
@@ -88,6 +91,10 @@ The `showybox()` function can receive the following parameters:
 ### Separator properties
 - `width`: Separator's width
 - `dash`: Separator's style (as a `line` dash style)
+
+### Shadow properties
+- `color`: Shadow color (default is `black`)
+- `offset`: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y` (default is `3pt`)
 
 ## Known issues
 - A `break` property for showyboxes with a title would be great

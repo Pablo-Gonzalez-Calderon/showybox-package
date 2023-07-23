@@ -55,11 +55,40 @@
     width: 1pt,
     dash: "solid"
   ),
+  shadow: none,
   title: "",
   breakable: false,
   ..body
 ) = {
-  block(
+  /*
+   * Optionally create a wrapper
+   * function to add a shadow.
+   */
+  let wrap = (sbox) => sbox
+  if shadow != none {
+    if type(shadow.at("offset", default: 4pt)) != "dictionary" {
+      shadow.offset = (
+        x: shadow.at("offset", default: 4pt),
+        y: shadow.at("offset", default: 4pt)
+      )
+    }
+    wrap = (sbox) => move(
+      dx: shadow.offset.x,
+      dy: shadow.offset.y,
+      rect(
+        radius: frame.at("radius", default: 5pt),
+        fill:   shadow.at("color", default: luma(128)),
+        outset: 0pt,
+        inset:  0pt,
+        move(
+          dx:-1 * shadow.offset.x,
+          dy:-1 * shadow.offset.y,
+          sbox
+        )
+      )
+    )
+  }
+  wrap(block(
     fill: frame.at("border-color", default: black),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
@@ -74,7 +103,7 @@
       dash: frame.at("dash", default: "solid"),
       thickness: frame.at("width", default: 2pt)
     )
-  )[   
+  )[
     /*
      * Title of the showybox. We'll check if it is
      * empty. If so, skip its drawing and only put
