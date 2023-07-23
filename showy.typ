@@ -5,7 +5,7 @@
  * showy.typ -- The package's main file containing the
  * public and (more) useful functions
  *
- * This file is under the MIT license. For more 
+ * This file is under the MIT license. For more
  * information see LICENSE on the package's main folder.
  */
 
@@ -13,7 +13,7 @@
  * Function: showybox()
  *
  * Description: Creates a showybox
- * 
+ *
  * Parameters:
  * - frame:
  *   + upper-color: Color used as background color where the title goes
@@ -38,8 +38,8 @@
     upper-color: black,
     lower-color: white,
     border-color: black,
-    radius: 5pt, 
-    width: 2pt, 
+    radius: 5pt,
+    width: 2pt,
     dash: "solid"
   ),
   title-style: (
@@ -126,15 +126,15 @@
       ]
       v(-1.1em) // Avoid an inelegant space
     }
-    
+
     /*
      * Body of the showybox
      */
     #block(
       fill: frame.at("lower-color", default: white),
-      width: 100%, 
+      width: 100%,
       inset:(x: 1em, y: 0.75em),
-      radius: 
+      radius:
         if title != "" {
           (bottom: frame.at("radius", default: 5pt))
         } else {
@@ -147,7 +147,7 @@
           body.pos().join(
             align(left, // Avoid alignement errors
               line(
-                start:(-1em, 0pt), 
+                start:(-1em, 0pt),
                 end: (100% + 1em, 0pt),
                 stroke: (
                   paint: frame.at("border-color", default: black),
@@ -160,5 +160,5 @@
         )
       )
     )
-  ]
+  ])
 }
