@@ -5,7 +5,7 @@
  * showy.typ -- The package's main file containing the
  * public and (more) useful functions
  *
- * This file is under the MIT license. For more 
+ * This file is under the MIT license. For more
  * information see LICENSE on the package's main folder.
  */
 
@@ -13,7 +13,7 @@
  * Function: showybox()
  *
  * Description: Creates a showybox
- * 
+ *
  * Parameters:
  * - frame:
  *   + upper-color: Color used as background color where the title goes
@@ -38,8 +38,8 @@
     upper-color: black,
     lower-color: white,
     border-color: black,
-    radius: 5pt, 
-    width: 2pt, 
+    radius: 5pt,
+    width: 2pt,
     dash: "solid"
   ),
   title-style: (
@@ -55,11 +55,40 @@
     width: 1pt,
     dash: "solid"
   ),
+  shadow: none,
   title: "",
   breakable: false,
   ..body
 ) = {
-  block(
+  /*
+   * Optionally create a wrapper
+   * function to add a shadow.
+   */
+  let wrap = (sbox) => sbox
+  if shadow != none {
+    if type(shadow.at("offset", default: 4pt)) != "dictionary" {
+      shadow.offset = (
+        x: shadow.at("offset", default: 4pt),
+        y: shadow.at("offset", default: 4pt)
+      )
+    }
+    wrap = (sbox) => move(
+      dx: shadow.offset.x,
+      dy: shadow.offset.y,
+      rect(
+        radius: frame.at("radius", default: 5pt),
+        fill:   shadow.at("color", default: luma(128)),
+        outset: 0pt,
+        inset:  0pt,
+        move(
+          dx:-1 * shadow.offset.x,
+          dy:-1 * shadow.offset.y,
+          sbox
+        )
+      )
+    )
+  }
+  wrap(block(
     fill: frame.at("border-color", default: black),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
@@ -74,7 +103,7 @@
       dash: frame.at("dash", default: "solid"),
       thickness: frame.at("width", default: 2pt)
     )
-  )[   
+  )[
     /*
      * Title of the showybox. We'll check if it is
      * empty. If so, skip its drawing and only put
@@ -97,15 +126,15 @@
       ]
       v(-1.1em) // Avoid an inelegant space
     }
-    
+
     /*
      * Body of the showybox
      */
     #block(
       fill: frame.at("lower-color", default: white),
-      width: 100%, 
+      width: 100%,
       inset:(x: 1em, y: 0.75em),
-      radius: 
+      radius:
         if title != "" {
           (bottom: frame.at("radius", default: 5pt))
         } else {
@@ -118,7 +147,7 @@
           body.pos().join(
             align(left, // Avoid alignement errors
               line(
-                start:(-1em, 0pt), 
+                start:(-1em, 0pt),
                 end: (100% + 1em, 0pt),
                 stroke: (
                   paint: frame.at("border-color", default: black),
@@ -131,5 +160,5 @@
         )
       )
     )
-  ]
+  ])
 }
