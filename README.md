@@ -1,17 +1,19 @@
-# Showybox (v0.2.0)
+# Showybox (v0.2.1)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
+_Please note that this version (v0.2.1) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_
+
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:0.2.0": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:0.2.1": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
-By default, a box with no title, black borders, white background, and `5pt` border radius will be created.
+By default, a box with no title, no shadow, black borders, white background, and `5pt` border radius will be created.
 
 ```java
-#import "@preview/showybox:0.2.0": showybox
+#import "@preview/showybox:0.2.1": showybox
 
 #showybox(
   [Hello world!]
@@ -57,7 +59,7 @@ Looks quite simple, but the "magic" starts when adding a title and color. The fo
 )
 ```
 <h3 align="center">
-  <img alt="Further examples" src="https://i.ibb.co/n1z856C/Captura-de-pantalla-2023-07-09-003648.png" style="max-width: 100%; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Further examples" src="https://i.ibb.co/mbB2ygT/Captura-de-pantalla-2023-07-23-154439.png" style="max-width: 100%; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ## Reference
@@ -69,6 +71,7 @@ The `showybox()` function can receive the following parameters:
 - `title`: A string used as the title of the showybox
 - `body`: The content of the showybox
 - `sep`: A dictionary containing the separator's properties
+- `shadow`: A dictionary containing the shadow's properties
 - `breakable`: A boolean indicating whether a no-title showybox can break
 
 ### Frame properties
@@ -94,7 +97,7 @@ The `showybox()` function can receive the following parameters:
 
 ### Shadow properties
 - `color`: Shadow color (default is `black`)
-- `offset`: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y` (default is `3pt`)
+- `offset`: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y` (default is `4pt`)
 
 ## Known issues
 - A `break` property for showyboxes with a title would be great
@@ -133,3 +136,6 @@ May have some bugs
 - Improved code documentation
 - Enabled an auto-break functionality for non-titled showyboxes
 - Created a separator functionality to separate content inside a showybox with a horizontal line
+
+### Version 0.2.1
+- Added the `shadow` option (by Jonas Neugebauer <https://github.com/jneug>)
