@@ -85,7 +85,8 @@
   ),
   sep: (
     width: 1pt,
-    dash: "solid"
+    dash: "solid",
+    gutter: 0.65em
   ),
   shadow: none,
   title: "",
@@ -175,25 +176,27 @@
         body-style.at("align", default: left),
         text(
           body-style.at("color", default: black),
-          body.pos().join(
-            align(left, // Avoid alignement errors
-              line(
-                start:(-showy-inset(
-                  left,
-                  frame.at("lower-inset", default: frame.at("inset", default:none))
-                ), 0pt),
-                end: (100% + showy-inset(
-                  right,
-                  frame.at("lower-inset", default: frame.at("inset", default:none))
-                ), 0pt),
-                stroke: (
-                  paint: frame.at("border-color", default: black),
-                  dash: sep.at("dash", default: "solid"),
-                  thickness: sep.at("width", default: 1pt)
+          body.pos()
+            .map(block.with(spacing:0pt))
+            .join(block(spacing: sep.at("gutter", default: .65em),
+              align(left, // Avoid alignement errors
+                line(
+                  start:(-showy-inset(
+                    left,
+                    frame.at("lower-inset", default: frame.at("inset", default:none))
+                  ), 0pt),
+                  end: (100% + showy-inset(
+                    right,
+                    frame.at("lower-inset", default: frame.at("inset", default:none))
+                  ), 0pt),
+                  stroke: (
+                    paint: frame.at("border-color", default: black),
+                    dash: sep.at("dash", default: "solid"),
+                    thickness: sep.at("width", default: 1pt)
+                  )
                 )
-              )
+              ))
             )
-          )
         )
       )
     )
