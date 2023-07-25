@@ -39,7 +39,7 @@
     lower-color: white,
     border-color: black,
     radius: 5pt,
-    width: 2pt,
+    width: 1pt,
     dash: "solid"
   ),
   title-style: (
