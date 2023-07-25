@@ -1,12 +1,12 @@
-# Showybox (v0.2.1)
+# Showybox (v0.3.0)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
-_Please note that this version (v0.2.1) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_
+_Please note that this version (v.0.3.0) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:0.2.1": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:.0.3.0": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```java
-#import "@preview/showybox:0.2.1": showybox
+#import "@preview/showybox:.0.3.0": showybox
 
 #showybox(
   [Hello world!]
@@ -149,3 +149,7 @@ _All changes listed here were performed  by Jonas Neugebauer (<https://github.co
 - Added the `shadow` option 
 - Enabled auto-break (`breakable`) functionality for titled showyboxes
 - Removed a thin line that appears in showyboxes with no borders or dashed borders
+
+### Version 0.3.0
+
+- Added `lower-inset`, `upper-inset` and `inset` options
