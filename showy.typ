@@ -39,7 +39,7 @@
     lower-color: white,
     border-color: black,
     radius: 5pt,
-    width: 2pt,
+    width: 1pt,
     dash: "solid"
   ),
   title-style: (
@@ -72,36 +72,28 @@
         y: shadow.at("offset", default: 4pt)
       )
     }
-    wrap = (sbox) => move(
-      dx: shadow.offset.x,
-      dy: shadow.offset.y,
-      rect(
-        radius: frame.at("radius", default: 5pt),
-        fill:   shadow.at("color", default: luma(128)),
-        outset: 0pt,
-        inset:  0pt,
-        move(
-          dx:-1 * shadow.offset.x,
-          dy:-1 * shadow.offset.y,
-          sbox
-        )
-      )
+    wrap = (sbox) => block(
+      breakable: breakable,
+      radius: frame.at("radius", default: 5pt),
+      fill:   shadow.at("color", default: luma(128)),
+      inset: (
+        top: -shadow.offset.y,
+        left: -shadow.offset.x,
+        right: shadow.offset.x,
+        bottom: shadow.offset.y
+      ),
+      sbox
     )
   }
   wrap(block(
-    fill: frame.at("border-color", default: black),
+    fill: frame.at("lower-color", default: white),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
-    breakable: // Auto break if there's no title
-      if title != "" {
-        false
-      } else {
-        breakable
-      },
+    breakable: breakable,
     stroke: (
       paint: frame.at("border-color", default: black),
       dash: frame.at("dash", default: "solid"),
-      thickness: frame.at("width", default: 2pt)
+      thickness: frame.at("width", default: 1pt)
     )
   )[
     /*
@@ -113,7 +105,13 @@
       block(
         inset:(x: 1em, y: 0.5em),
         width: 100%,
+        spacing: 0pt,
         fill: frame.at("upper-color", default: black),
+        stroke: (
+          paint: frame.at("border-color", default: black),
+          dash: frame.at("dash", default: "solid"),
+          thickness: frame.at("width", default: 1pt)
+        ),
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
             title-style.at("align", default: left),
@@ -124,22 +122,15 @@
             )
           )
       ]
-      v(-1.1em) // Avoid an inelegant space
     }
 
     /*
      * Body of the showybox
      */
     #block(
-      fill: frame.at("lower-color", default: white),
       width: 100%,
+      spacing: 0pt,
       inset:(x: 1em, y: 0.75em),
-      radius:
-        if title != "" {
-          (bottom: frame.at("radius", default: 5pt))
-        } else {
-          frame.at("radius", default: 5pt)
-        },
       align(
         body-style.at("align", default: left),
         text(
