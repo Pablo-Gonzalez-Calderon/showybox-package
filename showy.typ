@@ -41,6 +41,7 @@
     upper-color: black,
     lower-color: white,
     border-color: black,
+    inset: (x:1em, y:.65em),
     radius: 5pt,
     width: 1pt,
     dash: "solid"
@@ -106,7 +107,11 @@
      */
     #if title != "" {
       block(
-        inset:(x: 1em, y: 0.5em),
+        inset: if "upper-inset" in frame {
+          frame.upper-inset
+        } else {
+          frame.at("inset", default:(x:1em, y:0.65em))
+        },
         width: 100%,
         spacing: 0pt,
         fill: frame.at("upper-color", default: black),
@@ -133,7 +138,11 @@
     #block(
       width: 100%,
       spacing: 0pt,
-      inset:(x: 1em, y: 0.75em),
+      inset:  if "lower-inset" in frame {
+        frame.lower-inset
+      } else {
+        frame.at("inset", default:(x:1em, y:0.65em))
+      },
       align(
         body-style.at("align", default: left),
         text(
