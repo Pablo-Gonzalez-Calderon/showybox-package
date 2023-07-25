@@ -89,19 +89,14 @@
     )
   }
   wrap(block(
-    fill: frame.at("border-color", default: black),
+    fill: frame.at("lower-color", default: white),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
-    breakable: // Auto break if there's no title
-      if title != "" {
-        false
-      } else {
-        breakable
-      },
+    breakable: breakable,
     stroke: (
       paint: frame.at("border-color", default: black),
       dash: frame.at("dash", default: "solid"),
-      thickness: frame.at("width", default: 2pt)
+      thickness: frame.at("width", default: 1pt)
     )
   )[
     /*
@@ -113,7 +108,13 @@
       block(
         inset:(x: 1em, y: 0.5em),
         width: 100%,
+        spacing: 0pt,
         fill: frame.at("upper-color", default: black),
+        stroke: (
+          paint: frame.at("border-color", default: black),
+          dash: frame.at("dash", default: "solid"),
+          thickness: frame.at("width", default: 1pt)
+        ),
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
             title-style.at("align", default: left),
@@ -124,22 +125,16 @@
             )
           )
       ]
-      v(-1.1em) // Avoid an inelegant space
     }
 
     /*
      * Body of the showybox
      */
     #block(
-      fill: frame.at("lower-color", default: white),
       width: 100%,
+      spacing: 0pt,
       inset:(x: 1em, y: 0.75em),
-      radius:
-        if title != "" {
-          (bottom: frame.at("radius", default: 5pt))
-        } else {
-          frame.at("radius", default: 5pt)
-        },
+      radius: frame.at("radius", default: 5pt),
       align(
         body-style.at("align", default: left),
         text(
