@@ -1,6 +1,9 @@
 /*
  * ShowyBox - A package for Typst
- * Pablo González Calderón (c) 2023
+ * Pablo González Calderón and Showybox Contributors (c) 2023
+ *
+ * Main Contributors:
+ * - Jonas Neugebauer (<https://github.com/jneug>)
  *
  * showy.typ -- The package's main file containing the
  * public and (more) useful functions

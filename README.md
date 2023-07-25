@@ -10,7 +10,15 @@ To use this library through the Typst package manager (for Typst 0.6.0 or greate
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
-By default, a box with no title, no shadow, black borders, white background, and `5pt` border radius will be created.
+By default a `showybox` with these properties will be created:
+
+- No title
+- No shadow
+- Not breakable
+- Black borders
+- White background
+- `5pt` of border radius
+- `1pt` of border thickness
 
 ```java
 #import "@preview/showybox:0.2.1": showybox
@@ -20,10 +28,10 @@ By default, a box with no title, no shadow, black borders, white background, and
 )
 ```
 <h3 align="center">
-  <img alt="Hello world! example" src="https://i.ibb.co/5FZ5Q32/Captura-de-pantalla-2023-07-01-152146.png" style="max-width: 100%; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Hello world! example" src="assets/hello-world-example.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
-Looks quite simple, but the "magic" starts when adding a title and color. The following code creates two "unique" boxes with defined colors and custom borders:
+Looks quite simple, but the "magic" starts when adding a title, color and shadows. The following code creates two "unique" boxes with defined colors and custom borders:
 ```java
 // First showybox
 #showybox(
@@ -59,7 +67,7 @@ Looks quite simple, but the "magic" starts when adding a title and color. The fo
 )
 ```
 <h3 align="center">
-  <img alt="Further examples" src="https://i.ibb.co/mbB2ygT/Captura-de-pantalla-2023-07-23-154439.png" style="max-width: 100%; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Further examples" src="assets/further-examples.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ## Reference
@@ -72,7 +80,7 @@ The `showybox()` function can receive the following parameters:
 - `body`: The content of the showybox
 - `sep`: A dictionary containing the separator's properties
 - `shadow`: A dictionary containing the shadow's properties
-- `breakable`: A boolean indicating whether a no-title showybox can break
+- `breakable`: A boolean indicating whether a showybox can break if it reached an end of page
 
 ### Frame properties
 - `upper-color`: Color used as background color where the title goes (default is `black`)
@@ -99,9 +107,6 @@ The `showybox()` function can receive the following parameters:
 - `color`: Shadow color (default is `black`)
 - `offset`: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y` (default is `4pt`)
 
-## Known issues
-- A `break` property for showyboxes with a title would be great
-- There's a slightly thin line in showyboxes that have no borders or dashed borders, instead of white spaces or nothing.
 
 ## Gallery
 
@@ -109,17 +114,17 @@ The `showybox()` function can receive the following parameters:
 
 May have some bugs
 <h3 align="center">
-  <img alt="Encapsulation" src="https://i.ibb.co/rmFYWhq/Captura-de-pantalla-2023-07-01-152511.png" style="max-width: 100%; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Encapsulation" src="assets/encapsulation.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ### Enabling breaking
 <h3 align="center">
-  <img alt="Enabling breakable" src="https://i.ibb.co/2kNqZ2G/Captura-de-pantalla-2023-07-09-010052.png" style="max-width: 100%; padding: 10px 10px; background-color: #E4E5EA; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Enabling breakable" src="assets/enabling-breakable.png" style="max-width: 100%; padding: 10px 10px; background-color: #E4E5EA; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ### Custom radius
 <h3 align="center">
-  <img alt="Custom radius" src="https://i.ibb.co/23xvrHt/Captura-de-pantalla-2023-07-01-152528.png" style="max-width: 100%; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Custom radius" src="assets/custom-radius.png" style="max-width: 100%; background: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ## Changelog
@@ -138,4 +143,9 @@ May have some bugs
 - Created a separator functionality to separate content inside a showybox with a horizontal line
 
 ### Version 0.2.1
-- Added the `shadow` option (by Jonas Neugebauer <https://github.com/jneug>)
+
+_All changes listed here were performed  by Jonas Neugebauer (<https://github.com/jneug>)_
+
+- Added the `shadow` option 
+- Enabled auto-break (`breakable`) functionality for titled showyboxes
+- Removed a thin line that appears in showyboxes with no borders or dashed borders
