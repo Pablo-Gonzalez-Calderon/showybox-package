@@ -72,31 +72,18 @@
         y: shadow.at("offset", default: 4pt)
       )
     }
-    if not breakable {
-      wrap = (sbox) => move(
-        dx: shadow.offset.x,
-        dy: shadow.offset.y,
-        rect(
-          radius: frame.at("radius", default: 5pt),
-          fill:   shadow.at("color", default: luma(128)),
-          outset: 0pt,
-          inset:  0pt,
-          move(
-            dx:-1 * shadow.offset.x,
-            dy:-1 * shadow.offset.y,
-            sbox
-          )
-        )
-      )
-    } else {
-      wrap = (sbox) => block(
-        breakable: breakable,
-        radius: frame.at("radius", default: 5pt),
-        fill:   shadow.at("color", default: luma(128)),
-        inset: (top:0pt, left: 0pt, right: shadow.offset.x, bottom: shadow.offset.y),
-        sbox
-      )
-    }
+    wrap = (sbox) => block(
+      breakable: breakable,
+      radius: frame.at("radius", default: 5pt),
+      fill:   shadow.at("color", default: luma(128)),
+      inset: (
+        top: -shadow.offset.y,
+        left: -shadow.offset.x,
+        right: shadow.offset.x,
+        bottom: shadow.offset.y
+      ),
+      sbox
+    )
   }
   wrap(block(
     fill: frame.at("lower-color", default: white),
