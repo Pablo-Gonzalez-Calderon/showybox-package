@@ -13,6 +13,34 @@
  */
 
 /*
+ * Function: showy-inset()
+ *
+ * Description: Helper function to get inset in a specific direction
+ *
+ * Parameters:
+ * + direction
+ * + value
+ */
+#let showy-inset( direction, value ) = {
+  direction = repr(direction)   // allows use of alignment values
+  if type(value) == "dictionary" {
+    if direction in value {
+      value.at(direction)
+    } else if direction in ("left", "right") and "x" in value {
+      value.x
+    } else if direction in ("top", "bottom") and "y" in value {
+      value.y
+    } else {
+      0pt
+    }
+  } else if value == none {
+    0pt
+  } else {
+    value
+  }
+}
+
+/*
  * Function: showybox()
  *
  * Description: Creates a showybox
@@ -150,8 +178,14 @@
           body.pos().join(
             align(left, // Avoid alignement errors
               line(
-                start:(-1em, 0pt),
-                end: (100% + 1em, 0pt),
+                start:(-showy-inset(
+                  left,
+                  frame.at("lower-inset", default: frame.at("inset", default:none))
+                ), 0pt),
+                end: (100% + showy-inset(
+                  right,
+                  frame.at("lower-inset", default: frame.at("inset", default:none))
+                ), 0pt),
                 stroke: (
                   paint: frame.at("border-color", default: black),
                   dash: sep.at("dash", default: "solid"),
