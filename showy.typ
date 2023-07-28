@@ -1,9 +1,6 @@
 /*
  * ShowyBox - A package for Typst
- * Pablo González Calderón and Showybox Contributors (c) 2023
- *
- * Main Contributors:
- * - Jonas Neugebauer (<https://github.com/jneug>)
+ * Pablo González Calderón (c) 2023
  *
  * showy.typ -- The package's main file containing the
  * public and (more) useful functions
@@ -75,18 +72,31 @@
         y: shadow.at("offset", default: 4pt)
       )
     }
-    wrap = (sbox) => block(
-      breakable: breakable,
-      radius: frame.at("radius", default: 5pt),
-      fill:   shadow.at("color", default: luma(128)),
-      inset: (
-        top: -shadow.offset.y,
-        left: -shadow.offset.x,
-        right: shadow.offset.x,
-        bottom: shadow.offset.y
-      ),
-      sbox
-    )
+    if not breakable {
+      wrap = (sbox) => move(
+        dx: shadow.offset.x,
+        dy: shadow.offset.y,
+        rect(
+          radius: frame.at("radius", default: 5pt),
+          fill:   shadow.at("color", default: luma(128)),
+          outset: 0pt,
+          inset:  0pt,
+          move(
+            dx:-1 * shadow.offset.x,
+            dy:-1 * shadow.offset.y,
+            sbox
+          )
+        )
+      )
+    } else {
+      wrap = (sbox) => block(
+        breakable: breakable,
+        radius: frame.at("radius", default: 5pt),
+        fill:   shadow.at("color", default: luma(128)),
+        inset: (top: -shadow.offset.y, left: -shadow.offset.x, right: shadow.offset.x, bottom: shadow.offset.y),
+        sbox
+      )
+    }
   }
   wrap(block(
     fill: frame.at("lower-color", default: white),
@@ -134,6 +144,12 @@
       width: 100%,
       spacing: 0pt,
       inset:(x: 1em, y: 0.75em),
+      fill: frame.at("lower-color", default: white),
+      radius: if title != "" {
+        (bottom: frame.at("radius", default: 5pt))
+      } else {
+        frame.at("radius", default: 5pt)
+      },
       align(
         body-style.at("align", default: left),
         text(
