@@ -134,6 +134,12 @@
       width: 100%,
       spacing: 0pt,
       inset:(x: 1em, y: 0.75em),
+      fill: frame.at("lower-color", default: white),
+      radius: if title != "" {
+        (bottom: frame.at("radius", default: 5pt))
+      } else {
+        frame.at("radius", default: 5pt)
+      },
       align(
         body-style.at("align", default: left),
         text(
