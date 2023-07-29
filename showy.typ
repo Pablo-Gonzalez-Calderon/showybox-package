@@ -79,7 +79,7 @@
       breakable: breakable,
       radius: frame.at("radius", default: 5pt),
       fill:   shadow.at("color", default: luma(128)),
-      inset: (
+      outset: (
         top: -shadow.offset.y,
         left: -shadow.offset.x,
         right: shadow.offset.x,
