@@ -125,11 +125,35 @@
         width: 100%,
         spacing: 0pt,
         fill: frame.at("upper-color", default: black),
-        stroke: (
-          paint: frame.at("border-color", default: black),
-          dash: frame.at("dash", default: "solid"),
-          thickness: frame.at("width", default: 1pt)
-        ),
+        stroke: if type(frame.at("width", default: 1pt)) != "dictionary" { // Set all borders at once
+          (
+            paint: frame.at("border-color", default: black),
+            dash: frame.at("dash", default: "solid"),
+            thickness: frame.at("width", default: 1pt)
+          )
+        } else { // Set each border individually
+          let prop = (:)
+          for pair in frame.at("width") {
+            prop.insert(
+              pair.at(0), // key
+              (
+                paint: frame.at("border-color", default: black),
+                dash: frame.at("dash", default: "solid"),
+                thickness: pair.at(1)
+              )
+            )
+          }
+          // Allways set bottom border to 1pt for title
+          prop.insert(
+            "bottom",
+            (
+              paint: frame.at("border-color", default: black),
+                dash: frame.at("dash", default: "solid"),
+                thickness: 1pt
+            )
+          )
+          prop
+        },
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
             title-style.at("align", default: left),
