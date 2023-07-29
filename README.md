@@ -36,10 +36,10 @@ Looks quite simple, but the "magic" starts when adding a title, color and shadow
 // First showybox
 #showybox(
   frame: (
-    upper-color: red.darken(40%),
-    lower-color: red.lighten(90%),
+    title-color: red.darken(40%),
+    body-color: red.lighten(90%),
     border-color: black,
-    width: 2pt
+    thickness: 2pt
   ),
   title: "Hello world! - An example",
   [
@@ -73,21 +73,29 @@ Looks quite simple, but the "magic" starts when adding a title, color and shadow
 ## Reference
 
 The `showybox()` function can receive the following parameters:
+- `title`: A string used as the title of the showybox
+- `footer`: A string used as the footer of the showybox
 - `frame`: A dictionary containing the frame's properties
 - `title-style`: A dictionary containing the title's styles
-- `body-styles`: A dictionary containing the body's styles
-- `title`: A string used as the title of the showybox
-- `body`: The content of the showybox
+- `body-style`: A dictionary containing the body's styles
+- `footer-style`: A dictionary containing the footer's styles
 - `sep`: A dictionary containing the separator's properties
 - `shadow`: A dictionary containing the shadow's properties
+- `width`: A relative length indicating the showybox's width
+- `align`: An unidimensional alignement for the showybox in the page
 - `breakable`: A boolean indicating whether a showybox can break if it reached an end of page
+- `spacing`: Space above and below the showybox
+- `above`: Space above the showybox
+- `below`: Space below the showybox
+- `body`: The content of the showybox
 
 ### Frame properties
-- `upper-color`: Color used as background color where the title goes (default is `black`)
-- `lower-color`: Color used as background color where the body goes (default is `white`)
+- `title-color`: Color used as background color where the title goes (default is `black`)
+- `body-color`: Color used as background color where the body goes (default is `white`)
+- `footer-color`: Color used as background color where the footer goes (default is `luma(85)`)
 - `border-color`: Color used for the showybox's border (default is `black`)
 - `radius`: Showybox's radius (default is `5pt`)
-- `width`: Border width of the showybox (default is `1pt`)
+- `thickness`: Border thickness of the showybox (default is `1pt`)
 - `dash`: Showybox's border style (default is `solid`)
 
 ### Title styles
@@ -99,9 +107,15 @@ The `showybox()` function can receive the following parameters:
 - `color`: Text color (default is `black`)
 - `align`: Text align (default is `left`)
 
+### Footer styles
+- `color`: Text color (default is `luma(85)`)
+- `weight`: Text weight (default is `regular`)
+- `align`: Text align (default is `left`)
+
 ### Separator properties
-- `width`: Separator's width
-- `dash`: Separator's style (as a `line` dash style)
+- `thickness`: Separator's thickness (default is `1pt`)
+- `dash`: Separator's style (as a `line` dash style, default is `"solid"`)
+- `gutter`: Separator's space above and below
 
 ### Shadow properties
 - `color`: Shadow color (default is `black`)
@@ -144,23 +158,21 @@ May have some bugs
 
 ### Version 0.2.1
 
-_All changes listed here were performed  by Jonas Neugebauer (<https://github.com/jneug>)_
+_All changes listed here were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 
 - Added the `shadow` option 
 - Enabled auto-break (`breakable`) functionality for titled showyboxes
 - Removed a thin line that appears in showyboxes with no borders or dashed borders
 
-### Version 0.2.2
+### Version 0.3.0
 
-- Fixed visual extra space around separators
-  - **Details:** Visually, above and below a showybox's separator, looked like there was extra space. Adding more space at top and bottom of the body fixes this visual effect.
 - Fixed shadow displacement
   - **Details:** Instead of displacing the showybox's body from the shadow, now the shadow is displaced from the body.
 
-### Version 0.3.0
+_Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 
-- Added `lower-inset`, `upper-inset` and `inset` options
-	- **Details:** `lower-inset` and `upper-inset` will set the inset of the lower and upper area respectively. `inset` is a fallback for both areas.
+- Added `title-inset`, `body-inset`, `footer-inset` and `inset` options
+	- **Details:** `title-inset`, `body-inset` and `footer-inset` will set the inset of the title, body and footer area respectively. `inset` is a fallback for those areas.
 - Added a `sep.gutter` option to set the spacing around separator lines 
 - Added option `width` to set the width of a showybox
 - Added option `align` to move a showybox with `width` < 100% along the x-axis
