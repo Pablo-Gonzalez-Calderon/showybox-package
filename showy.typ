@@ -145,6 +145,7 @@
     upper-color: black,
     lower-color: white,
     border-color: black,
+    footer-color: gray,
     inset: (x:1em, y:.65em),
     radius: 5pt,
     width: 1pt,
@@ -159,6 +160,11 @@
     color: black,
     align: left
   ),
+  footer-style: (
+    color: white,
+    weight: "regular",
+    align: left
+  ),
   sep: (
     width: 1pt,
     dash: "solid",
@@ -171,6 +177,7 @@
   // align: none, // collides with align-function
 
   title: "",
+  footer: "",
 
   ..body
 ) = {
@@ -285,6 +292,29 @@
         )
       )
     )
+
+    #if footer != "" {
+      block(
+        inset: if "footer-inset" in frame {
+          frame.upper-inset
+        } else {
+          frame.at("inset", default:(x:1em, y:0.65em))
+        },
+        width: 100%,
+        spacing: 0pt,
+        fill: frame.at("footer-color", default: luma(220)),
+        stroke: showy-stroke(frame, top:1pt),
+        radius: (bottom: frame.at("radius", default: 5pt)))[
+          #align(
+            footer-style.at("align", default: left),
+            text(
+              footer-style.at("color", default: luma(85)),
+              weight: footer-style.at("weight", default: "bold"),
+              footer
+            )
+          )
+      ]
+    }
   ]
 
   alignwrap(
