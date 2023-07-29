@@ -93,11 +93,26 @@
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
     breakable: breakable,
-    stroke: (
-      paint: frame.at("border-color", default: black),
-      dash: frame.at("dash", default: "solid"),
-      thickness: frame.at("width", default: 1pt)
-    )
+    stroke: if type(frame.at("width", default: 1pt)) != "dictionary" { // Set all borders at once
+      (
+        paint: frame.at("border-color", default: black),
+        dash: frame.at("dash", default: "solid"),
+        thickness: frame.at("width", default: 1pt)
+      )
+    } else { // Set each border individually
+      let prop = (:)
+      for pair in frame.at("width") {
+        prop.insert(
+          pair.at(0), // key
+          (
+            paint: frame.at("border-color", default: black),
+            dash: frame.at("dash", default: "solid"),
+            thickness: pair.at(1)
+          )
+        )
+      }
+      prop
+    }
   )[
     /*
      * Title of the showybox. We'll check if it is
