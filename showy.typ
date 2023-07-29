@@ -301,7 +301,7 @@
     #if footer != "" {
       block(
         inset: if "footer-inset" in frame {
-          frame.upper-inset
+          frame.footer-inset
         } else {
           frame.at("inset", default:(x:1em, y:0.65em))
         },
