@@ -1,8 +1,8 @@
-# Showybox (v0.2.1)
+# Showybox (v0.2.2)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
-<!-- _Please note that this version (v0.2.1) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_ -->
+_Please note that this version (v0.2.1) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_
 
 ## Usage
 
@@ -87,7 +87,7 @@ The `showybox()` function can receive the following parameters:
 - `lower-color`: Color used as background color where the body goes (default is `white`)
 - `border-color`: Color used for the showybox's border (default is `black`)
 - `radius`: Showybox's radius (default is `5pt`)
-- `width`: Border width of the showybox (default is `2pt`)
+- `width`: Border width of the showybox (default is `1pt`)
 - `dash`: Showybox's border style (default is `solid`)
 
 ### Title styles
@@ -149,3 +149,10 @@ _All changes listed here were performed  by Jonas Neugebauer (<https://github.co
 - Added the `shadow` option 
 - Enabled auto-break (`breakable`) functionality for titled showyboxes
 - Removed a thin line that appears in showyboxes with no borders or dashed borders
+
+### Version 0.2.2
+
+- Fixed visual extra space around separators
+  - **Details:** Visually, above and below a showybox's separator, looked like there was extra space. Adding more space at top and bottom of the body fixes this visual effect.
+- Fixed shadow displacement
+  - **Details:** Instead of displacing the showybox's body from the shadow, now the shadow is displaced from the body.
