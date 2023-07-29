@@ -145,7 +145,7 @@
     upper-color: black,
     lower-color: white,
     border-color: black,
-    footer-color: gray,
+    footer-color: luma(220),
     inset: (x:1em, y:.65em),
     radius: 5pt,
     width: 1pt,
@@ -161,7 +161,7 @@
     align: left
   ),
   footer-style: (
-    color: white,
+    color: luma(85),
     weight: "regular",
     align: left
   ),
