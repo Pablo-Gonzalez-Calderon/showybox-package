@@ -160,3 +160,10 @@ _All changes listed here were performed  by Jonas Neugebauer (<https://github.co
 ### Version 0.3.0
 
 - Added `lower-inset`, `upper-inset` and `inset` options
+	- **Details:** `lower-inset` and `upper-inset` will set the inset of the lower and upper area respectively. `inset` is a fallback for both areas.
+- Added a `sep.gutter` option to set the spacing around separator lines 
+- Added option `width` to set the width of a showybox
+- Added option `align` to move a showybox with `width` < 100% along the x-axis
+	- **Details:** A showybox is now wrapped in another block to allow alignment. This also makes it possible to pass the spacing options `spacing`, `above` and `below` to `#showybox()`.
+- Added `footer` and `footer-style` options
+	- **Details:** The optional footer is added at the bottom of the box.
