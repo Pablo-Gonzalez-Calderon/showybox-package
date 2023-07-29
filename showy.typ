@@ -314,7 +314,7 @@
             footer-style.at("align", default: left),
             text(
               footer-style.at("color", default: luma(85)),
-              weight: footer-style.at("weight", default: "bold"),
+              weight: footer-style.at("weight", default: "regular"),
               footer
             )
           )
