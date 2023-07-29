@@ -187,7 +187,7 @@
    *  Alignment wrapper
    */
   let alignprops = (:)
-  for prop in ("spacing", "above", "blow") {
+  for prop in ("spacing", "above", "below") {
     if prop in body.named() {
       alignprops.insert(prop, body.named().at(prop))
     }
