@@ -131,11 +131,31 @@
 
   width: 100%,
   breakable: false,
+  // align: none, // collides with align-function
 
   title: "",
 
   ..body
 ) = {
+  /*
+   *  Alignment wrapper
+   */
+  let alignprops = (:)
+  for prop in ("spacing", "above", "blow") {
+    if prop in body.named() {
+      alignprops.insert(prop, body.named().at(prop))
+    }
+  }
+  let alignwrap( content ) = block(
+    ..alignprops,
+    width: 100%,
+    if "align" in body.named() and body.named().align != none {
+      align(body.named().align, content)
+    } else {
+      content
+    }
+  )
+
   /*
    * Optionally create a wrapper
    * function to add a shadow.
@@ -277,5 +297,7 @@
     )
   ]
 
-  shadowwrap(showyblock)
+  alignwrap(
+    shadowwrap(showyblock)
+  )
 }
