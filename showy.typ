@@ -40,22 +40,39 @@
     value
   }
 }
+/*
+ * Function: showy-line()
+ *
+ * Description: Creates a modified `#line()` function
+ * to draw a separator line with start and end points
+ * adjusted to insets.
+ *
+ * Parameters:
+ * + frame: The dictionary with frame settings
+ */
 #let showy-line( frame ) = {
   let inset = frame.at("lower-inset", default: frame.at("inset", default:none))
-  let (start, end) = (
-    showy-inset(left, inset),
-    showy-inset(right, inset)
+  let inset = (
+    left: showy-inset(left, inset),
+    right: showy-inset(right, inset)
   )
-  if type(start) == "ratio" {
-    start = -100% * (100% / start)
+  let (start, end) = (0%, 0%)
+
+  // For relative insets the original width needs to be calculated
+  if type(inset.left) == "ratio" and type(inset.right) == "ratio" {
+    let full = 100% / (1 - float(inset.right) - float(inset.left))
+    start = -inset.left * full
+    end = full + start
+  } else if type(inset.left) == "ratio" {
+    let full = (100% + inset.right) / (1 - float(inset.left))
+    (start, end) = (-inset.left * full, 100% + inset.right)
+  } else if type(inset.right) == "ratio" {
+    let full = (100% + inset.left) / (1 - float(inset.right))
+    (start, end) = (-inset.left, full - inset.left)
   } else {
-    start = -1 * start
+    (start, end) = (-inset.left, 100% + inset.right)
   }
-  if type(end) == "ratio" {
-    end = 100% * (100% / end) //+ showy-inset(left, inset)
-  } else {
-    end = 100% + end
-  }
+
   line.with(
     start: (start, 0%),
     end: (end, 0%)
@@ -240,7 +257,7 @@
           body.pos()
             .map(block.with(spacing:0pt))
             .join(block(spacing: sep.at("gutter", default: .65em),
-              align(left, // Avoid alignement errors
+              align(left, // Avoid alignment errors
                 showy-line(frame)(
                   stroke: (
                     paint: frame.at("border-color", default: black),
