@@ -78,6 +78,40 @@
     end: (end, 0%)
   )
 }
+/*
+ * Function: showy-stroke()
+ *
+ * Description: Creates a stroke ot set of strokes
+ * to use as borders.
+ *
+ * Parameters:
+ * + frame: The dictionary with frame settings
+ */
+#let showy-stroke( frame ) = {
+  let (paint, dash, width) = (
+    frame.at("border-color", default: black),
+    frame.at("dash", default: "solid"),
+    frame.at("width", default: 1pt)
+  )
+
+  if type(width) != "dictionary" { // Set all borders at once
+    return (paint: paint, dash: dash, thickness: width)
+  } else { // Set each border individually
+    let strokes = (:)
+    for pair in width {
+      strokes.insert(
+        pair.first(), // key
+        (paint: paint, dash: dash, thickness: pair.last())
+      )
+    }
+    // Allways set bottom border to 1pt for title
+    strokes.insert(
+      "bottom",
+      (paint: paint, dash: dash, thickness: 1pt)
+    )
+    return strokes
+  }
+}
 
 /*
  * Function: showybox()
@@ -223,35 +257,7 @@
         width: 100%,
         spacing: 0pt,
         fill: frame.at("upper-color", default: black),
-        stroke: if type(frame.at("width", default: 1pt)) != "dictionary" { // Set all borders at once
-          (
-            paint: frame.at("border-color", default: black),
-            dash: frame.at("dash", default: "solid"),
-            thickness: frame.at("width", default: 1pt)
-          )
-        } else { // Set each border individually
-          let prop = (:)
-          for pair in frame.at("width") {
-            prop.insert(
-              pair.at(0), // key
-              (
-                paint: frame.at("border-color", default: black),
-                dash: frame.at("dash", default: "solid"),
-                thickness: pair.at(1)
-              )
-            )
-          }
-          // Allways set bottom border to 1pt for title
-          prop.insert(
-            "bottom",
-            (
-              paint: frame.at("border-color", default: black),
-                dash: frame.at("dash", default: "solid"),
-                thickness: 1pt
-            )
-          )
-          prop
-        },
+        stroke: showy-stroke(frame),
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
             title-style.at("align", default: left),
