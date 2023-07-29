@@ -87,30 +87,33 @@
  * Parameters:
  * + frame: The dictionary with frame settings
  */
-#let showy-stroke( frame ) = {
+#let showy-stroke( frame, ..overrides ) = {
   let (paint, dash, width) = (
     frame.at("border-color", default: black),
     frame.at("dash", default: "solid"),
     frame.at("width", default: 1pt)
   )
 
+  let strokes = (:)
   if type(width) != "dictionary" { // Set all borders at once
-    return (paint: paint, dash: dash, thickness: width)
+    for side in ("top", "bottom", "left", "right") {
+      strokes.insert(side, (paint: paint, dash: dash, thickness: width))
+    }
   } else { // Set each border individually
-    let strokes = (:)
     for pair in width {
       strokes.insert(
         pair.first(), // key
         (paint: paint, dash: dash, thickness: pair.last())
       )
     }
-    // Allways set bottom border to 1pt for title
-    strokes.insert(
-      "bottom",
-      (paint: paint, dash: dash, thickness: 1pt)
-    )
-    return strokes
   }
+  for pair in overrides.named() {
+    strokes.insert(
+      pair.first(),
+      (paint: paint, dash: dash, thickness: pair.last())
+    )
+  }
+  return strokes
 }
 
 /*
@@ -221,26 +224,7 @@
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
     breakable: breakable,
-    stroke: if type(frame.at("width", default: 1pt)) != "dictionary" { // Set all borders at once
-      (
-        paint: frame.at("border-color", default: black),
-        dash: frame.at("dash", default: "solid"),
-        thickness: frame.at("width", default: 1pt)
-      )
-    } else { // Set each border individually
-      let prop = (:)
-      for pair in frame.at("width") {
-        prop.insert(
-          pair.at(0), // key
-          (
-            paint: frame.at("border-color", default: black),
-            dash: frame.at("dash", default: "solid"),
-            thickness: pair.at(1)
-          )
-        )
-      }
-      prop
-    }
+    stroke: showy-stroke(frame)
   )[
     /*
      * Title of the showybox. We'll check if it is
@@ -257,7 +241,7 @@
         width: 100%,
         spacing: 0pt,
         fill: frame.at("upper-color", default: black),
-        stroke: showy-stroke(frame),
+        stroke: showy-stroke(frame, bottom:1pt),
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
             title-style.at("align", default: left),
