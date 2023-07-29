@@ -53,7 +53,7 @@
  * + frame: The dictionary with frame settings
  */
 #let showy-line( frame ) = {
-  let inset = frame.at("lower-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
+  let inset = frame.at("body-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
   let inset = (
     left: showy-inset(left, inset),
     right: showy-inset(right, inset)
@@ -93,7 +93,7 @@
   let (paint, dash, width) = (
     frame.at("border-color", default: black),
     frame.at("dash", default: "solid"),
-    frame.at("width", default: 1pt)
+    frame.at("thickness", default: 1pt)
   )
 
   let strokes = (:)
@@ -125,11 +125,11 @@
  *
  * Parameters:
  * - frame:
- *   + upper-color: Color used as background color where the title goes
- *   + lower-color: Color used as background color where the body goes
+ *   + title-color: Color used as background color where the title goes
+ *   + body-color: Color used as background color where the body goes
  *   + border-color: Color used for the showybox's border
  *   + radius: Showybox's radius
- *   + width: Border width of the showybox
+ *   + thickness: Border width of the showybox
  *   + dash: Showybox's border style
  * - title-style:
  *   + color: Text color
@@ -144,13 +144,13 @@
  */
  #let showybox(
   frame: (
-    upper-color: black,
-    lower-color: white,
+    title-color: black,
+    body-color: white,
     border-color: black,
     footer-color: luma(220),
     inset: (x:1em, y:.65em),
     radius: 5pt,
-    width: 1pt,
+    thickness: 1pt,
     dash: "solid"
   ),
   title-style: (
@@ -229,7 +229,7 @@
   }
   let showyblock = block(
     width: width,
-    fill: frame.at("lower-color", default: white),
+    fill: frame.at("body-color", default: white),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
     breakable: breakable,
@@ -242,14 +242,14 @@
      */
     #if title != "" {
       block(
-        inset: if "upper-inset" in frame {
-          frame.upper-inset
+        inset: if "title-inset" in frame {
+          frame.title-inset
         } else {
           frame.at("inset", default:(x:1em, y:0.65em))
         },
         width: 100%,
         spacing: 0pt,
-        fill: frame.at("upper-color", default: black),
+        fill: frame.at("title-color", default: black),
         stroke: showy-stroke(frame, bottom:1pt),
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
@@ -269,8 +269,8 @@
     #block(
       width: 100%,
       spacing: 0pt,
-      inset:  if "lower-inset" in frame {
-        frame.lower-inset
+      inset:  if "body-inset" in frame {
+        frame.body-inset
       } else {
         frame.at("inset", default:(x:1em, y:0.65em))
       },
@@ -286,7 +286,7 @@
                   stroke: (
                     paint: frame.at("border-color", default: black),
                     dash: sep.at("dash", default: "solid"),
-                    thickness: sep.at("width", default: 1pt)
+                    thickness: sep.at("thickness", default: 1pt)
                   )
                 )
               ))
