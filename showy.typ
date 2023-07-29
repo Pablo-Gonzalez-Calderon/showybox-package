@@ -51,7 +51,7 @@
  * + frame: The dictionary with frame settings
  */
 #let showy-line( frame ) = {
-  let inset = frame.at("lower-inset", default: frame.at("inset", default:none))
+  let inset = frame.at("lower-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
   let inset = (
     left: showy-inset(left, inset),
     right: showy-inset(right, inset)
