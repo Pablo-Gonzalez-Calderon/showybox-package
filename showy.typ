@@ -31,6 +31,8 @@
       value.x
     } else if direction in ("top", "bottom") and "y" in value {
       value.y
+    } else  if "rest" in value {
+      value.rest
     } else {
       0pt
     }
