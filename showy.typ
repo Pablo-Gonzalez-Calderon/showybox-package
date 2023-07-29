@@ -128,8 +128,12 @@
     gutter: 0.65em
   ),
   shadow: none,
-  title: "",
+
+  width: 100%,
   breakable: false,
+
+  title: "",
+
   ..body
 ) = {
   /*
@@ -158,6 +162,7 @@
     )
   }
   let showyblock = block(
+    width: width,
     fill: frame.at("lower-color", default: white),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
