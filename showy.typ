@@ -39,6 +39,27 @@
     value
   }
 }
+#let showy-line( frame ) = {
+  let inset = frame.at("lower-inset", default: frame.at("inset", default:none))
+  let (start, end) = (
+    showy-inset(left, inset),
+    showy-inset(right, inset)
+  )
+  if type(start) == "ratio" {
+    start = -100% * (100% / start)
+  } else {
+    start = -1 * start
+  }
+  if type(end) == "ratio" {
+    end = 100% * (100% / end) //+ showy-inset(left, inset)
+  } else {
+    end = 100% + end
+  }
+  line.with(
+    start: (start, 0%),
+    end: (end, 0%)
+  )
+}
 
 /*
  * Function: showybox()
@@ -97,7 +118,7 @@
    * Optionally create a wrapper
    * function to add a shadow.
    */
-  let wrap = (sbox) => sbox
+  let shadowwrap = (sbox) => sbox
   if shadow != none {
     if type(shadow.at("offset", default: 4pt)) != "dictionary" {
       shadow.offset = (
@@ -105,7 +126,7 @@
         y: shadow.at("offset", default: 4pt)
       )
     }
-    wrap = (sbox) => block(
+    shadowwrap = (sbox) => block(
       breakable: breakable,
       radius: frame.at("radius", default: 5pt),
       fill:   shadow.at("color", default: luma(128)),
@@ -118,7 +139,7 @@
       sbox
     )
   }
-  wrap(block(
+  let showyblock = block(
     fill: frame.at("lower-color", default: white),
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
@@ -180,15 +201,7 @@
             .map(block.with(spacing:0pt))
             .join(block(spacing: sep.at("gutter", default: .65em),
               align(left, // Avoid alignement errors
-                line(
-                  start:(-showy-inset(
-                    left,
-                    frame.at("lower-inset", default: frame.at("inset", default:none))
-                  ), 0pt),
-                  end: (100% + showy-inset(
-                    right,
-                    frame.at("lower-inset", default: frame.at("inset", default:none))
-                  ), 0pt),
+                showy-line(frame)(
                   stroke: (
                     paint: frame.at("border-color", default: black),
                     dash: sep.at("dash", default: "solid"),
@@ -200,5 +213,7 @@
         )
       )
     )
-  ])
+  ]
+
+  shadowwrap(showyblock)
 }
