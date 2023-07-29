@@ -1,3 +1,4 @@
+
 /*
  * ShowyBox - A package for Typst
  * Pablo González Calderón and Showybox Contributors (c) 2023
@@ -85,7 +86,7 @@
  *   + width: Separator's width
  *   + dash: Separator's style (as a 'line' dash style)
  */
-#let showybox(
+ #let showybox(
   frame: (
     upper-color: black,
     lower-color: white,
@@ -130,7 +131,7 @@
       breakable: breakable,
       radius: frame.at("radius", default: 5pt),
       fill:   shadow.at("color", default: luma(128)),
-      inset: (
+      outset: (
         top: -shadow.offset.y,
         left: -shadow.offset.x,
         right: shadow.offset.x,
@@ -144,11 +145,26 @@
     radius: frame.at("radius", default: 5pt),
     inset: 0pt,
     breakable: breakable,
-    stroke: (
-      paint: frame.at("border-color", default: black),
-      dash: frame.at("dash", default: "solid"),
-      thickness: frame.at("width", default: 1pt)
-    )
+    stroke: if type(frame.at("width", default: 1pt)) != "dictionary" { // Set all borders at once
+      (
+        paint: frame.at("border-color", default: black),
+        dash: frame.at("dash", default: "solid"),
+        thickness: frame.at("width", default: 1pt)
+      )
+    } else { // Set each border individually
+      let prop = (:)
+      for pair in frame.at("width") {
+        prop.insert(
+          pair.at(0), // key
+          (
+            paint: frame.at("border-color", default: black),
+            dash: frame.at("dash", default: "solid"),
+            thickness: pair.at(1)
+          )
+        )
+      }
+      prop
+    }
   )[
     /*
      * Title of the showybox. We'll check if it is
@@ -165,11 +181,35 @@
         width: 100%,
         spacing: 0pt,
         fill: frame.at("upper-color", default: black),
-        stroke: (
-          paint: frame.at("border-color", default: black),
-          dash: frame.at("dash", default: "solid"),
-          thickness: frame.at("width", default: 1pt)
-        ),
+        stroke: if type(frame.at("width", default: 1pt)) != "dictionary" { // Set all borders at once
+          (
+            paint: frame.at("border-color", default: black),
+            dash: frame.at("dash", default: "solid"),
+            thickness: frame.at("width", default: 1pt)
+          )
+        } else { // Set each border individually
+          let prop = (:)
+          for pair in frame.at("width") {
+            prop.insert(
+              pair.at(0), // key
+              (
+                paint: frame.at("border-color", default: black),
+                dash: frame.at("dash", default: "solid"),
+                thickness: pair.at(1)
+              )
+            )
+          }
+          // Allways set bottom border to 1pt for title
+          prop.insert(
+            "bottom",
+            (
+              paint: frame.at("border-color", default: black),
+                dash: frame.at("dash", default: "solid"),
+                thickness: 1pt
+            )
+          )
+          prop
+        },
         radius: (top: frame.at("radius", default: 5pt)))[
           #align(
             title-style.at("align", default: left),
