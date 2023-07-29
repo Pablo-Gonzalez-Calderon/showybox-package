@@ -1,6 +1,6 @@
 [package]
 name = "showybox"
-version = "0.2.1"
+version = "0.3.0"
 entrypoint = "showy.typ"
 authors = ["Pablo González Calderón", "Showybox Contributors"]
 license = "MIT"

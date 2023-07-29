@@ -1,12 +1,12 @@
-# Showybox (v0.2.2)
+# Showybox (v0.3.0)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
-_Please note that this version (v0.2.1) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_
+_Please note that this version (v.0.3.0) **isn't yet published at Typst's official package repository**. If you want to use this package, see https://github.com/typst/packages/tree/main/packages/preview for the latest stable version_
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:0.2.1": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:.0.3.0": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```java
-#import "@preview/showybox:0.2.1": showybox
+#import "@preview/showybox:.0.3.0": showybox
 
 #showybox(
   [Hello world!]
@@ -156,3 +156,14 @@ _All changes listed here were performed  by Jonas Neugebauer (<https://github.co
   - **Details:** Visually, above and below a showybox's separator, looked like there was extra space. Adding more space at top and bottom of the body fixes this visual effect.
 - Fixed shadow displacement
   - **Details:** Instead of displacing the showybox's body from the shadow, now the shadow is displaced from the body.
+
+### Version 0.3.0
+
+- Added `lower-inset`, `upper-inset` and `inset` options
+	- **Details:** `lower-inset` and `upper-inset` will set the inset of the lower and upper area respectively. `inset` is a fallback for both areas.
+- Added a `sep.gutter` option to set the spacing around separator lines 
+- Added option `width` to set the width of a showybox
+- Added option `align` to move a showybox with `width` < 100% along the x-axis
+	- **Details:** A showybox is now wrapped in another block to allow alignment. This also makes it possible to pass the spacing options `spacing`, `above` and `below` to `#showybox()`.
+- Added `footer` and `footer-style` options
+	- **Details:** The optional footer is added at the bottom of the box.
