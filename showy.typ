@@ -295,6 +295,9 @@
       )
     )
 
+    /*
+     * Footer of the showybox
+     */
     #if footer != "" {
       block(
         inset: if "footer-inset" in frame {
