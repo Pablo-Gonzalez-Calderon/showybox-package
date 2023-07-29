@@ -83,7 +83,7 @@
 /*
  * Function: showy-stroke()
  *
- * Description: Creates a stroke ot set of strokes
+ * Description: Creates a stroke or set of strokes
  * to use as borders.
  *
  * Parameters:
