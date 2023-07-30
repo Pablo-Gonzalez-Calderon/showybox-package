@@ -1,4 +1,4 @@
-# Showybox (v1.0.0)
+# Showybox (v1.1.0)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this version (v.0.3.0) **isn't yet published at Typst's offici
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.0.0": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.1.0": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```java
-#import "@preview/showybox:1.0.0": showybox
+#import "@preview/showybox:1.1.0": showybox
 
 #showybox(
   [Hello world!]
@@ -102,6 +102,8 @@ The `showybox()` function can receive the following parameters:
 - `color`: Text color (default is `white`)
 - `weight`: Text weight (default is `bold`)
 - `align`: Text align (default is `left`)
+- `boxed`: Wether the title occupies the whole showybox width or appears like a "floating box" above the showybox (default is `false`)
+- `boxed-align`: If `boxed` is `true`, the alignement of the boxed title (default is `left`)
 
 ### Body styles
 - `color`: Text color (default is `black`)
@@ -123,6 +125,12 @@ The `showybox()` function can receive the following parameters:
 
 
 ## Gallery
+
+### Boxed title and custom width
+
+<h3 align="center">
+  <img alt="Encapsulation" src="assets/width-and-boxed-title.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+</h3>
 
 ### Encapsulation
 
@@ -179,3 +187,7 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 	- **Details:** A showybox is now wrapped in another block to allow alignment. This also makes it possible to pass the spacing options `spacing`, `above` and `below` to `#showybox()`.
 - Added `footer` and `footer-style` options
 	- **Details:** The optional footer is added at the bottom of the box.
+
+### Version 1.1.0
+- Added `boxed` option in title styles
+- Added `boxed-align` in title styles
