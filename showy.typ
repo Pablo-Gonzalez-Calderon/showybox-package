@@ -135,13 +135,38 @@
   }
 
   /*
-   * Optionally create a wrapper
+   * Optionally create two wrapper
    * function for `boxed` titles
    */
   let boxedwrap = (tbox) => tbox
+  let boxedshadowwrap = (tbox) => tbox
   if title-style.at("boxed", default: false) {
     let boxed-align = title-style.at("boxed-align", default: left)
-    
+  
+    // Shadow
+    if shadow != none {
+      boxedshadowwrap = (tbox) => style(styles => {
+        let title-size = measure(title, styles)
+        let bottom-outset = title-size.height/2 + showy-inset(top, showy-section-inset("body", frame)) + (frame.at("thickness", default: 1pt)/2 - 0.5pt)
+        
+        block(
+          radius: (
+            top: frame.at("radius", default: 5pt),
+            bottom: 0pt
+          ),
+          fill:   shadow.at("color", default: luma(128)),
+          outset: (
+              top: -shadow.offset.y,
+              left: -shadow.offset.x,
+              right: shadow.offset.x,
+              bottom: -bottom-outset
+            ),
+          tbox
+        )
+      })
+    }
+
+    // Alignement
     boxedwrap = (tbox) => block(
       spacing: 0pt,
       width: 100%,
@@ -152,7 +177,7 @@
       } else {
         0pt
       },
-      align(title-style.at("boxed-align"), tbox)
+      boxedshadowwrap(align(title-style.at("boxed-align"), tbox))
     )
   }
   
