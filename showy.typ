@@ -1,3 +1,4 @@
+
 /*
  * ShowyBox - A package for Typst
  * Pablo González Calderón and Showybox Contributors (c) 2023
@@ -13,9 +14,109 @@
  */
 
 /*
- * Import functions
+ * Function: showy-inset()
+ *
+ * Description: Helper function to get inset in a specific direction
+ *
+ * Parameters:
+ * + direction
+ * + value
  */
-#import "lib/func.typ": *
+#let showy-inset( direction, value ) = {
+  direction = repr(direction)   // allows use of alignment values
+  if type(value) == "dictionary" {
+    if direction in value {
+      value.at(direction)
+    } else if direction in ("left", "right") and "x" in value {
+      value.x
+    } else if direction in ("top", "bottom") and "y" in value {
+      value.y
+    } else  if "rest" in value {
+      value.rest
+    } else {
+      0pt
+    }
+  } else if value == none {
+    0pt
+  } else {
+    value
+  }
+}
+/*
+ * Function: showy-line()
+ *
+ * Description: Creates a modified `#line()` function
+ * to draw a separator line with start and end points
+ * adjusted to insets.
+ *
+ * Parameters:
+ * + frame: The dictionary with frame settings
+ */
+#let showy-line( frame ) = {
+  let inset = frame.at("body-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
+  let inset = (
+    left: showy-inset(left, inset),
+    right: showy-inset(right, inset)
+  )
+  let (start, end) = (0%, 0%)
+
+  // For relative insets the original width needs to be calculated
+  if type(inset.left) == "ratio" and type(inset.right) == "ratio" {
+    let full = 100% / (1 - float(inset.right) - float(inset.left))
+    start = -inset.left * full
+    end = full + start
+  } else if type(inset.left) == "ratio" {
+    let full = (100% + inset.right) / (1 - float(inset.left))
+    (start, end) = (-inset.left * full, 100% + inset.right)
+  } else if type(inset.right) == "ratio" {
+    let full = (100% + inset.left) / (1 - float(inset.right))
+    (start, end) = (-inset.left, full - inset.left)
+  } else {
+    (start, end) = (-inset.left, 100% + inset.right)
+  }
+
+  line.with(
+    start: (start, 0%),
+    end: (end, 0%)
+  )
+}
+/*
+ * Function: showy-stroke()
+ *
+ * Description: Creates a stroke or set of strokes
+ * to use as borders.
+ *
+ * Parameters:
+ * + frame: The dictionary with frame settings
+ */
+#let showy-stroke( frame, ..overrides ) = {
+  let (paint, dash, width) = (
+    frame.at("border-color", default: black),
+    frame.at("dash", default: "solid"),
+    frame.at("thickness", default: 1pt)
+  )
+
+  let strokes = (:)
+  if type(width) != "dictionary" { // Set all borders at once
+    for side in ("top", "bottom", "left", "right") {
+      strokes.insert(side, (paint: paint, dash: dash, thickness: width))
+    }
+  } else { // Set each border individually
+    for pair in width {
+      strokes.insert(
+        pair.first(), // key
+        (paint: paint, dash: dash, thickness: pair.last())
+      )
+    }
+  }
+  for pair in overrides.named() {
+    strokes.insert(
+      pair.first(),
+      (paint: paint, dash: dash, thickness: pair.last())
+    )
+  }
+  return strokes
+}
 
 /*
  * Function: showybox()
@@ -113,136 +214,113 @@
         y: shadow.at("offset", default: 4pt)
       )
     }
-    shadowwrap = (sbox) => style(styles => {
-        let title-size = measure(title, styles)
-        
-        block(
-          breakable: breakable,
-          radius: frame.at("radius", default: 5pt),
-          fill:   shadow.at("color", default: luma(128)),
-          outset: (
-              left: -shadow.offset.x,
-              right: shadow.offset.x,
-              bottom: shadow.offset.y
-          ) + if title != "" and title-style.at("boxed", default: false) {
-            (top: -(shadow.offset.y + title-size.height/2 + showy-inset(top, showy-section-inset("body", frame))))
-          } else {
-            (top: -shadow.offset.y)
-          },
-          sbox
-        )
-      })
-  }
-
-  /*
-   * Optionally create a wrapper
-   * function for `boxed` titles
-   */
-  let boxedwrap = (tbox) => tbox
-  if title-style.at("boxed", default: false) {
-    let boxed-align = title-style.at("boxed-align", default: left)
-    
-    boxedwrap = (tbox) => block(
-      spacing: 0pt,
-      width: 100%,
-      inset: if boxed-align == left {
-        (left: 1em)
-      } else if boxed-align == right {
-        (right: 1em)
-      } else {
-        0pt
-      },
-      align(title-style.at("boxed-align"), tbox)
+    shadowwrap = (sbox) => block(
+      breakable: breakable,
+      radius: frame.at("radius", default: 5pt),
+      fill:   shadow.at("color", default: luma(128)),
+      outset: (
+        top: -shadow.offset.y,
+        left: -shadow.offset.x,
+        right: shadow.offset.x,
+        bottom: shadow.offset.y
+      ),
+      sbox
     )
   }
-  
-  let showyblock = style(styles => {
-    let title-size = measure(title, styles)
-    
-    block(
-      width: width,
-      fill: frame.at("body-color", default: white),
-      radius: frame.at("radius", default: 5pt),
-      inset: 0pt,
-      outset: if title-style.at("boxed", default: false) and title != "" {
-        // Get mid position by substracting title's half height plus
-        // body's top inset
-        (top: -(title-size.height/2 + showy-inset(top, showy-section-inset("body", frame))))
-      } else {
-        0pt
-      },
-      breakable: breakable,
-      stroke: showy-stroke(frame)
-    )[
-      /*
-       * Title of the showybox
-       */
-      #if title != "" {
-        boxedwrap(
-          block(..showy-title(frame, title-style))[
-            #align(
-              title-style.at("align", default: left),
-              text(
-                title-style.at("color", default: white),
-                weight: title-style.at("weight", default: "bold"),
-                title
-              )
-            )
-          ]
-        )
-      }
-    
-      /*
-       * Body of the showybox
-       */
-      #block(
+  let showyblock = block(
+    width: width,
+    fill: frame.at("body-color", default: white),
+    radius: frame.at("radius", default: 5pt),
+    inset: 0pt,
+    breakable: breakable,
+    stroke: showy-stroke(frame)
+  )[
+    /*
+     * Title of the showybox. We'll check if it is
+     * empty. If so, skip its drawing and only put
+     * the body
+     */
+    #if title != "" {
+      block(
+        inset: if "title-inset" in frame {
+          frame.title-inset
+        } else {
+          frame.at("inset", default:(x:1em, y:0.65em))
+        },
         width: 100%,
         spacing: 0pt,
-        inset:  showy-section-inset("body", frame),
-        align(
-          body-style.at("align", default: left),
-          text(
-            body-style.at("color", default: black),
-            body.pos()
-              .map(block.with(spacing:0pt))
-              .join(block(spacing: sep.at("gutter", default: .65em),
-                align(left, // Avoid alignment errors
-                  showy-line(frame)(
-                    stroke: (
-                      paint: frame.at("border-color", default: black),
-                      dash: sep.at("dash", default: "solid"),
-                      thickness: sep.at("thickness", default: 1pt)
-                    )
-                  )
-                ))
-              )
+        fill: frame.at("title-color", default: black),
+        stroke: showy-stroke(frame, bottom:1pt),
+        radius: (top: frame.at("radius", default: 5pt)))[
+          #align(
+            title-style.at("align", default: left),
+            text(
+              title-style.at("color", default: white),
+              weight: title-style.at("weight", default: "bold"),
+              title
+            )
           )
+      ]
+    }
+
+    /*
+     * Body of the showybox
+     */
+    #block(
+      width: 100%,
+      spacing: 0pt,
+      inset:  if "body-inset" in frame {
+        frame.body-inset
+      } else {
+        frame.at("inset", default:(x:1em, y:0.65em))
+      },
+      align(
+        body-style.at("align", default: left),
+        text(
+          body-style.at("color", default: black),
+          body.pos()
+            .map(block.with(spacing:0pt))
+            .join(block(spacing: sep.at("gutter", default: .65em),
+              align(left, // Avoid alignment errors
+                showy-line(frame)(
+                  stroke: (
+                    paint: frame.at("border-color", default: black),
+                    dash: sep.at("dash", default: "solid"),
+                    thickness: sep.at("thickness", default: 1pt)
+                  )
+                )
+              ))
+            )
         )
       )
-    
-      /*
-       * Footer of the showybox
-       */
-      #if footer != "" {
-        block(
-          inset: showy-section-inset("footer", frame),
-          width: 100%,
-          spacing: 0pt,
-          fill: frame.at("footer-color", default: luma(220)),
-          stroke: showy-stroke(frame, top:1pt),
-          radius: (bottom: frame.at("radius", default: 5pt)))[
-            #align(
-              footer-style.at("align", default: left),
-              text(
-                footer-style.at("color", default: luma(85)),
-                weight: footer-style.at("weight", default: "regular"),
-                footer
-              )
+    )
+
+    /*
+     * Footer of the showybox
+     */
+    #if footer != "" {
+      block(
+        inset: if "footer-inset" in frame {
+          frame.footer-inset
+        } else {
+          frame.at("inset", default:(x:1em, y:0.65em))
+        },
+        width: 100%,
+        spacing: 0pt,
+        fill: frame.at("footer-color", default: luma(220)),
+        stroke: showy-stroke(frame, top:1pt),
+        radius: (bottom: frame.at("radius", default: 5pt)))[
+          #align(
+            footer-style.at("align", default: left),
+            text(
+              footer-style.at("color", default: luma(85)),
+              weight: footer-style.at("weight", default: "regular"),
+              footer
             )
-        ]
-      }
-    ]
-  })
+          )
+      ]
+    }
+  ]
 
   alignwrap(
     shadowwrap(showyblock)
