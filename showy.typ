@@ -177,7 +177,7 @@
       } else {
         0pt
       },
-      boxedshadowwrap(align(title-style.at("boxed-align"), tbox))
+      align(boxed-align, boxedshadowwrap(tbox))
     )
   }
   
