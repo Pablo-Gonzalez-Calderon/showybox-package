@@ -137,13 +137,15 @@
  * Function: showy-title()
  *
  * Description: Sets the title's block properties
- * depending if it's `boxed` or not
+ * depending if it's `boxed` or not and returns
+ * the title as a styled block
  *
  * Parameters:
  * + frame: The dictionary with frame settings
  * + title-styles: The dictionary with title styles
+ * + title: Title of the showybox
  */
-#let showy-title( frame, title-style ) = {
+#let showy-title( frame, title-style, title ) = {
   /*
    * Porperties independent of `boxed`
    */
@@ -171,5 +173,15 @@
     )
   }
 
-  return props
+  return block(
+    ..props,
+    align(
+      title-style.at("align", default: left),
+      text(
+        title-style.at("color", default: white),
+        weight: title-style.at("weight", default: "bold"),
+        title
+      )
+    )
+  )
 }

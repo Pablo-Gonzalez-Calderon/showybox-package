@@ -81,7 +81,20 @@
   footer: "",
 
   ..body
-) = {
+) = style(styles => {
+  /*
+   * Useful booleans
+   */
+  let titled = (title != "")
+  let boxed = title-style.at("boxed", default: false)
+
+  /*
+   * Useful sizes and alignements
+   */
+  let title-size = measure(title, styles)
+  let title-block-size = title-size.height + showy-inset(top, showy-section-inset("title", frame)) + showy-inset(bottom, showy-section-inset("title", frame))
+  let boxed-align = title-style.at("boxed-align", default: left)
+  
   /*
    *  Alignment wrapper
    */
@@ -107,116 +120,70 @@
    */
   let shadowwrap = (sbox) => sbox
   if shadow != none {
+    /* Since we cannot modify a exxtern variable from style(), 
+       define a local variable for shadow values, called d-shadow */
+    let d-shadow = shadow
+    
     if type(shadow.at("offset", default: 4pt)) != "dictionary" {
-      shadow.offset = (
+      d-shadow.offset = (
         x: shadow.at("offset", default: 4pt),
         y: shadow.at("offset", default: 4pt)
       )
     }
-    shadowwrap = (sbox) => style(styles => {
-        let title-size = measure(title, styles)
-        
-        block(
-          breakable: breakable,
-          radius: frame.at("radius", default: 5pt),
-          fill:   shadow.at("color", default: luma(128)),
-          outset: (
-              left: -shadow.offset.x,
-              right: shadow.offset.x,
-              bottom: shadow.offset.y
-          ) + if title != "" and title-style.at("boxed", default: false) {
-            (top: -(shadow.offset.y + title-size.height/2 + showy-inset(top, showy-section-inset("body", frame))))
-          } else {
-            (top: -shadow.offset.y)
-          },
-          sbox
-        )
-      })
+    shadowwrap = (sbox) => {
+      block(
+        breakable: breakable,
+        radius: frame.at("radius", default: 5pt),
+        fill:   shadow.at("color", default: luma(128)),
+        spacing: 0pt,
+        outset: (
+          left: -d-shadow.offset.x,
+          right: d-shadow.offset.x,
+          bottom: d-shadow.offset.y,
+          top: -d-shadow.offset.y 
+        ),
+        sbox
+      )
+    }
   }
-
-  /*
-   * Optionally create two wrapper
-   * function for `boxed` titles
-   */
-  let boxedwrap = (tbox) => tbox
-  let boxedshadowwrap = (tbox) => tbox
-  if title-style.at("boxed", default: false) {
-    let boxed-align = title-style.at("boxed-align", default: left)
   
-    // Shadow
-    if shadow != none {
-      boxedshadowwrap = (tbox) => style(styles => {
-        let title-size = measure(title, styles)
-        let bottom-outset = title-size.height/2 + showy-inset(top, showy-section-inset("body", frame)) + (frame.at("thickness", default: 1pt)/2 - 0.5pt)
-        
-        block(
-          radius: (
-            top: frame.at("radius", default: 5pt),
-            bottom: 0pt
-          ),
-          fill:   shadow.at("color", default: luma(128)),
-          outset: (
-              top: -shadow.offset.y,
-              left: -shadow.offset.x,
-              right: shadow.offset.x,
-              bottom: -bottom-outset
-            ),
-          tbox
-        )
-      })
+  let showyblock = {
+
+    if titled and boxed{
+      v(title-block-size -.5em)
     }
 
-    // Alignement
-    boxedwrap = (tbox) => block(
-      spacing: 0pt,
-      width: 100%,
-      inset: if boxed-align == left {
-        (left: 1em)
-      } else if boxed-align == right {
-        (right: 1em)
-      } else {
-        0pt
-      },
-      align(boxed-align, boxedshadowwrap(tbox))
-    )
-  }
-  
-  let showyblock = style(styles => {
-    let title-size = measure(title, styles)
-    
     block(
       width: width,
       fill: frame.at("body-color", default: white),
       radius: frame.at("radius", default: 5pt),
       inset: 0pt,
-      outset: if title-style.at("boxed", default: false) and title != "" {
-        // Get mid position by substracting title's half height plus
-        // body's top inset
-        (top: -(title-size.height/2 + showy-inset(top, showy-section-inset("body", frame))))
-      } else {
-        0pt
-      },
+      spacing: 0pt,
       breakable: breakable,
       stroke: showy-stroke(frame)
     )[
       /*
        * Title of the showybox
        */
-      #if title != "" {
-        boxedwrap(
-          block(..showy-title(frame, title-style))[
-            #align(
-              title-style.at("align", default: left),
-              text(
-                title-style.at("color", default: white),
-                weight: title-style.at("weight", default: "bold"),
-                title
-              )
-            )
-          ]
+      #if titled and not boxed {
+        showy-title(frame, title-style, title)
+      } else if titled and boxed {        
+        // Leave some space for putting a boxed title
+        v(1em)
+        place(
+          top + boxed-align,
+          dy: -(title-block-size - 1em),
+          dx: if boxed-align == left {
+            1em
+          } else if boxed-align == right {
+            -1em
+          } else {
+            0pt
+          },
+          showy-title(frame, title-style, title)
         )
       }
-    
+      
       /*
        * Body of the showybox
        */
@@ -267,9 +234,9 @@
         ]
       }
     ]
-  })
+  }
 
   alignwrap(
     shadowwrap(showyblock)
   )
-}
+})
