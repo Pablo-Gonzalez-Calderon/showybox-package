@@ -131,6 +131,14 @@
       )
     }
     shadowwrap = (sbox) => {
+      let sbox-size = measure(sbox, styles)
+
+      /* If it has a boxed title, leave some space to avoid collisions
+         with other elements next to the showybox*/
+      if titled and boxed {
+        v(title-block-size - .5em)
+      }
+      
       block(
         breakable: breakable,
         radius: frame.at("radius", default: 5pt),
@@ -142,7 +150,15 @@
           bottom: d-shadow.offset.y,
           top: -d-shadow.offset.y 
         ),
-        sbox
+        /* If it have a boxed title, substract some space to
+           avoid the shadow to be body + title height, and only
+           body height */
+        if titled and boxed {
+          v(-(title-block-size - .5em))
+          sbox
+        } else {
+          sbox
+        }
       )
     }
   }
