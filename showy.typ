@@ -92,7 +92,7 @@
    * Useful sizes and alignements
    */
   let title-size = measure(title, styles)
-  let title-block-size = title-size.height + showy-inset(top, showy-section-inset("title", frame)) + showy-inset(bottom, showy-section-inset("title", frame))
+  let title-block-height = title-size.height + showy-inset(top, showy-section-inset("title", frame)) + showy-inset(bottom, showy-section-inset("title", frame))
   let boxed-align = title-style.at("boxed-align", default: left)
   
   /*
@@ -115,10 +115,11 @@
   )
 
   /*
-   * Optionally create a wrapper
-   * function to add a shadow.
+   * Optionally create one or two wrapper
+   * functions to add a shadow.
    */
   let shadowwrap = (sbox) => sbox
+  let boxedtitleshadowwrap = (tbox) => tbox
   if shadow != none {
     /* Since we cannot modify a exxtern variable from style(), 
        define a local variable for shadow values, called d-shadow */
@@ -136,7 +137,7 @@
       /* If it has a boxed title, leave some space to avoid collisions
          with other elements next to the showybox*/
       if titled and boxed {
-        v(title-block-size - .5em)
+        v(title-block-height - 10pt)
       }
       
       block(
@@ -154,11 +155,35 @@
            avoid the shadow to be body + title height, and only
            body height */
         if titled and boxed {
-          v(-(title-block-size - .5em))
+          v(-(title-block-height - 10pt))
           sbox
         } else {
           sbox
         }
+      )
+    }
+
+    if titled and boxed {
+      /* Due to some uncontrolable spaces between blocks, there's the need
+         of adding an offset to `bottom-outset` to avoid an unwanted space
+         between the boxed-title shadow and the body. Hopefully in the
+         future a more pure-mathematically formula will be found. At the
+         moment, this 'trick' solves all cases where a showybox title has
+         only one line of heights */
+      let bottom-outset = 10pt + frame.at("thickness", default: 1pt)/2 - .15pt
+      
+      boxedtitleshadowwrap = (tbox) => block(
+        breakable: breakable,
+        radius: (top: frame.at("radius", default: 5pt)),
+        fill:   shadow.at("color", default: luma(128)),
+        spacing: 0pt,
+        outset: (
+          left: -d-shadow.offset.x,
+          right: d-shadow.offset.x,
+          top: -d-shadow.offset.y,
+          bottom: -bottom-outset
+        ),
+        tbox
       )
     }
   }
@@ -166,7 +191,7 @@
   let showyblock = {
 
     if titled and boxed{
-      v(title-block-size -.5em)
+      v(title-block-height - 10pt)
     }
 
     block(
@@ -185,10 +210,10 @@
         showy-title(frame, title-style, title)
       } else if titled and boxed {        
         // Leave some space for putting a boxed title
-        v(1em)
+        v(10pt)
         place(
           top + boxed-align,
-          dy: -(title-block-size - 1em),
+          dy: -(title-block-height - 10pt),
           dx: if boxed-align == left {
             1em
           } else if boxed-align == right {
@@ -196,7 +221,7 @@
           } else {
             0pt
           },
-          showy-title(frame, title-style, title)
+          boxedtitleshadowwrap(showy-title(frame, title-style, title))
         )
       }
       
