@@ -16,6 +16,7 @@
  * Import functions
  */
 #import "lib/func.typ": *
+#import "lib/sections.typ": *
 
 /*
  * Function: showybox()
@@ -23,10 +24,14 @@
  * Description: Creates a showybox
  *
  * Parameters:
+ * - title: Title of the showybox
+ * - footer: Footer of the showybox
  * - frame:
  *   + title-color: Color used as background color where the title goes
  *   + body-color: Color used as background color where the body goes
+ *   + footer-color: Color used as background color where the footer goes
  *   + border-color: Color used for the showybox's border
+ *   + inset: Inset for the title, body, and footer, if title-inset, body-inset, footer-inset aren't given
  *   + radius: Showybox's radius
  *   + thickness: Border width of the showybox
  *   + dash: Showybox's border style
@@ -34,12 +39,31 @@
  *   + color: Text color
  *   + weight: Text weight
  *   + align: Text align
+ *   + boxed: Whether the title's block should be apart or not
+ *   + boxed-align: Alignement of the boxed title
+ *   + sep-thickness: Title's separator thickness
  * - body-styles:
  *   + color: Text color
  *   + align: Text align
+ * - footer-style:
+ *   + color: Text color
+ *   + weight: Text weight
+ *   + align: Text align
+ *   + sep-thickness: Footer's separator thickness
  * - sep:
  *   + width: Separator's width
  *   + dash: Separator's style (as a 'line' dash style)
+ *   + gutter: Separator's gutter space
+ * - shadow:
+ *   + color: Shadow color
+ *   + offset: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y`
+ * - width: Showybox's width
+ * - align: Alignement of the showybox inside its container
+ * - breakable: Whether the showybox can break if it reaches the end of its container
+ * - spacing: Space above and below the showybox
+ * - above: Space above the showybox
+ * - below: Space below the showybox
+ * - body: The content of the showybox
  */
  #let showybox(
   frame: (
@@ -47,7 +71,7 @@
     body-color: white,
     border-color: black,
     footer-color: luma(220),
-    inset: (x:1em, y:.65em),
+    inset: (x: 1em, y: .65em),
     radius: 5pt,
     thickness: 1pt,
     dash: "solid"
@@ -55,7 +79,10 @@
   title-style: (
     color: white,
     weight: "bold",
-    align: left
+    align: left,
+    boxed: false,
+    boxed-align: left,
+    sep-thickness: 1pt
   ),
   body-style: (
     color: black,
@@ -64,7 +91,8 @@
   footer-style: (
     color: luma(85),
     weight: "regular",
-    align: left
+    align: left,
+    sep-thickness: 1pt,
   ),
   sep: (
     width: 1pt,
@@ -72,14 +100,12 @@
     gutter: 0.65em
   ),
   shadow: none,
-
   width: 100%,
   breakable: false,
-  // align: none, // collides with align-function
-
+  /* align: none, / collides with align-function */
+  /* spacing, above, and below are by default what's set for all `block`s */
   title: "",
   footer: "",
-
   ..body
 ) = style(styles => {
   /*
@@ -132,7 +158,6 @@
       )
     }
     shadowwrap = (sbox) => {
-      let sbox-size = measure(sbox, styles)
 
       /* If it has a boxed title, leave some space to avoid collisions
          with other elements next to the showybox*/
@@ -228,51 +253,13 @@
       /*
        * Body of the showybox
        */
-      #block(
-        width: 100%,
-        spacing: 0pt,
-        inset:  showy-section-inset("body", frame),
-        align(
-          body-style.at("align", default: left),
-          text(
-            body-style.at("color", default: black),
-            body.pos()
-              .map(block.with(spacing:0pt))
-              .join(block(spacing: sep.at("gutter", default: .65em),
-                align(left, // Avoid alignment errors
-                  showy-line(frame)(
-                    stroke: (
-                      paint: frame.at("border-color", default: black),
-                      dash: sep.at("dash", default: "solid"),
-                      thickness: sep.at("thickness", default: 1pt)
-                    )
-                  )
-                ))
-              )
-          )
-        )
-      )
+      #showy-body(frame, body-style, sep, ..body)
     
       /*
        * Footer of the showybox
        */
       #if footer != "" {
-        block(
-          inset: showy-section-inset("footer", frame),
-          width: 100%,
-          spacing: 0pt,
-          fill: frame.at("footer-color", default: luma(220)),
-          stroke: showy-stroke(frame, top:1pt),
-          radius: (bottom: frame.at("radius", default: 5pt)))[
-            #align(
-              footer-style.at("align", default: left),
-              text(
-                footer-style.at("color", default: luma(85)),
-                weight: footer-style.at("weight", default: "regular"),
-                footer
-              )
-            )
-        ]
+        showy-footer(frame, footer-style, footer)
       }
     ]
   }
