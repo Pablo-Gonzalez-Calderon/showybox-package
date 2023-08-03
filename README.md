@@ -1,4 +1,4 @@
-# Showybox (v1.0.0)
+# Showybox (v1.1.0)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this repository contains the latest (development) version of t
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.0.0": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.1.0": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```java
-#import "@preview/showybox:1.0.0": showybox
+#import "@preview/showybox:1.1.0": showybox
 
 #showybox(
   [Hello world!]
@@ -94,6 +94,10 @@ The `showybox()` function can receive the following parameters:
 - `body-color`: Color used as background color where the body goes (default is `white`)
 - `footer-color`: Color used as background color where the footer goes (default is `luma(85)`)
 - `border-color`: Color used for the showybox's border (default is `black`)
+- `inset`: Inset used for title, body and footer elements (default is `(x: 1em, y: 0.65em)`) if none of the followings are given:
+  - `title-inset`: Inset used for the title
+  - `body-inset`: Inset used for the body
+  - `footer-inset`: Inset used for the body
 - `radius`: Showybox's radius (default is `5pt`)
 - `thickness`: Border thickness of the showybox (default is `1pt`)
 - `dash`: Showybox's border style (default is `solid`)
@@ -102,6 +106,9 @@ The `showybox()` function can receive the following parameters:
 - `color`: Text color (default is `white`)
 - `weight`: Text weight (default is `bold`)
 - `align`: Text align (default is `left`)
+- `boxed`: Wether the title occupies the whole showybox width or appears like a "floating box" above the showybox (default is `false`)
+- `boxed-align`: If `boxed` is `true`, the alignement of the boxed title (default is `left`)
+- `sep-thickness`: Thickness of the separator between title and body (default is `1pt`)
 
 ### Body styles
 - `color`: Text color (default is `black`)
@@ -111,11 +118,12 @@ The `showybox()` function can receive the following parameters:
 - `color`: Text color (default is `luma(85)`)
 - `weight`: Text weight (default is `regular`)
 - `align`: Text align (default is `left`)
+- `sep-thickness`: Thickness of the separator between body and footer (default is `1pt`)
 
 ### Separator properties
 - `thickness`: Separator's thickness (default is `1pt`)
 - `dash`: Separator's style (as a `line` dash style, default is `"solid"`)
-- `gutter`: Separator's space above and below
+- `gutter`: Separator's space above and below (defalut is `0.65em`)
 
 ### Shadow properties
 - `color`: Shadow color (default is `black`)
@@ -123,6 +131,18 @@ The `showybox()` function can receive the following parameters:
 
 
 ## Gallery
+
+### Boxed title and custom width
+
+<h3 align="center">
+  <img alt="Encapsulation" src="assets/width-and-boxed-title.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+</h3>
+
+### Information-box-like showybox
+
+<h3 align="center">
+  <img alt="Encapsulation" src="assets/information-box-like.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+</h3>
 
 ### Encapsulation
 
@@ -179,3 +199,9 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 	- **Details:** A showybox is now wrapped in another block to allow alignment. This also makes it possible to pass the spacing options `spacing`, `above` and `below` to `#showybox()`.
 - Added `footer` and `footer-style` options
 	- **Details:** The optional footer is added at the bottom of the box.
+
+### Version 1.1.0
+- Added `boxed` option in title styles
+- Added `boxed-align` in title styles
+- Added `sep-thickness` for title and footer
+- Refactored repository's files layout

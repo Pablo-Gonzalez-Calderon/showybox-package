@@ -1,4 +1,3 @@
-
 /*
  * ShowyBox - A package for Typst
  * Pablo González Calderón and Showybox Contributors (c) 2023
@@ -14,109 +13,10 @@
  */
 
 /*
- * Function: showy-inset()
- *
- * Description: Helper function to get inset in a specific direction
- *
- * Parameters:
- * + direction
- * + value
+ * Import functions
  */
-#let showy-inset( direction, value ) = {
-  direction = repr(direction)   // allows use of alignment values
-  if type(value) == "dictionary" {
-    if direction in value {
-      value.at(direction)
-    } else if direction in ("left", "right") and "x" in value {
-      value.x
-    } else if direction in ("top", "bottom") and "y" in value {
-      value.y
-    } else  if "rest" in value {
-      value.rest
-    } else {
-      0pt
-    }
-  } else if value == none {
-    0pt
-  } else {
-    value
-  }
-}
-/*
- * Function: showy-line()
- *
- * Description: Creates a modified `#line()` function
- * to draw a separator line with start and end points
- * adjusted to insets.
- *
- * Parameters:
- * + frame: The dictionary with frame settings
- */
-#let showy-line( frame ) = {
-  let inset = frame.at("body-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
-  let inset = (
-    left: showy-inset(left, inset),
-    right: showy-inset(right, inset)
-  )
-  let (start, end) = (0%, 0%)
-
-  // For relative insets the original width needs to be calculated
-  if type(inset.left) == "ratio" and type(inset.right) == "ratio" {
-    let full = 100% / (1 - float(inset.right) - float(inset.left))
-    start = -inset.left * full
-    end = full + start
-  } else if type(inset.left) == "ratio" {
-    let full = (100% + inset.right) / (1 - float(inset.left))
-    (start, end) = (-inset.left * full, 100% + inset.right)
-  } else if type(inset.right) == "ratio" {
-    let full = (100% + inset.left) / (1 - float(inset.right))
-    (start, end) = (-inset.left, full - inset.left)
-  } else {
-    (start, end) = (-inset.left, 100% + inset.right)
-  }
-
-  line.with(
-    start: (start, 0%),
-    end: (end, 0%)
-  )
-}
-/*
- * Function: showy-stroke()
- *
- * Description: Creates a stroke or set of strokes
- * to use as borders.
- *
- * Parameters:
- * + frame: The dictionary with frame settings
- */
-#let showy-stroke( frame, ..overrides ) = {
-  let (paint, dash, width) = (
-    frame.at("border-color", default: black),
-    frame.at("dash", default: "solid"),
-    frame.at("thickness", default: 1pt)
-  )
-
-  let strokes = (:)
-  if type(width) != "dictionary" { // Set all borders at once
-    for side in ("top", "bottom", "left", "right") {
-      strokes.insert(side, (paint: paint, dash: dash, thickness: width))
-    }
-  } else { // Set each border individually
-    for pair in width {
-      strokes.insert(
-        pair.first(), // key
-        (paint: paint, dash: dash, thickness: pair.last())
-      )
-    }
-  }
-  for pair in overrides.named() {
-    strokes.insert(
-      pair.first(),
-      (paint: paint, dash: dash, thickness: pair.last())
-    )
-  }
-  return strokes
-}
+#import "lib/func.typ": *
+#import "lib/sections.typ": *
 
 /*
  * Function: showybox()
@@ -124,10 +24,14 @@
  * Description: Creates a showybox
  *
  * Parameters:
+ * - title: Title of the showybox
+ * - footer: Footer of the showybox
  * - frame:
  *   + title-color: Color used as background color where the title goes
  *   + body-color: Color used as background color where the body goes
+ *   + footer-color: Color used as background color where the footer goes
  *   + border-color: Color used for the showybox's border
+ *   + inset: Inset for the title, body, and footer, if title-inset, body-inset, footer-inset aren't given
  *   + radius: Showybox's radius
  *   + thickness: Border width of the showybox
  *   + dash: Showybox's border style
@@ -135,12 +39,31 @@
  *   + color: Text color
  *   + weight: Text weight
  *   + align: Text align
+ *   + boxed: Whether the title's block should be apart or not
+ *   + boxed-align: Alignement of the boxed title
+ *   + sep-thickness: Title's separator thickness
  * - body-styles:
  *   + color: Text color
  *   + align: Text align
+ * - footer-style:
+ *   + color: Text color
+ *   + weight: Text weight
+ *   + align: Text align
+ *   + sep-thickness: Footer's separator thickness
  * - sep:
  *   + width: Separator's width
  *   + dash: Separator's style (as a 'line' dash style)
+ *   + gutter: Separator's gutter space
+ * - shadow:
+ *   + color: Shadow color
+ *   + offset: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y`
+ * - width: Showybox's width
+ * - align: Alignement of the showybox inside its container
+ * - breakable: Whether the showybox can break if it reaches the end of its container
+ * - spacing: Space above and below the showybox
+ * - above: Space above the showybox
+ * - below: Space below the showybox
+ * - body: The content of the showybox
  */
  #let showybox(
   frame: (
@@ -148,7 +71,7 @@
     body-color: white,
     border-color: black,
     footer-color: luma(220),
-    inset: (x:1em, y:.65em),
+    inset: (x: 1em, y: .65em),
     radius: 5pt,
     thickness: 1pt,
     dash: "solid"
@@ -156,7 +79,10 @@
   title-style: (
     color: white,
     weight: "bold",
-    align: left
+    align: left,
+    boxed: false,
+    boxed-align: left,
+    sep-thickness: 1pt
   ),
   body-style: (
     color: black,
@@ -165,7 +91,8 @@
   footer-style: (
     color: luma(85),
     weight: "regular",
-    align: left
+    align: left,
+    sep-thickness: 1pt,
   ),
   sep: (
     width: 1pt,
@@ -173,16 +100,27 @@
     gutter: 0.65em
   ),
   shadow: none,
-
   width: 100%,
   breakable: false,
-  // align: none, // collides with align-function
-
+  /* align: none, / collides with align-function */
+  /* spacing, above, and below are by default what's set for all `block`s */
   title: "",
   footer: "",
-
   ..body
-) = {
+) = style(styles => {
+  /*
+   * Useful booleans
+   */
+  let titled = (title != "")
+  let boxed = title-style.at("boxed", default: false)
+
+  /*
+   * Useful sizes and alignements
+   */
+  let title-size = measure(title, styles)
+  let title-block-height = title-size.height + showy-inset(top, showy-section-inset("title", frame)) + showy-inset(bottom, showy-section-inset("title", frame))
+  let boxed-align = title-style.at("boxed-align", default: left)
+  
   /*
    *  Alignment wrapper
    */
@@ -203,126 +141,130 @@
   )
 
   /*
-   * Optionally create a wrapper
-   * function to add a shadow.
+   * Optionally create one or two wrapper
+   * functions to add a shadow.
    */
   let shadowwrap = (sbox) => sbox
+  let boxedtitleshadowwrap = (tbox) => tbox
   if shadow != none {
+    /* Since we cannot modify a exxtern variable from style(), 
+       define a local variable for shadow values, called d-shadow */
+    let d-shadow = shadow
+    
     if type(shadow.at("offset", default: 4pt)) != "dictionary" {
-      shadow.offset = (
+      d-shadow.offset = (
         x: shadow.at("offset", default: 4pt),
         y: shadow.at("offset", default: 4pt)
       )
     }
-    shadowwrap = (sbox) => block(
-      breakable: breakable,
-      radius: frame.at("radius", default: 5pt),
-      fill:   shadow.at("color", default: luma(128)),
-      outset: (
-        top: -shadow.offset.y,
-        left: -shadow.offset.x,
-        right: shadow.offset.x,
-        bottom: shadow.offset.y
-      ),
-      sbox
-    )
-  }
-  let showyblock = block(
-    width: width,
-    fill: frame.at("body-color", default: white),
-    radius: frame.at("radius", default: 5pt),
-    inset: 0pt,
-    breakable: breakable,
-    stroke: showy-stroke(frame)
-  )[
-    /*
-     * Title of the showybox. We'll check if it is
-     * empty. If so, skip its drawing and only put
-     * the body
-     */
-    #if title != "" {
-      block(
-        inset: if "title-inset" in frame {
-          frame.title-inset
-        } else {
-          frame.at("inset", default:(x:1em, y:0.65em))
-        },
-        width: 100%,
-        spacing: 0pt,
-        fill: frame.at("title-color", default: black),
-        stroke: showy-stroke(frame, bottom:1pt),
-        radius: (top: frame.at("radius", default: 5pt)))[
-          #align(
-            title-style.at("align", default: left),
-            text(
-              title-style.at("color", default: white),
-              weight: title-style.at("weight", default: "bold"),
-              title
-            )
-          )
-      ]
-    }
+    shadowwrap = (sbox) => {
 
-    /*
-     * Body of the showybox
-     */
-    #block(
-      width: 100%,
-      spacing: 0pt,
-      inset:  if "body-inset" in frame {
-        frame.body-inset
-      } else {
-        frame.at("inset", default:(x:1em, y:0.65em))
-      },
-      align(
-        body-style.at("align", default: left),
-        text(
-          body-style.at("color", default: black),
-          body.pos()
-            .map(block.with(spacing:0pt))
-            .join(block(spacing: sep.at("gutter", default: .65em),
-              align(left, // Avoid alignment errors
-                showy-line(frame)(
-                  stroke: (
-                    paint: frame.at("border-color", default: black),
-                    dash: sep.at("dash", default: "solid"),
-                    thickness: sep.at("thickness", default: 1pt)
-                  )
-                )
-              ))
-            )
-        )
+      /* If it has a boxed title, leave some space to avoid collisions
+         with other elements next to the showybox*/
+      if titled and boxed {
+        v(title-block-height - 10pt)
+      }
+      
+      block(
+        breakable: breakable,
+        radius: frame.at("radius", default: 5pt),
+        fill:   shadow.at("color", default: luma(128)),
+        spacing: 0pt,
+        outset: (
+          left: -d-shadow.offset.x,
+          right: d-shadow.offset.x,
+          bottom: d-shadow.offset.y,
+          top: -d-shadow.offset.y 
+        ),
+        /* If it have a boxed title, substract some space to
+           avoid the shadow to be body + title height, and only
+           body height */
+        if titled and boxed {
+          v(-(title-block-height - 10pt))
+          sbox
+        } else {
+          sbox
+        }
       )
-    )
-
-    /*
-     * Footer of the showybox
-     */
-    #if footer != "" {
-      block(
-        inset: if "footer-inset" in frame {
-          frame.footer-inset
-        } else {
-          frame.at("inset", default:(x:1em, y:0.65em))
-        },
-        width: 100%,
-        spacing: 0pt,
-        fill: frame.at("footer-color", default: luma(220)),
-        stroke: showy-stroke(frame, top:1pt),
-        radius: (bottom: frame.at("radius", default: 5pt)))[
-          #align(
-            footer-style.at("align", default: left),
-            text(
-              footer-style.at("color", default: luma(85)),
-              weight: footer-style.at("weight", default: "regular"),
-              footer
-            )
-          )
-      ]
     }
-  ]
+
+    if titled and boxed {
+      /* Due to some uncontrolable spaces between blocks, there's the need
+         of adding an offset to `bottom-outset` to avoid an unwanted space
+         between the boxed-title shadow and the body. Hopefully in the
+         future a more pure-mathematically formula will be found. At the
+         moment, this 'trick' solves all cases where a showybox title has
+         only one line of heights */
+      let bottom-outset = 10pt + frame.at("thickness", default: 1pt)/2 - .15pt
+      
+      boxedtitleshadowwrap = (tbox) => block(
+        breakable: breakable,
+        radius: (top: frame.at("radius", default: 5pt)),
+        fill:   shadow.at("color", default: luma(128)),
+        spacing: 0pt,
+        outset: (
+          left: -d-shadow.offset.x,
+          right: d-shadow.offset.x,
+          top: -d-shadow.offset.y,
+          bottom: -bottom-outset
+        ),
+        tbox
+      )
+    }
+  }
+  
+  let showyblock = {
+
+    if titled and boxed{
+      v(title-block-height - 10pt)
+    }
+
+    block(
+      width: width,
+      fill: frame.at("body-color", default: white),
+      radius: frame.at("radius", default: 5pt),
+      inset: 0pt,
+      spacing: 0pt,
+      breakable: breakable,
+      stroke: showy-stroke(frame)
+    )[
+      /*
+       * Title of the showybox
+       */
+      #if titled and not boxed {
+        showy-title(frame, title-style, title)
+      } else if titled and boxed {        
+        // Leave some space for putting a boxed title
+        v(10pt)
+        place(
+          top + boxed-align,
+          dy: -(title-block-height - 10pt),
+          dx: if boxed-align == left {
+            1em
+          } else if boxed-align == right {
+            -1em
+          } else {
+            0pt
+          },
+          boxedtitleshadowwrap(showy-title(frame, title-style, title))
+        )
+      }
+      
+      /*
+       * Body of the showybox
+       */
+      #showy-body(frame, body-style, sep, ..body)
+    
+      /*
+       * Footer of the showybox
+       */
+      #if footer != "" {
+        showy-footer(frame, footer-style, footer)
+      }
+    ]
+  }
 
   alignwrap(
     shadowwrap(showyblock)
   )
-}
+})
