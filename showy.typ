@@ -120,7 +120,7 @@
   let title-size = measure(title, styles)
   let title-block-height = title-size.height + showy-inset(top, showy-section-inset("title", frame)) + showy-inset(bottom, showy-section-inset("title", frame))
   let boxed-align = title-style.at("boxed-align", default: left)
-  
+
   /*
    *  Alignment wrapper
    */
@@ -147,11 +147,11 @@
   let shadowwrap = (sbox) => sbox
   let boxedtitleshadowwrap = (tbox) => tbox
   if shadow != none {
-    /* Since we cannot modify a exxtern variable from style(), 
+    /* Since we cannot modify a exxtern variable from style(),
        define a local variable for shadow values, called d-shadow */
     let d-shadow = shadow
-    
-    if type(shadow.at("offset", default: 4pt)) != "dictionary" {
+
+    if type(shadow.at("offset", default: 4pt)) != dictionary {
       d-shadow.offset = (
         x: shadow.at("offset", default: 4pt),
         y: shadow.at("offset", default: 4pt)
@@ -164,7 +164,7 @@
       if titled and boxed {
         v(title-block-height - 10pt)
       }
-      
+
       block(
         breakable: breakable,
         radius: frame.at("radius", default: 5pt),
@@ -174,7 +174,7 @@
           left: -d-shadow.offset.x,
           right: d-shadow.offset.x,
           bottom: d-shadow.offset.y,
-          top: -d-shadow.offset.y 
+          top: -d-shadow.offset.y
         ),
         /* If it have a boxed title, substract some space to
            avoid the shadow to be body + title height, and only
@@ -196,7 +196,7 @@
          moment, this 'trick' solves all cases where a showybox title has
          only one line of heights */
       let bottom-outset = 10pt + frame.at("thickness", default: 1pt)/2 - .15pt
-      
+
       boxedtitleshadowwrap = (tbox) => block(
         breakable: breakable,
         radius: (top: frame.at("radius", default: 5pt)),
@@ -212,7 +212,7 @@
       )
     }
   }
-  
+
   let showyblock = {
 
     if titled and boxed{
@@ -233,7 +233,7 @@
        */
       #if titled and not boxed {
         showy-title(frame, title-style, title)
-      } else if titled and boxed {        
+      } else if titled and boxed {
         // Leave some space for putting a boxed title
         v(10pt)
         place(
@@ -249,12 +249,12 @@
           boxedtitleshadowwrap(showy-title(frame, title-style, title))
         )
       }
-      
+
       /*
        * Body of the showybox
        */
       #showy-body(frame, body-style, sep, ..body)
-    
+
       /*
        * Footer of the showybox
        */

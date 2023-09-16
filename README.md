@@ -1,4 +1,4 @@
-# Showybox (v1.1.0)
+# Showybox (v1.1.1) -- In developing
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -180,7 +180,7 @@ May have some bugs
 
 _All changes listed here were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 
-- Added the `shadow` option 
+- Added the `shadow` option
 - Enabled auto-break (`breakable`) functionality for titled showyboxes
 - Removed a thin line that appears in showyboxes with no borders or dashed borders
 
@@ -193,7 +193,7 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 
 - Added `title-inset`, `body-inset`, `footer-inset` and `inset` options
 	- **Details:** `title-inset`, `body-inset` and `footer-inset` will set the inset of the title, body and footer area respectively. `inset` is a fallback for those areas.
-- Added a `sep.gutter` option to set the spacing around separator lines 
+- Added a `sep.gutter` option to set the spacing around separator lines
 - Added option `width` to set the width of a showybox
 - Added option `align` to move a showybox with `width` < 100% along the x-axis
 	- **Details:** A showybox is now wrapped in another block to allow alignment. This also makes it possible to pass the spacing options `spacing`, `above` and `below` to `#showybox()`.
@@ -205,3 +205,7 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Added `boxed-align` in title styles
 - Added `sep-thickness` for title and footer
 - Refactored repository's files layout
+
+### Version 1.1.1
+
+- Update ``type()`` conditionals to Typst 0.8.0 standards

@@ -20,7 +20,7 @@
  */
 #let showy-inset( direction, value ) = {
   direction = repr(direction)   // allows use of alignment values
-  if type(value) == "dictionary" {
+  if type(value) == dictionary {
     if direction in value {
       value.at(direction)
     } else if direction in ("left", "right") and "x" in value {
@@ -57,14 +57,14 @@
   let (start, end) = (0%, 0%)
 
   // For relative insets the original width needs to be calculated
-  if type(inset.left) == "ratio" and type(inset.right) == "ratio" {
+  if type(inset.left) == ratio and type(inset.right) == ratio {
     let full = 100% / (1 - float(inset.right) - float(inset.left))
     start = -inset.left * full
     end = full + start
-  } else if type(inset.left) == "ratio" {
+  } else if type(inset.left) == ratio {
     let full = (100% + inset.right) / (1 - float(inset.left))
     (start, end) = (-inset.left * full, 100% + inset.right)
-  } else if type(inset.right) == "ratio" {
+  } else if type(inset.right) == ratio {
     let full = (100% + inset.left) / (1 - float(inset.right))
     (start, end) = (-inset.left, full - inset.left)
   } else {
@@ -93,7 +93,7 @@
   )
 
   let strokes = (:)
-  if type(width) != "dictionary" { // Set all borders at once
+  if type(width) != dictionary { // Set all borders at once
     for side in ("top", "bottom", "left", "right") {
       strokes.insert(side, (paint: paint, dash: dash, thickness: width))
     }
@@ -128,7 +128,7 @@
  */
 #let showy-section-inset( section, frame ) = {
   return frame.at(
-    section + "-inset", 
+    section + "-inset",
     default: frame.at("inset", default: (x:1em, y: 0.65em))
   )
 }
