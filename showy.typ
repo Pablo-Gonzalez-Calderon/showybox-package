@@ -186,7 +186,7 @@
    * Useful sizes and alignements
    */
   let title-size = measure(title, styles)
-  let title-block-height = title-size.height + showy-inset(top, showy-section-inset("title", frame)) + showy-inset(bottom, showy-section-inset("title", frame))
+  let title-block-height = title-size.height + showy-value-in-direction(top, showy-section-inset("title", frame), 0pt) + showy-value-in-direction(bottom, showy-section-inset("title", frame), 0pt)
   let boxed-align = title-style.at("boxed-align", default: left)
 
   /*

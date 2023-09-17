@@ -10,16 +10,18 @@
  */
 
 /*
- * Function: showy-inset()
+ * Function: showy-value-in-direction()
  *
- * Description: Helper function to get inset in a specific direction
+ * Description: Helper function to get a value
+ * in a specific direction inside a dictionary or value
  *
  * Parameters:
- * + direction
- * + value
+ * + direction: Direction as an alignement
+ * + value: Dictionary or value to search in
+ * + default: Default value if nothing is found
  */
-#let showy-inset( direction, value ) = {
-  direction = repr(direction)   // allows use of alignment values
+#let showy-value-in-direction( direction, value, default ) = {
+  direction = repr(direction)
   if type(value) == dictionary {
     if direction in value {
       value.at(direction)
@@ -30,14 +32,15 @@
     } else  if "rest" in value {
       value.rest
     } else {
-      0pt
+      default
     }
   } else if value == none {
-    0pt
+    default
   } else {
     value
   }
 }
+
 /*
  * Function: showy-line()
  *
@@ -51,8 +54,8 @@
 #let showy-line( frame ) = {
   let inset = frame.at("body-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
   let inset = (
-    left: showy-inset(left, inset),
-    right: showy-inset(right, inset)
+    left: showy-value-in-direction(left, inset, 0pt),
+    right: showy-value-in-direction(right, inset, 0pt)
   )
   let (start, end) = (0%, 0%)
 

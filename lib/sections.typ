@@ -43,7 +43,7 @@
   } else {
     props = props + (
       width: 100%,
-      radius: (top: frame.at("radius", default: 5pt)),
+      radius: (top: showy-value-in-direction(top, frame.at("radius", default: 5pt), 5pt)),
       stroke: showy-stroke(frame, bottom: title-style.at("sep-thickness", default: 1pt))
     )
   }
