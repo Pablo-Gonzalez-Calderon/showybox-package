@@ -21,40 +21,44 @@
  * + title-styles: The dictionary with title styles
  * + title: Title of the showybox
  */
-#let showy-title( frame, title-style, title ) = {
+#let showy-title( sbox-props, title ) = {
   /*
    * Porperties independent of `boxed`
    */
   let props = (
     spacing: 0pt,
-    fill: frame.at("title-color", default: black),
-    inset: showy-section-inset("title", frame)
+    fill: sbox-props.frame.title-color,
+    inset: showy-section-inset("title", sbox-props.frame)
   )
 
   /*
    * Porperties dependent of `boxed`
    */
-  if title-style.at("boxed", default: false) {
+  if sbox-props.title-style.boxed {
     props = props + (
       width: auto,
-      radius: frame.at("radius", default: 5pt),
-      stroke: showy-stroke(frame),
+      radius: sbox-props.boxed-style.radius,
+      stroke: showy-stroke(sbox-props.frame),
     )
   } else {
     props = props + (
       width: 100%,
-      radius: (top: showy-value-in-direction(top, frame.at("radius", default: 5pt), 5pt)),
-      stroke: showy-stroke(frame, bottom: title-style.at("sep-thickness", default: 1pt))
+      radius: (
+        top-left: showy-value-in-direction("top-left", sbox-props.frame.radius, 5pt),
+        top-right: showy-value-in-direction("top-right", sbox-props.frame.radius, 5pt),
+        bottom: 0pt
+        ),
+      stroke: showy-stroke(sbox-props.frame, bottom: sbox-props.title-style.sep-thickness)
     )
   }
 
   return block(
     ..props,
     align(
-      title-style.at("align", default: left),
+      sbox-props.title-style.align,
       text(
-        title-style.at("color", default: white),
-        weight: title-style.at("weight", default: "bold"),
+        sbox-props.title-style.color,
+        weight: sbox-props.title-style.weight,
         title
       )
     )
@@ -72,26 +76,26 @@
  * + sep: The dictionary with sep styles
  * + body: Body content
  */
-#let showy-body( frame, body-style, sep, ..body ) = block(
+#let showy-body( sbox-props, ..body ) = block(
     width: 100%,
     spacing: 0pt,
-    inset:  showy-section-inset("body", frame),
+    inset:  showy-section-inset("body", sbox-props.frame),
     align(
-        body-style.at("align", default: left),
+        sbox-props.body-style.align,
         text(
-        body-style.at("color", default: black),
+        sbox-props.body-style.color,
         body.pos()
             .map(block.with(spacing:0pt))
             .join(
                 block(
-                    spacing: sep.at("gutter", default: .65em),
+                    spacing: sbox-props.sep.gutter,
                     align(
                         left, // Avoid alignment errors
-                        showy-line(frame)(
+                        showy-line(sbox-props.frame)(
                             stroke: (
-                                paint: frame.at("border-color", default: black),
-                                dash: sep.at("dash", default: "solid"),
-                                thickness: sep.at("thickness", default: 1pt)
+                                paint: sbox-props.frame.border-color,
+                                dash: sbox-props.sep.dash,
+                                thickness: sbox-props.sep.width
                             )
                         )
                     )
@@ -112,18 +116,18 @@
  * + sep: The dictionary with sep styles
  * + body: Body content
  */
-#let showy-footer( frame, footer-style, footer ) = block(
+#let showy-footer( sbox-props, footer ) = block(
     width: 100%,
     spacing: 0pt,
-    inset: showy-section-inset("footer", frame),
-    fill: frame.at("footer-color", default: luma(220)),
-    stroke: showy-stroke(frame, top: footer-style.at("sep-thickness", default: 1pt)),
-    radius: (bottom: frame.at("radius", default: 5pt)),
+    inset: showy-section-inset("footer", sbox-props.frame),
+    fill: sbox-props.frame.footer-color,
+    stroke: showy-stroke(sbox-props.frame, top: sbox-props.footer-style.sep-thickness),
+    radius: (bottom: sbox-props.frame.radius),
     align(
-        footer-style.at("align", default: left),
+        sbox-props.footer-style.align,
         text(
-            footer-style.at("color", default: luma(85)),
-            weight: footer-style.at("weight", default: "regular"),
+            sbox-props.footer-style.color,
+            weight: sbox-props.footer-style.weight,
             footer
         )
     )
