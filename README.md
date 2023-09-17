@@ -20,7 +20,7 @@ By default a `showybox` with these properties will be created:
 - `5pt` of border radius
 - `1pt` of border thickness
 
-```java
+```typst
 #import "@preview/showybox:1.2.0": showybox
 
 #showybox(
@@ -32,7 +32,7 @@ By default a `showybox` with these properties will be created:
 </h3>
 
 Looks quite simple, but the "magic" starts when adding a title, color and shadows. The following code creates two "unique" boxes with defined colors and custom borders:
-```java
+```typst
 // First showybox
 #showybox(
   frame: (
