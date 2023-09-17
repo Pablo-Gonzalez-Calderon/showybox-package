@@ -325,9 +325,12 @@
           block(
             width: 100%,
             spacing: 0pt,
-            align(
-              props.boxed-style.anchor.x,
-              showy-title(props, title)
+            move(
+              dx: props.boxed-style.offset,
+              align(
+                props.boxed-style.anchor.x,
+                showy-title(props, title)
+              )
             )
           )
         } else {
