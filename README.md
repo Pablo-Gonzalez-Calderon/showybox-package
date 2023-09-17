@@ -116,6 +116,7 @@ The `showybox()` function can receive the following parameters:
   - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
   - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `left`)
 - `offset`: Horizontal offset of the boxed title (default is `0pt`)
+- ``radius``: Boxed title radius as a dictionary or relative length (default is `5pt`)
 
 ### Body styles
 - `color`: Text color (default is `black`)
@@ -216,4 +217,6 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 ### Version 1.2.0
 
 - Update ``type()`` conditionals to Typst 0.8.0 standards
-- Add ``boxed-style`` property, with ``anchor`` and ``offset`` properties.
+- Add ``boxed-style`` property, with ``anchor``, ``offset`` and ``radius`` properties.
+- Refactor ``showy-inset()`` for being general-purpose. Now it's called ``showy-value-in-direction()`` and has a default value for handling properties defaults
+- Now sharp corners can be set by giving a dictionary to frame ``radius`` (e.g. ``radius: (top: 5pt, bottom: 0pt)``). Before this only was possible for untitled showyboxes.
