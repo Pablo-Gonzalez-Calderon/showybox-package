@@ -228,7 +228,7 @@
       /* If it has a boxed title, leave some space to avoid collisions
          with other elements next to the showybox*/
       if title != "" and props.title-style.boxed {
-        if props.boxed-style.anchor.y == top {
+        if props.boxed-style.anchor.y == bottom {
           v(title-block-height)
         } else if props.boxed-style.anchor.y == horizon{
           v(title-block-height - 10pt)
@@ -251,7 +251,7 @@
            avoid the shadow to be body + title height, and only
            body height */
         if title != "" and props.title-style.boxed {
-          if props.boxed-style.anchor.y == top {
+          if props.boxed-style.anchor.y == bottom {
             v(-title-block-height)
           } else if props.boxed-style.anchor.y == horizon {
             v(-title-block-height + 10pt)
@@ -264,7 +264,7 @@
       )
     }
 
-    if title != "" and props.title-style.boxed and props.boxed-style.anchor.y != bottom {
+    if title != "" and props.title-style.boxed and props.boxed-style.anchor.y != top {
       /* Due to some uncontrolable spaces between blocks, there's the need
          of adding an offset to `bottom-outset` to avoid an unwanted space
          between the boxed-title shadow and the body. Hopefully in the
@@ -299,8 +299,8 @@
   let showyblock = {
 
     if title != "" and props.title-style.boxed {
-      if props.boxed-style.anchor.y == top {
-      v(title-block-height)
+      if props.boxed-style.anchor.y == bottom {
+        v(title-block-height)
       } else if props.boxed-style.anchor.y == horizon {
         v(title-block-height - 10pt)
       } // Otherwise don't add extra space
@@ -321,7 +321,7 @@
       #if title != "" and not props.title-style.boxed {
         showy-title(props, title)
       } else if title != "" and props.title-style.boxed {
-        if props.boxed-style.anchor.y == bottom {
+        if props.boxed-style.anchor.y == top {
           block(
             width: 100%,
             spacing: 0pt,
@@ -340,7 +340,7 @@
           }
           place(
             top + props.boxed-style.anchor.x,
-            dy: if props.boxed-style.anchor.y == top {
+            dy: if props.boxed-style.anchor.y == bottom {
               -title-block-height
             } else if props.boxed-style.anchor.y == horizon {
               -title-block-height + 10pt
