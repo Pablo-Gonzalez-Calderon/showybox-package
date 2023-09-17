@@ -81,8 +81,14 @@
     weight: "bold",
     align: left,
     boxed: false,
-    boxed-align: left,
     sep-thickness: 1pt
+  ),
+  boxed-style: (
+    anchor: (
+      y: horizon,
+      x: left,
+    ),
+    offset: 0pt // Only in x direction
   ),
   body-style: (
     color: black,
@@ -109,10 +115,72 @@
   ..body
 ) = style(styles => {
   /*
-   * Useful booleans
+   * Complete and store all the dictionary-like-properties inside a
+   * single dictionary. This will improve readability and avoids to
+   * constantly have a default option while accessing
    */
-  let titled = (title != "")
-  let boxed = title-style.at("boxed", default: false)
+  let props = (
+    frame: (
+      title-color: frame.at("title-color", default: black),
+      body-color: frame.at("body-color", default: white),
+      border-color: frame.at("border-color", default: black),
+      footer-color: frame.at("footer-color", default: luma(220)),
+      inset: frame.at("inset", default: (x: 1em, y: .65em)),
+      radius: frame.at("radius", default: 5pt),
+      thickness: frame.at("thickness", default: 1pt),
+      dash: frame.at("dash", default: "solid")
+    ),
+    title-style: (
+      color: title-style.at("color", default: white),
+      weight: title-style.at("weight", default: "bold"),
+      align: title-style.at("align", default: left),
+      boxed: title-style.at("boxed", default: false),
+      sep-thickness: title-style.at("sept-thickness", default: 1pt)
+    ),
+    boxed-style: (
+      anchor: (
+        y: boxed-style.at("anchor", default: (:)).at("y", default: horizon),
+        x: boxed-style.at("anchor", default: (:)).at("x", default: left),
+      ),
+      offset: boxed-style.at("offset", default: 0pt)
+    ),
+    body-style: (
+      color: body-style.at("color", default: black),
+      align: body-style.at("align", default: left)
+    ),
+    footer-style: (
+      color: footer-style.at("color", default: luma(85)),
+      weight: footer-style.at("weight", default: "regular"),
+      align: footer-style.at("align", default: left),
+      sep-thickness: footer-style.at("sep-thickness", default: 1pt),
+    ),
+    sep: (
+      width: sep.at("width", default: 1pt),
+      dash: sep.at("dash", default: "solid"),
+      gutter: sep.at("gutter", default: 0.65)
+    ),
+    shadow: if shadow != none {
+      if type(shadow.at("offset", default: 4pt)) != dictionary {
+        (
+          offset: (
+            x: shadow.at("offset", default: 4pt),
+            y: shadow.at("offset", default: 4pt),
+          ),
+          color: shadow.at("color", default: luma(128))
+        )
+      } else {
+        (
+          offset: (
+            x: shadow.at("offset").at("x", default: 4pt),
+            y: shadow.at("offset").at("y", default: 4pt),
+          ),
+          color: shadow.at("color", default: luma(128))
+        )
+      }
+    } else {
+      none
+    }
+  )
 
   /*
    * Useful sizes and alignements
@@ -146,41 +214,41 @@
    */
   let shadowwrap = (sbox) => sbox
   let boxedtitleshadowwrap = (tbox) => tbox
-  if shadow != none {
-    /* Since we cannot modify a exxtern variable from style(),
-       define a local variable for shadow values, called d-shadow */
-    let d-shadow = shadow
-
-    if type(shadow.at("offset", default: 4pt)) != dictionary {
-      d-shadow.offset = (
-        x: shadow.at("offset", default: 4pt),
-        y: shadow.at("offset", default: 4pt)
-      )
-    }
+  if props.shadow != none {
     shadowwrap = (sbox) => {
 
       /* If it has a boxed title, leave some space to avoid collisions
          with other elements next to the showybox*/
-      if titled and boxed {
-        v(title-block-height - 10pt)
+      if title != "" and props.title-style.boxed {
+        if props.boxed-style.anchor.y == top {
+          v(title-block-height)
+        } else if props.boxed-style.anchor.y == horizon{
+          v(title-block-height - 10pt)
+        } // Otherwise, no space is needed
+
       }
 
       block(
         breakable: breakable,
-        radius: frame.at("radius", default: 5pt),
-        fill:   shadow.at("color", default: luma(128)),
+        radius: props.frame.radius,
+        fill: props.shadow.color,
         spacing: 0pt,
         outset: (
-          left: -d-shadow.offset.x,
-          right: d-shadow.offset.x,
-          bottom: d-shadow.offset.y,
-          top: -d-shadow.offset.y
+          left: -props.shadow.offset.x,
+          right: props.shadow.offset.x,
+          bottom: props.shadow.offset.y,
+          top: -props.shadow.offset.y
         ),
         /* If it have a boxed title, substract some space to
            avoid the shadow to be body + title height, and only
            body height */
-        if titled and boxed {
-          v(-(title-block-height - 10pt))
+        if title != "" and props.title-style.boxed {
+          if props.boxed-style.anchor.y == top {
+            v(-title-block-height)
+          } else if props.boxed-style.anchor.y == horizon {
+            v(-title-block-height + 10pt)
+          } // Otherwise do nothing
+
           sbox
         } else {
           sbox
@@ -188,24 +256,28 @@
       )
     }
 
-    if titled and boxed {
+    if title != "" and props.title-style.boxed and props.boxed-style.anchor.y != bottom {
       /* Due to some uncontrolable spaces between blocks, there's the need
          of adding an offset to `bottom-outset` to avoid an unwanted space
          between the boxed-title shadow and the body. Hopefully in the
          future a more pure-mathematically formula will be found. At the
          moment, this 'trick' solves all cases where a showybox title has
          only one line of heights */
-      let bottom-outset = 10pt + frame.at("thickness", default: 1pt)/2 - .15pt
+      let bottom-outset = if props.boxed-style.anchor.y == horizon {
+        10pt + props.frame.thickness/2 - .15pt
+      } else {
+        props.frame.thickness/2 - .15pt
+      }
 
       boxedtitleshadowwrap = (tbox) => block(
         breakable: breakable,
-        radius: (top: frame.at("radius", default: 5pt)),
-        fill:   shadow.at("color", default: luma(128)),
+        radius: (top: props.frame.radius),
+        fill:   props.shadow.color,
         spacing: 0pt,
         outset: (
-          left: -d-shadow.offset.x,
-          right: d-shadow.offset.x,
-          top: -d-shadow.offset.y,
+          left: -props.shadow.offset.x,
+          right: props.shadow.offset.x,
+          top: -props.shadow.offset.y,
           bottom: -bottom-outset
         ),
         tbox
@@ -215,14 +287,18 @@
 
   let showyblock = {
 
-    if titled and boxed{
-      v(title-block-height - 10pt)
+    if title != "" and props.title-style.boxed {
+      if props.boxed-style.anchor.y == top {
+      v(title-block-height)
+      } else if props.boxed-style.anchor.y == horizon {
+        v(title-block-height - 10pt)
+      } // Otherwise don't add extra space
     }
 
     block(
       width: width,
-      fill: frame.at("body-color", default: white),
-      radius: frame.at("radius", default: 5pt),
+      fill: props.frame.body-color,
+      radius: props.frame.radius,
       inset: 0pt,
       spacing: 0pt,
       breakable: breakable,
@@ -231,23 +307,34 @@
       /*
        * Title of the showybox
        */
-      #if titled and not boxed {
+      #if title != "" and not props.title-style.boxed {
         showy-title(frame, title-style, title)
-      } else if titled and boxed {
-        // Leave some space for putting a boxed title
-        v(10pt)
-        place(
-          top + boxed-align,
-          dy: -(title-block-height - 10pt),
-          dx: if boxed-align == left {
-            1em
-          } else if boxed-align == right {
-            -1em
-          } else {
-            0pt
-          },
-          boxedtitleshadowwrap(showy-title(frame, title-style, title))
-        )
+      } else if title != "" and props.title-style.boxed {
+        if props.boxed-style.anchor.y == bottom {
+          block(
+            width: 100%,
+            spacing: 0pt,
+            align(
+              props.boxed-style.anchor.x,
+              showy-title(frame, title-style, title)
+            )
+          )
+        } else {
+          if props.boxed-style.anchor.y == horizon {
+            // Leave some space for putting a horizon-boxed title
+            v(10pt)
+          }
+          place(
+            top + props.boxed-style.anchor.x,
+            dy: if props.boxed-style.anchor.y == top {
+              -title-block-height
+            } else if props.boxed-style.anchor.y == horizon {
+              -title-block-height + 10pt
+            },
+            dx: props.boxed-style.offset,
+            boxedtitleshadowwrap(showy-title(frame, title-style, title))
+          )
+        }
       }
 
       /*

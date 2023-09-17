@@ -34,13 +34,12 @@
   /*
    * Porperties dependent of `boxed`
    */
-  if title-style.at("boxed", default: false) == true {
+  if title-style.at("boxed", default: false) {
     props = props + (
       width: auto,
       radius: frame.at("radius", default: 5pt),
       stroke: showy-stroke(frame),
     )
-    
   } else {
     props = props + (
       width: 100%,

@@ -1,4 +1,4 @@
-# Showybox (v1.1.1) -- In developing
+# Showybox (v1.2.0) -- In developing
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this repository contains the latest (development) version of t
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.1.0": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.2.0": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```java
-#import "@preview/showybox:1.1.0": showybox
+#import "@preview/showybox:1.2.0": showybox
 
 #showybox(
   [Hello world!]
@@ -77,6 +77,7 @@ The `showybox()` function can receive the following parameters:
 - `footer`: A string used as the footer of the showybox
 - `frame`: A dictionary containing the frame's properties
 - `title-style`: A dictionary containing the title's styles
+- `boxed-style`: A dictionary containing the boxed-title's special properties
 - `body-style`: A dictionary containing the body's styles
 - `footer-style`: A dictionary containing the footer's styles
 - `sep`: A dictionary containing the separator's properties
@@ -107,8 +108,14 @@ The `showybox()` function can receive the following parameters:
 - `weight`: Text weight (default is `bold`)
 - `align`: Text align (default is `left`)
 - `boxed`: Wether the title occupies the whole showybox width or appears like a "floating box" above the showybox (default is `false`)
-- `boxed-align`: If `boxed` is `true`, the alignement of the boxed title (default is `left`)
 - `sep-thickness`: Thickness of the separator between title and body (default is `1pt`)
+
+### Boxed styles
+
+- `anchor`: Anchor of the boxed title
+  - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
+  - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `left`)
+- `offset`: Horizontal offset of the boxed title (default is `0pt`)
 
 ### Body styles
 - `color`: Text color (default is `black`)
@@ -206,6 +213,7 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Added `sep-thickness` for title and footer
 - Refactored repository's files layout
 
-### Version 1.1.1
+### Version 1.2.0
 
 - Update ``type()`` conditionals to Typst 0.8.0 standards
+- Add ``boxed-style`` property, with ``anchor`` and ``offset`` properties.
