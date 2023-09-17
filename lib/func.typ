@@ -16,12 +16,14 @@
  * in a specific direction inside a dictionary or value
  *
  * Parameters:
- * + direction: Direction as an alignement
+ * + direction: Direction as an alignement or string
  * + value: Dictionary or value to search in
  * + default: Default value if nothing is found
  */
 #let showy-value-in-direction( direction, value, default ) = {
-  direction = repr(direction)
+  if type(direction) != str {
+    direction = repr(direction)
+  }
   if type(value) == dictionary {
     if direction in value {
       value.at(direction)
@@ -29,7 +31,11 @@
       value.x
     } else if direction in ("top", "bottom") and "y" in value {
       value.y
-    } else  if "rest" in value {
+    } else if direction in ("top-left", "top-right") and "top" in value {
+      value.top
+    } else if direction in ("bottom-left", "bottom-right") and "bottom" in value {
+      value.bottom
+    } else if "rest" in value {
       value.rest
     } else {
       default
@@ -39,6 +45,25 @@
   } else {
     value
   }
+}
+
+/*
+ * Function: showy-section-inset()
+ *
+ * Description: Gets the inset value for the given
+ * section ("title", "body", "footer"), checking if
+ * it's declared in `title-inset`, `body-inset` or
+ * `footer-inset` instead of `inset`
+ *
+ * Parameters:
+ * + section: Section to retrieve the inset ("title", "body" or "footer")
+ * + frame: The dictionary with frame settings
+ */
+#let showy-section-inset( section, frame ) = {
+  return frame.at(
+    section + "-inset",
+    default: frame.inset
+  )
 }
 
 /*
@@ -52,7 +77,7 @@
  * + frame: The dictionary with frame settings
  */
 #let showy-line( frame ) = {
-  let inset = frame.at("body-inset", default: frame.at("inset", default:(x:1em, y:0.65em)))
+  let inset = showy-section-inset("body", frame)
   let inset = (
     left: showy-value-in-direction(left, inset, 0pt),
     right: showy-value-in-direction(right, inset, 0pt)
@@ -90,9 +115,9 @@
  */
 #let showy-stroke( frame, ..overrides ) = {
   let (paint, dash, width) = (
-    frame.at("border-color", default: black),
-    frame.at("dash", default: "solid"),
-    frame.at("thickness", default: 1pt)
+    frame.border-color,
+    frame.dash,
+    frame.thickness
   )
 
   let strokes = (:)
@@ -115,23 +140,4 @@
     )
   }
   return strokes
-}
-
-/*
- * Function: showy-section-inset()
- *
- * Description: Gets the inset value for the given
- * section ("title", "body", "footer"), checking if
- * it's declared in `title-inset`, `body-inset` or
- * `footer-inset` instead of `inset`
- *
- * Parameters:
- * + section: Section to retrieve the inset ("title", "body" or "footer")
- * + frame: The dictionary with frame settings
- */
-#let showy-section-inset( section, frame ) = {
-  return frame.at(
-    section + "-inset",
-    default: frame.at("inset", default: (x:1em, y: 0.65em))
-  )
 }
