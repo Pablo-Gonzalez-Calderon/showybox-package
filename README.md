@@ -220,3 +220,5 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Add ``boxed-style`` property, with ``anchor``, ``offset`` and ``radius`` properties.
 - Refactor ``showy-inset()`` for being general-purpose. Now it's called ``showy-value-in-direction()`` and has a default value for handling properties defaults
 - Now sharp corners can be set by giving a dictionary to frame ``radius`` (e.g. ``radius: (top: 5pt, bottom: 0pt)``). Before this only was possible for untitled showyboxes.
+- Refactor shadow functions to be in a separated file.
+- Fix bug of bad behaviour while writing too long titles.

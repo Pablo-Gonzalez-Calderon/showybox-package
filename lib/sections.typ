@@ -21,7 +21,7 @@
  * + title-styles: The dictionary with title styles
  * + title: Title of the showybox
  */
-#let showy-title( sbox-props, title ) = {
+#let showy-title(sbox-props, title) = {
   /*
    * Porperties independent of `boxed`
    */
@@ -76,7 +76,7 @@
  * + sep: The dictionary with sep styles
  * + body: Body content
  */
-#let showy-body( sbox-props, ..body ) = block(
+#let showy-body(sbox-props, ..body) = block(
     width: 100%,
     spacing: 0pt,
     inset:  showy-section-inset("body", sbox-props.frame),
@@ -116,7 +116,7 @@
  * + sep: The dictionary with sep styles
  * + body: Body content
  */
-#let showy-footer( sbox-props, footer ) = block(
+#let showy-footer(sbox-props, footer) = block(
     width: 100%,
     spacing: 0pt,
     inset: showy-section-inset("footer", sbox-props.frame),

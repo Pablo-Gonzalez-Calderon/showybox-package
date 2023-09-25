@@ -17,6 +17,8 @@
  */
 #import "lib/func.typ": *
 #import "lib/sections.typ": *
+#import "lib/shadows.typ": *
+#import "lib/state.typ": *
 
 /*
  * Function: showybox()
@@ -180,7 +182,9 @@
       }
     } else {
       none
-    }
+    },
+    breakable: breakable,
+    title: title
   )
   // Add title, body and footer inset (if present)
   for section-inset in ("title-inset", "body-inset", "footer-inset") {
@@ -190,12 +194,63 @@
     }
   }
 
+  _showy-id.step()
 
   /*
-   * Useful sizes and alignements
+   * Get title height and store it in the state. This pre-renders
+   * the title inside a container similar to the "final" one,
+   * depending if it's container's width is given as a ratio type
+   * or a length type.
    */
-  let title-size = measure(title, styles)
-  let title-block-height = title-size.height + showy-value-in-direction(top, showy-section-inset("title", props.frame), 0pt) + showy-value-in-direction(bottom, showy-section-inset("title", props.frame), 0pt)
+  locate(loc => {
+    let my-id = _showy-id.at(loc)
+    let my-state = _showy-state(my-id.first())
+
+    if type(width) == ratio {
+      layout(size => {
+        // Get full container's width in a length type
+        let container-width = size.width * width
+
+        let pre-rendered = block(
+          spacing: 0pt,
+          width: container-width,
+          fill: yellow,
+          inset: (x: 1em),
+          showy-title(props, title)
+        )
+
+        place(
+          top,
+          hide(pre-rendered)
+        )
+
+        let rendered-size = measure(pre-rendered, styles)
+
+        // Store the height in the state
+        my-state.update(rendered-size.height)
+
+      })
+    } else {
+      // Pre-rendering "normally" will be effective
+      let pre-rendered = block(
+        spacing: 0pt,
+        width: width,
+        fill: yellow,
+        inset: (x: 1em),
+        showy-title(props, title)
+      )
+
+      place(
+        top,
+        hide(pre-rendered)
+      )
+
+      let rendered-size = measure(pre-rendered, styles)
+
+      // Store the height in the state
+      my-state.update(rendered-size.height)
+    }
+  })
 
   /*
    *  Alignment wrapper
@@ -216,93 +271,15 @@
     }
   )
 
-  /*
-   * Optionally create one or two wrapper
-   * functions to add a shadow.
-   */
-  let shadowwrap = (sbox) => sbox
-  let boxedtitleshadowwrap = (tbox) => tbox
-  if props.shadow != none {
-    shadowwrap = (sbox) => {
-
-      /* If it has a boxed title, leave some space to avoid collisions
-         with other elements next to the showybox*/
-      if title != "" and props.title-style.boxed {
-        if props.boxed-style.anchor.y == bottom {
-          v(title-block-height)
-        } else if props.boxed-style.anchor.y == horizon{
-          v(title-block-height - 10pt)
-        } // Otherwise, no space is needed
-
-      }
-
-      block(
-        breakable: breakable,
-        radius: props.frame.radius,
-        fill: props.shadow.color,
-        spacing: 0pt,
-        outset: (
-          left: -props.shadow.offset.x,
-          right: props.shadow.offset.x,
-          bottom: props.shadow.offset.y,
-          top: -props.shadow.offset.y
-        ),
-        /* If it have a boxed title, substract some space to
-           avoid the shadow to be body + title height, and only
-           body height */
-        if title != "" and props.title-style.boxed {
-          if props.boxed-style.anchor.y == bottom {
-            v(-title-block-height)
-          } else if props.boxed-style.anchor.y == horizon {
-            v(-title-block-height + 10pt)
-          } // Otherwise do nothing
-
-          sbox
-        } else {
-          sbox
-        }
-      )
-    }
-
-    if title != "" and props.title-style.boxed and props.boxed-style.anchor.y != top {
-      /* Due to some uncontrolable spaces between blocks, there's the need
-         of adding an offset to `bottom-outset` to avoid an unwanted space
-         between the boxed-title shadow and the body. Hopefully in the
-         future a more pure-mathematically formula will be found. At the
-         moment, this 'trick' solves all cases where a showybox title has
-         only one line of heights */
-      let bottom-outset = if props.boxed-style.anchor.y == horizon {
-        10pt + props.frame.thickness/2 - .15pt
-      } else {
-        props.frame.thickness/2 - .15pt
-      }
-
-      boxedtitleshadowwrap = (tbox) => block(
-        breakable: breakable,
-        radius: (
-          top-left: showy-value-in-direction("top-left", props.boxed-style.radius, 5pt),
-          top-right: showy-value-in-direction("top-right", props.boxed-style.radius, 5pt)
-        ),
-        fill: props.shadow.color,
-        spacing: 0pt,
-        outset: (
-          left: -props.shadow.offset.x,
-          right: props.shadow.offset.x,
-          top: -props.shadow.offset.y,
-          bottom: -bottom-outset
-        ),
-        tbox
-      )
-    }
-  }
-
-  let showyblock = {
+  let showyblock = locate(loc => {
+    let my-id = _showy-id.at(loc)
+    let my-state = _showy-state(my-id.first())
 
     if title != "" and props.title-style.boxed {
       if props.boxed-style.anchor.y == bottom {
-        v(title-block-height)
+        v(my-state.at(loc))
       } else if props.boxed-style.anchor.y == horizon {
-        v(title-block-height - 10pt)
+        v(my-state.at(loc)/2)
       } // Otherwise don't add extra space
     }
 
@@ -325,10 +302,11 @@
           block(
             width: 100%,
             spacing: 0pt,
-            move(
-              dx: props.boxed-style.offset,
-              align(
-                props.boxed-style.anchor.x,
+            align(
+              props.boxed-style.anchor.x,
+              block(
+                spacing: 0pt,
+                inset: (x: 1em),
                 showy-title(props, title)
               )
             )
@@ -336,17 +314,20 @@
         } else {
           if props.boxed-style.anchor.y == horizon {
             // Leave some space for putting a horizon-boxed title
-            v(10pt)
+            v(my-state.at(loc)/2)
           }
           place(
             top + props.boxed-style.anchor.x,
             dy: if props.boxed-style.anchor.y == bottom {
-              -title-block-height
+              -my-state.at(loc)
             } else if props.boxed-style.anchor.y == horizon {
-              -title-block-height + 10pt
+              -my-state.at(loc)/2
             },
-            dx: props.boxed-style.offset,
-            boxedtitleshadowwrap(showy-title(props, title))
+            block(
+              spacing: 0pt,
+              inset: props.boxed-style.offset,
+              showy-boxed-title-shadow(props, showy-title(props, title))
+            )
           )
         }
       }
@@ -363,9 +344,9 @@
         showy-footer(props, footer)
       }
     ]
-  }
+  })
 
   alignwrap(
-    shadowwrap(showyblock)
+    showy-shadow(props, showyblock)
   )
 })
