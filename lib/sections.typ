@@ -17,13 +17,12 @@
  * Description: Returns the title's block
  *
  * Parameters:
- * + frame: The dictionary with frame settings
- * + title-styles: The dictionary with title styles
+ * + sbox-props: Showybox properties
  * + title: Title of the showybox
  */
 #let showy-title(sbox-props, title) = {
   /*
-   * Porperties independent of `boxed`
+   * Properties independent of `boxed`
    */
   let props = (
     spacing: 0pt,
@@ -32,7 +31,7 @@
   )
 
   /*
-   * Porperties dependent of `boxed`
+   * Properties dependent of `boxed`
    */
   if sbox-props.title-style.boxed {
     props = props + (
@@ -71,9 +70,7 @@
  * Description: Returns the body's block
  *
  * Parameters:
- * + frame: The dictionary with frame settings
- * + body-styles: The dictionary with body styles
- * + sep: The dictionary with sep styles
+ * + sbox-props: Showybox properties
  * + body: Body content
  */
 #let showy-body(sbox-props, ..body) = block(
@@ -111,9 +108,7 @@
  * Description: Returns the footer's block
  *
  * Parameters:
- * + frame: The dictionary with frame settings
- * + body-styles: The dictionary with body styles
- * + sep: The dictionary with sep styles
+ * + sbox-props: Showybox properties
  * + body: Body content
  */
 #let showy-footer(sbox-props, footer) = block(

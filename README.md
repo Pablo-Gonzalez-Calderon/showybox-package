@@ -115,7 +115,7 @@ The `showybox()` function can receive the following parameters:
 - `anchor`: Anchor of the boxed title
   - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
   - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `left`)
-- `offset`: Horizontal offset of the boxed title (default is `0pt`)
+- `offset`: How much to offset the boxed title in x and y direction either as a length or a dictionary with keys `x` and `y` (default is `0pt`)
 - ``radius``: Boxed title radius as a dictionary or relative length (default is `5pt`)
 
 ### Body styles

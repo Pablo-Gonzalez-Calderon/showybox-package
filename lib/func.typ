@@ -20,7 +20,7 @@
  * + value: Dictionary or value to search in
  * + default: Default value if nothing is found
  */
-#let showy-value-in-direction( direction, value, default ) = {
+#let showy-value-in-direction(direction, value, default) = {
   if type(direction) != str {
     direction = repr(direction)
   }
@@ -59,7 +59,7 @@
  * + section: Section to retrieve the inset ("title", "body" or "footer")
  * + frame: The dictionary with frame settings
  */
-#let showy-section-inset( section, frame ) = {
+#let showy-section-inset(section, frame) = {
   return frame.at(
     section + "-inset",
     default: frame.inset
@@ -76,7 +76,7 @@
  * Parameters:
  * + frame: The dictionary with frame settings
  */
-#let showy-line( frame ) = {
+#let showy-line(frame) = {
   let inset = showy-section-inset("body", frame)
   let inset = (
     left: showy-value-in-direction(left, inset, 0pt),
@@ -113,7 +113,7 @@
  * Parameters:
  * + frame: The dictionary with frame settings
  */
-#let showy-stroke( frame, ..overrides ) = {
+#let showy-stroke(frame, ..overrides) = {
   let (paint, dash, width) = (
     frame.border-color,
     frame.dash,

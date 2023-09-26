@@ -1,6 +1,27 @@
+/*
+ * ShowyBox - A package for Typst
+ * Pablo González Calderón and Showybox Contributors (c) 2023
+ *
+ * lib/shadows.typ -- The package's file containing all the
+ * internal functions for drawing shadows.
+ *
+ * This file is under the MIT license. For more
+ * information see LICENSE on the package's main folder.
+ */
+
 #import "func.typ": *
 #import "state.typ": *
 
+/*
+ * Function: showy-shadow()
+ *
+ * Description: Draws the showybox main shadow
+ * (excludes boxed title shadows).
+ *
+ * Parameters:
+ * + sbox-props: Showybox properties
+ * + sbox: Pre-rendered showybox
+ */
 #let showy-shadow(sbox-props, sbox) = locate(loc => {
   if sbox-props.shadow == none {
     return sbox
@@ -47,6 +68,15 @@
   )
 })
 
+/*
+ * Function: showy-boxed-title-shadow()
+ *
+ * Description:  Draws the showybox's boxed title shadow
+ *
+ * Parameters:
+ * + sbox-props: Showybox properties
+ * + tbox: Pre-rendered boxed-title
+ */
 #let showy-boxed-title-shadow(sbox-props, tbox) = locate(loc => {
   if sbox-props.shadow == none {
     return tbox
@@ -56,7 +86,7 @@
 
   let my-id = _showy-id.at(loc)
   let my-state = _showy-state(my-id.first())
-  let bottom-outset = if sbox-props.boxed-style.anchor.y == horizon {
+  let bottom-outset = sbox-props.boxed-style.offset.y + if sbox-props.boxed-style.anchor.y == horizon {
     (my-state.at(loc) + sbox-props.frame.thickness)/2
   } else {
     sbox-props.frame.thickness/2
@@ -65,9 +95,10 @@
   return block(
     breakable: sbox-props.breakable,
     radius: (
-      top-left: showy-value-in-direction("top-left", sbox-props.boxed-style.radius, 5pt),
-      top-right: showy-value-in-direction("top-right", sbox-props.boxed-style.radius, 5pt)
-    ),
+        top-left: showy-value-in-direction("top-left", sbox-props.boxed-style.radius, 5pt),
+        top-right: showy-value-in-direction("top-right", sbox-props.boxed-style.radius, 5pt)
+      )
+    ,
     fill: sbox-props.shadow.color,
     spacing: 0pt,
     outset: (

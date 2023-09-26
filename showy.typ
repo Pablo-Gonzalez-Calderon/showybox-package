@@ -25,88 +25,14 @@
  *
  * Description: Creates a showybox
  *
- * Parameters:
- * - title: Title of the showybox
- * - footer: Footer of the showybox
- * - frame:
- *   + title-color: Color used as background color where the title goes
- *   + body-color: Color used as background color where the body goes
- *   + footer-color: Color used as background color where the footer goes
- *   + border-color: Color used for the showybox's border
- *   + inset: Inset for the title, body, and footer, if title-inset, body-inset, footer-inset aren't given
- *   + radius: Showybox's radius
- *   + thickness: Border width of the showybox
- *   + dash: Showybox's border style
- * - title-style:
- *   + color: Text color
- *   + weight: Text weight
- *   + align: Text align
- *   + boxed: Whether the title's block should be apart or not
- *   + boxed-align: Alignement of the boxed title
- *   + sep-thickness: Title's separator thickness
- * - body-styles:
- *   + color: Text color
- *   + align: Text align
- * - footer-style:
- *   + color: Text color
- *   + weight: Text weight
- *   + align: Text align
- *   + sep-thickness: Footer's separator thickness
- * - sep:
- *   + width: Separator's width
- *   + dash: Separator's style (as a 'line' dash style)
- *   + gutter: Separator's gutter space
- * - shadow:
- *   + color: Shadow color
- *   + offset: How much to offset the shadow in x and y direction either as a length or a dictionary with keys `x` and `y`
- * - width: Showybox's width
- * - align: Alignement of the showybox inside its container
- * - breakable: Whether the showybox can break if it reaches the end of its container
- * - spacing: Space above and below the showybox
- * - above: Space above the showybox
- * - below: Space below the showybox
- * - body: The content of the showybox
  */
  #let showybox(
-  frame: (
-    title-color: black,
-    body-color: white,
-    border-color: black,
-    footer-color: luma(220),
-    inset: (x: 1em, y: .65em),
-    radius: 5pt,
-    thickness: 1pt,
-    dash: "solid"
-  ),
-  title-style: (
-    color: white,
-    weight: "bold",
-    align: left,
-    boxed: false,
-    sep-thickness: 1pt
-  ),
-  boxed-style: (
-    anchor: (
-      y: horizon,
-      x: left,
-    ),
-    offset: 0pt // Only in x direction
-  ),
-  body-style: (
-    color: black,
-    align: left
-  ),
-  footer-style: (
-    color: luma(85),
-    weight: "regular",
-    align: left,
-    sep-thickness: 1pt,
-  ),
-  sep: (
-    width: 1pt,
-    dash: "solid",
-    gutter: 0.65em
-  ),
+  frame: (:),
+  title-style: (:),
+  boxed-style: (:),
+  body-style: (:),
+  footer-style: (:),
+  sep: (:),
   shadow: none,
   width: 100%,
   breakable: false,
@@ -134,7 +60,7 @@
     ),
     title-style: (
       color: title-style.at("color", default: white),
-      weight: title-style.at("weight", default: "bold"),
+      weight: title-style.at("weight", default: "regular"),
       align: title-style.at("align", default: left),
       boxed: title-style.at("boxed", default: false),
       sep-thickness: title-style.at("sept-thickness", default: 1pt)
@@ -144,7 +70,17 @@
         y: boxed-style.at("anchor", default: (:)).at("y", default: horizon),
         x: boxed-style.at("anchor", default: (:)).at("x", default: left),
       ),
-      offset: boxed-style.at("offset", default: 0pt),
+      offset: if type(boxed-style.at("offset", default: 0pt)) != dictionary {
+        (
+          x: boxed-style.at("offset", default: 0pt),
+          y: boxed-style.at("offset", default: 0pt),
+        )
+      } else {
+        (
+          x: boxed-style.at("offset").at("x", default: 0pt),
+          y: boxed-style.at("offset").at("y", default: 0pt)
+        )
+      },
       radius: boxed-style.at("radius", default: 5pt)
     ),
     body-style: (
@@ -304,10 +240,14 @@
             spacing: 0pt,
             align(
               props.boxed-style.anchor.x,
-              block(
-                spacing: 0pt,
-                inset: (x: 1em),
-                showy-title(props, title)
+              move(
+                dx: props.boxed-style.offset.x,
+                dy: props.boxed-style.offset.y,
+                block(
+                  spacing: 0pt,
+                  inset: (x: 1em),
+                  showy-title(props, title)
+                )
               )
             )
           )
@@ -318,14 +258,15 @@
           }
           place(
             top + props.boxed-style.anchor.x,
-            dy: if props.boxed-style.anchor.y == bottom {
+            dx: props.boxed-style.offset.x,
+            dy: props.boxed-style.offset.y + if props.boxed-style.anchor.y == bottom {
               -my-state.at(loc)
             } else if props.boxed-style.anchor.y == horizon {
               -my-state.at(loc)/2
             },
             block(
               spacing: 0pt,
-              inset: props.boxed-style.offset,
+              inset: (x: 1em),
               showy-boxed-title-shadow(props, showy-title(props, title))
             )
           )
