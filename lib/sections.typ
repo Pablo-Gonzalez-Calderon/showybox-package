@@ -33,10 +33,10 @@
   /*
    * Properties dependent of `boxed`
    */
-  if sbox-props.title-style.boxed {
+  if sbox-props.title-style.boxed-style != none {
     props = props + (
       width: auto,
-      radius: sbox-props.boxed-style.radius,
+      radius: sbox-props.title-style.boxed-style.radius,
       stroke: showy-stroke(sbox-props.frame),
     )
   } else {

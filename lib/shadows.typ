@@ -31,10 +31,10 @@
 
   /* If it has a boxed sbox-props.title, leave some space to avoid collisions
       with other elements next to the showybox*/
-  if sbox-props.title != "" and sbox-props.title-style.boxed {
-    if sbox-props.boxed-style.anchor.y == bottom {
+  if sbox-props.title != "" and sbox-props.title-style.boxed-style != none {
+    if sbox-props.title-style.boxed-style.anchor.y == bottom {
       v(my-state.at(loc))
-    } else if sbox-props.boxed-style.anchor.y == horizon{
+    } else if sbox-props.title-style.boxed-style.anchor.y == horizon{
       v(my-state.at(loc)/2)
     } // Otherwise, no space is needed
 
@@ -54,10 +54,10 @@
     /* If it have a boxed title, substract some space to
         avoid the shadow to be body + title height, and only
         body height */
-    if sbox-props.title != "" and sbox-props.title-style.boxed {
-      if sbox-props.boxed-style.anchor.y == bottom {
+    if sbox-props.title != "" and sbox-props.title-style.boxed-style != none {
+      if sbox-props.title-style.boxed-style.anchor.y == bottom {
         v(-my-state.at(loc))
-      } else if sbox-props.boxed-style.anchor.y == horizon {
+      } else if sbox-props.title-style.boxed-style.anchor.y == horizon {
         v(-my-state.at(loc)/2)
       } // Otherwise do nothing
 
@@ -80,13 +80,13 @@
 #let showy-boxed-title-shadow(sbox-props, tbox) = locate(loc => {
   if sbox-props.shadow == none {
     return tbox
-  } else if sbox-props.title == "" or not sbox-props.title-style.boxed or sbox-props.boxed-style.anchor.y == top {
+  } else if sbox-props.title == "" or sbox-props.title-style.boxed-style == none or sbox-props.title-style.boxed-style.anchor.y == top {
     return tbox
   }
 
   let my-id = _showy-id.at(loc)
   let my-state = _showy-state(my-id.first())
-  let bottom-outset = sbox-props.boxed-style.offset.y + if sbox-props.boxed-style.anchor.y == horizon {
+  let bottom-outset = sbox-props.title-style.boxed-style.offset.y + if sbox-props.title-style.boxed-style.anchor.y == horizon {
     (my-state.at(loc) + sbox-props.frame.thickness)/2
   } else {
     sbox-props.frame.thickness/2
@@ -95,8 +95,8 @@
   return block(
     breakable: sbox-props.breakable,
     radius: (
-        top-left: showy-value-in-direction("top-left", sbox-props.boxed-style.radius, 5pt),
-        top-right: showy-value-in-direction("top-right", sbox-props.boxed-style.radius, 5pt)
+        top-left: showy-value-in-direction("top-left", sbox-props.title-style.boxed-style.radius, 5pt),
+        top-right: showy-value-in-direction("top-right", sbox-props.title-style.boxed-style.radius, 5pt)
       )
     ,
     fill: sbox-props.shadow.color,

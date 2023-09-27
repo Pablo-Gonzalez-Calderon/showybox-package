@@ -77,7 +77,6 @@ The `showybox()` function can receive the following parameters:
 - `footer`: A string used as the footer of the showybox
 - `frame`: A dictionary containing the frame's properties
 - `title-style`: A dictionary containing the title's styles
-- `boxed-style`: A dictionary containing the boxed-title's special properties
 - `body-style`: A dictionary containing the body's styles
 - `footer-style`: A dictionary containing the footer's styles
 - `sep`: A dictionary containing the separator's properties
@@ -107,10 +106,10 @@ The `showybox()` function can receive the following parameters:
 - `color`: Text color (default is `white`)
 - `weight`: Text weight (default is `bold`)
 - `align`: Text align (default is `left`)
-- `boxed`: Wether the title occupies the whole showybox width or appears like a "floating box" above the showybox (default is `false`)
 - `sep-thickness`: Thickness of the separator between title and body (default is `1pt`)
+- `boxed-style`: If it's a dictionary of properties, indicates that the title must appear like a "floating box" above the showybox. If it's ``none``, the title appears normally (default is `none`)
 
-### Boxed styles
+#### Boxed styles
 
 - `anchor`: Anchor of the boxed title
   - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
