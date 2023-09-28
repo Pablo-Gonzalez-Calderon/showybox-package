@@ -134,18 +134,40 @@
    * depending if it's container's width is given as a ratio type
    * or a length type.
    */
-  locate(loc => {
-    let my-id = _showy-id.at(loc)
-    let my-state = _showy-state(my-id.first())
+  if title != "" and props.title-style.boxed-style != none {
+    locate(loc => {
+      let my-id = _showy-id.at(loc)
+      let my-state = _showy-state(my-id.first())
 
-    if type(width) == ratio {
-      layout(size => {
-        // Get full container's width in a length type
-        let container-width = size.width * width
+      if type(width) == ratio {
+        layout(size => {
+          // Get full container's width in a length type
+          let container-width = size.width * width
 
+          let pre-rendered = block(
+            spacing: 0pt,
+            width: container-width,
+            fill: yellow,
+            inset: (x: 1em),
+            showy-title(props, title)
+          )
+
+          place(
+            top,
+            hide(pre-rendered)
+          )
+
+          let rendered-size = measure(pre-rendered, styles)
+
+          // Store the height in the state
+          my-state.update(rendered-size.height)
+
+        })
+      } else {
+        // Pre-rendering "normally" will be effective
         let pre-rendered = block(
           spacing: 0pt,
-          width: container-width,
+          width: width,
           fill: yellow,
           inset: (x: 1em),
           showy-title(props, title)
@@ -160,29 +182,9 @@
 
         // Store the height in the state
         my-state.update(rendered-size.height)
-
-      })
-    } else {
-      // Pre-rendering "normally" will be effective
-      let pre-rendered = block(
-        spacing: 0pt,
-        width: width,
-        fill: yellow,
-        inset: (x: 1em),
-        showy-title(props, title)
-      )
-
-      place(
-        top,
-        hide(pre-rendered)
-      )
-
-      let rendered-size = measure(pre-rendered, styles)
-
-      // Store the height in the state
-      my-state.update(rendered-size.height)
-    }
-  })
+      }
+    })
+  }
 
   /*
    *  Alignment wrapper
