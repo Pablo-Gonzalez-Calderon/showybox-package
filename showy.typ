@@ -62,7 +62,7 @@
       color: title-style.at("color", default: white),
       weight: title-style.at("weight", default: "regular"),
       align: title-style.at("align", default: left),
-      sep-thickness: title-style.at("sept-thickness", default: 1pt),
+      sep-thickness: title-style.at("sep-thickness", default: 1pt),
       boxed-style: if title-style.at("boxed-style", default: none) != none and type(title-style.at("boxed-style", default: none)) == dictionary {
         (
           anchor: (
