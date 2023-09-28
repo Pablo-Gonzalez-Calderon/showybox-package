@@ -117,7 +117,11 @@
     inset: showy-section-inset("footer", sbox-props.frame),
     fill: sbox-props.frame.footer-color,
     stroke: showy-stroke(sbox-props.frame, top: sbox-props.footer-style.sep-thickness),
-    radius: (bottom: sbox-props.frame.radius),
+    radius: (
+      bottom-left: showy-value-in-direction("bottom-left", sbox-props.frame.radius, 5pt),
+      bottom-right: showy-value-in-direction("bottom-right", sbox-props.frame.radius, 5pt),
+      top: 0pt
+    ),
     align(
         sbox-props.footer-style.align,
         text(
