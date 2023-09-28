@@ -82,7 +82,7 @@
         text(
         sbox-props.body-style.color,
         body.pos()
-            .map(block.with(spacing:0pt))
+            .map(block.with(spacing:0pt, width: 100%))
             .join(
                 block(
                     spacing: sbox-props.sep.gutter,
