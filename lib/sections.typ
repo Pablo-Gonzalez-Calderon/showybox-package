@@ -20,7 +20,7 @@
  * + sbox-props: Showybox properties
  * + title: Title of the showybox
  */
-#let showy-title(sbox-props, title) = {
+#let showy-title(sbox-props) = {
   /*
    * Properties independent of `boxed`
    */
@@ -58,7 +58,7 @@
       text(
         sbox-props.title-style.color,
         weight: sbox-props.title-style.weight,
-        title
+        sbox-props.title
       )
     )
   )

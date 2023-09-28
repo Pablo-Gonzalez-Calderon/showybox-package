@@ -19,6 +19,7 @@
 #import "lib/sections.typ": *
 #import "lib/shadows.typ": *
 #import "lib/state.typ": *
+#import "lib/pre-rendering.typ": *
 
 /*
  * Function: showybox()
@@ -41,7 +42,7 @@
   title: "",
   footer: "",
   ..body
-) = style(styles => {
+) = {
   /*
    * Complete and store all the dictionary-like-properties inside a
    * single dictionary. This will improve readability and avoids to
@@ -116,6 +117,7 @@
       none
     },
     breakable: breakable,
+    width: width,
     title: title
   )
   // Add title, body and footer inset (if present)
@@ -129,61 +131,17 @@
   _showy-id.step()
 
   /*
-   * Get title height and store it in the state. This pre-renders
-   * the title inside a container similar to the "final" one,
-   * depending if it's container's width is given as a ratio type
-   * or a length type.
+   * Update title height in state.
+   *
+   * NOTE: Although a `place` and `hide` are used in the pre-render
+   * function, for avoiding nesting components inside unaccesible
+   * containers, we must call this function inside another `place`.
    */
   if title != "" and props.title-style.boxed-style != none {
-    locate(loc => {
-      let my-id = _showy-id.at(loc)
-      let my-state = _showy-state(my-id.first())
-
-      if type(width) == ratio {
-        layout(size => {
-          // Get full container's width in a length type
-          let container-width = size.width * width
-
-          let pre-rendered = block(
-            spacing: 0pt,
-            width: container-width,
-            fill: yellow,
-            inset: (x: 1em),
-            showy-title(props, title)
-          )
-
-          place(
-            top,
-            hide(pre-rendered)
-          )
-
-          let rendered-size = measure(pre-rendered, styles)
-
-          // Store the height in the state
-          my-state.update(rendered-size.height)
-
-        })
-      } else {
-        // Pre-rendering "normally" will be effective
-        let pre-rendered = block(
-          spacing: 0pt,
-          width: width,
-          fill: yellow,
-          inset: (x: 1em),
-          showy-title(props, title)
-        )
-
-        place(
-          top,
-          hide(pre-rendered)
-        )
-
-        let rendered-size = measure(pre-rendered, styles)
-
-        // Store the height in the state
-        my-state.update(rendered-size.height)
-      }
-    })
+    place(
+      top,
+      hide(showy-pre-render-title(props))
+    )
   }
 
   /*
@@ -211,9 +169,9 @@
 
     if title != "" and props.title-style.boxed-style != none {
       if props.title-style.boxed-style.anchor.y == bottom {
-        v(my-state.at(loc))
+        v(my-state.final(loc))
       } else if props.title-style.boxed-style.anchor.y == horizon {
-        v(my-state.at(loc)/2)
+        v(my-state.final(loc)/2)
       } // Otherwise don't add extra space
     }
 
@@ -226,11 +184,12 @@
       breakable: breakable,
       stroke: showy-stroke(props.frame)
     )[
+
       /*
        * Title of the showybox
        */
       #if title != "" and not props.title-style.boxed-style != none {
-        showy-title(props, title)
+        showy-title(props)
       } else if title != "" and props.title-style.boxed-style != none {
         if props.title-style.boxed-style.anchor.y == top {
           block(
@@ -244,7 +203,7 @@
                 block(
                   spacing: 0pt,
                   inset: (x: 1em),
-                  showy-title(props, title)
+                  showy-title(props)
                 )
               )
             )
@@ -252,20 +211,20 @@
         } else {
           if props.title-style.boxed-style.anchor.y == horizon {
             // Leave some space for putting a horizon-boxed title
-            v(my-state.at(loc)/2)
+            v(my-state.final(loc)/2)
           }
           place(
             top + props.title-style.boxed-style.anchor.x,
             dx: props.title-style.boxed-style.offset.x,
             dy: props.title-style.boxed-style.offset.y + if props.title-style.boxed-style.anchor.y == bottom {
-              -my-state.at(loc)
+              -my-state.final(loc)
             } else if props.title-style.boxed-style.anchor.y == horizon {
-              -my-state.at(loc)/2
+              -my-state.final(loc)/2
             },
             block(
               spacing: 0pt,
               inset: (x: 1em),
-              showy-boxed-title-shadow(props, showy-title(props, title))
+              showy-boxed-title-shadow(props, showy-title(props))
             )
           )
         }
@@ -288,4 +247,4 @@
   alignwrap(
     showy-shadow(props, showyblock)
   )
-})
+}

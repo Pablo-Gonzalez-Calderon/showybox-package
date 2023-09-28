@@ -9,5 +9,5 @@
  * information see LICENSE on the package's main folder.
  */
 
-#let _showy-state(id) = state("showybox-state-for-id-" + repr(id), none)
+#let _showy-state(id) = state("showybox-state-for-id-" + repr(id), 0pt)
 #let _showy-id = counter("showybox-id")
