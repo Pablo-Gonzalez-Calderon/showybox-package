@@ -91,7 +91,7 @@
       sep-thickness: footer-style.at("sep-thickness", default: 1pt),
     ),
     sep: (
-      width: sep.at("width", default: 1pt),
+      thickness: sep.at("thickness", default: 1pt),
       dash: sep.at("dash", default: "solid"),
       gutter: sep.at("gutter", default: 0.65em)
     ),

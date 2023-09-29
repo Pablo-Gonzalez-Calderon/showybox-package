@@ -114,7 +114,7 @@ The `showybox()` function can receive the following parameters:
 - `anchor`: Anchor of the boxed title
   - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
   - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `left`)
-- `offset`: How much to offset the boxed title in x and y direction either as a length or a dictionary with keys `x` and `y` (default is `0pt`)
+- `offset`: How much to offset the boxed title in x and y direction as a dictionary with keys `x` and `y` (default is `0pt`)
 - ``radius``: Boxed title radius as a dictionary or relative length (default is `5pt`)
 
 ### Body styles
@@ -221,3 +221,4 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Now sharp corners can be set by giving a dictionary to frame ``radius`` (e.g. ``radius: (top: 5pt, bottom: 0pt)``). Before this only was possible for untitled showyboxes.
 - Refactor shadow functions to be in a separated file.
 - Fix bug of bad behaviour while writing too long titles.
+- Fix bug while rendering separators with custom thickness. Now the thickness is gotten properly.

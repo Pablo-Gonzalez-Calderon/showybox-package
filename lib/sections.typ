@@ -92,7 +92,7 @@
                             stroke: (
                                 paint: sbox-props.frame.border-color,
                                 dash: sbox-props.sep.dash,
-                                thickness: sbox-props.sep.width
+                                thickness: sbox-props.sep.thickness
                             )
                         )
                     )
