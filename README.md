@@ -223,3 +223,4 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Fix bug of bad behaviour while writing too long titles.
 - Fix bug while rendering separators with custom thickness. Now the thickness is gotten properly.
 - Fix bad shadow drawing in showyboxes with a boxed-title that has a "extreme" `offset` value.
+- Fix bad sizing while creating showyboxes with a `width` of less than `100%`, and a shadow.

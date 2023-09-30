@@ -181,7 +181,11 @@
     }
 
     block(
-      width: width,
+      width: if props.shadow == none {
+        width
+      } else {
+        100%
+      },
       fill: props.frame.body-color,
       radius: props.frame.radius,
       inset: 0pt,

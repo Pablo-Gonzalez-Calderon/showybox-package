@@ -46,6 +46,7 @@
     breakable: sbox-props.breakable,
     radius: sbox-props.frame.radius,
     fill: sbox-props.shadow.color,
+    width: sbox-props.width,
     spacing: 0pt,
     outset: (
       left: -sbox-props.shadow.offset.x,
