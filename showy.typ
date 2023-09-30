@@ -173,6 +173,11 @@
       } else if props.title-style.boxed-style.anchor.y == horizon {
         v(my-state.final(loc)/2)
       } // Otherwise don't add extra space
+
+      // Add the boxed-title shadow before rendering the body
+      if props.shadow != none {
+        showy-boxed-title-shadow(props)
+      }
     }
 
     block(
@@ -184,50 +189,33 @@
       breakable: breakable,
       stroke: showy-stroke(props.frame)
     )[
-
       /*
        * Title of the showybox
        */
-      #if title != "" and not props.title-style.boxed-style != none {
+      #if title != "" and props.title-style.boxed-style == none {
         showy-title(props)
       } else if title != "" and props.title-style.boxed-style != none {
         if props.title-style.boxed-style.anchor.y == top {
+          v(my-state.final(loc))
+        } else if props.title-style.boxed-style.anchor.y == horizon {
+          v(my-state.final(loc)/2)
+        }
+
+        place(
+          top + props.title-style.boxed-style.anchor.x,
+          dx: props.title-style.boxed-style.offset.x,
+          dy: props.title-style.boxed-style.offset.y + if props.title-style.boxed-style.anchor.y == bottom {
+            -my-state.final(loc)
+          } else if props.title-style.boxed-style.anchor.y == horizon {
+            -my-state.final(loc)/2
+          },
           block(
             width: 100%,
             spacing: 0pt,
-            align(
-              props.title-style.boxed-style.anchor.x,
-              move(
-                dx: props.title-style.boxed-style.offset.x,
-                dy: props.title-style.boxed-style.offset.y,
-                block(
-                  spacing: 0pt,
-                  inset: (x: 1em),
-                  showy-title(props)
-                )
-              )
-            )
+            inset: (x: 1em),
+            showy-title(props)
           )
-        } else {
-          if props.title-style.boxed-style.anchor.y == horizon {
-            // Leave some space for putting a horizon-boxed title
-            v(my-state.final(loc)/2)
-          }
-          place(
-            top + props.title-style.boxed-style.anchor.x,
-            dx: props.title-style.boxed-style.offset.x,
-            dy: props.title-style.boxed-style.offset.y + if props.title-style.boxed-style.anchor.y == bottom {
-              -my-state.final(loc)
-            } else if props.title-style.boxed-style.anchor.y == horizon {
-              -my-state.final(loc)/2
-            },
-            block(
-              spacing: 0pt,
-              inset: (x: 1em),
-              showy-boxed-title-shadow(props, showy-title(props))
-            )
-          )
-        }
+        )
       }
 
       /*

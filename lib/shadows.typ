@@ -11,6 +11,7 @@
 
 #import "func.typ": *
 #import "state.typ": *
+#import "sections.typ": *
 
 /*
  * Function: showy-shadow()
@@ -29,8 +30,9 @@
   let my-id = _showy-id.at(loc)
   let my-state = _showy-state(my-id.first())
 
-  /* If it has a boxed sbox-props.title, leave some space to avoid collisions
-      with other elements next to the showybox*/
+  /* If it has a boxed sbox-props.title, leave some space
+   * to avoid collisions with other elements next to the
+   * showybox */
   if sbox-props.title != "" and sbox-props.title-style.boxed-style != none {
     if sbox-props.title-style.boxed-style.anchor.y == bottom {
       v(my-state.at(loc))
@@ -71,43 +73,47 @@
 /*
  * Function: showy-boxed-title-shadow()
  *
- * Description:  Draws the showybox's boxed title shadow
+ * Description: Draws the showybox's boxed title shadow
  *
  * Parameters:
  * + sbox-props: Showybox properties
  * + tbox: Pre-rendered boxed-title
  */
-#let showy-boxed-title-shadow(sbox-props, tbox) = locate(loc => {
+#let showy-boxed-title-shadow(sbox-props) = locate(loc => {
   if sbox-props.shadow == none {
-    return tbox
-  } else if sbox-props.title == "" or sbox-props.title-style.boxed-style == none or sbox-props.title-style.boxed-style.anchor.y == top {
-    return tbox
+    return
+  } else if sbox-props.title == "" or sbox-props.title-style.boxed-style == none {
+    return
   }
 
   let my-id = _showy-id.at(loc)
   let my-state = _showy-state(my-id.first())
-  let bottom-outset = sbox-props.title-style.boxed-style.offset.y + if sbox-props.title-style.boxed-style.anchor.y == horizon {
-    (my-state.at(loc) + sbox-props.frame.thickness)/2
-  } else {
-    sbox-props.frame.thickness/2
-  }
 
-  return block(
-    breakable: sbox-props.breakable,
-    radius: (
-        top-left: showy-value-in-direction("top-left", sbox-props.title-style.boxed-style.radius, 5pt),
-        top-right: showy-value-in-direction("top-right", sbox-props.title-style.boxed-style.radius, 5pt)
+  return place(
+    top + sbox-props.title-style.boxed-style.anchor.x,
+    dx: sbox-props.title-style.boxed-style.offset.x,
+    dy: sbox-props.title-style.boxed-style.offset.y + if sbox-props.title-style.boxed-style.anchor.y == bottom {
+      -my-state.final(loc)
+    } else if sbox-props.title-style.boxed-style.anchor.y == horizon {
+      -my-state.final(loc)/2
+    },
+    block(
+      spacing: 0pt,
+      inset: (x: 1em),
+      block(
+        breakable: sbox-props.breakable,
+        radius: sbox-props.title-style.boxed-style.radius,
+        fill: sbox-props.shadow.color,
+        spacing: 0pt,
+        outset: (
+          left: -sbox-props.shadow.offset.x,
+          right: sbox-props.shadow.offset.x,
+          top: -sbox-props.shadow.offset.y,
+          bottom: sbox-props.shadow.offset.y
+        ),
+        hide(showy-title(sbox-props))
       )
-    ,
-    fill: sbox-props.shadow.color,
-    spacing: 0pt,
-    outset: (
-      left: -sbox-props.shadow.offset.x,
-      right: sbox-props.shadow.offset.x,
-      top: -sbox-props.shadow.offset.y,
-      bottom: -bottom-outset
-    ),
-    tbox
+    )
   )
 })
 

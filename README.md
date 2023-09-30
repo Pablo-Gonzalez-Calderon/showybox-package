@@ -222,3 +222,4 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Refactor shadow functions to be in a separated file.
 - Fix bug of bad behaviour while writing too long titles.
 - Fix bug while rendering separators with custom thickness. Now the thickness is gotten properly.
+- Fix bad shadow drawing in showyboxes with a boxed-title that has a "extreme" `offset` value.
