@@ -1,5 +1,5 @@
-#import "showy.typ": *
-#import "manual-template.typ": *
+#import "../showy.typ": *
+#import "template.typ": *
 #import "@preview/codelst:1.0.0": sourcecode
 
 #show: front-page
@@ -530,6 +530,25 @@ Default is `left`.
 How much is the thickness of the separator line that is between the footer and the body.
 
 Default is #line-raw("1pt").
+
+#sourcecode(
+```typ
+#showybox(
+  footer-style: (
+    sep-thickness: 0pt,
+    align: right,
+    color: black
+  ),
+  title: "Divergence theorem",
+  footer: [
+    In the case of $n=3$, $V$ represents a volumne in three-dimensional space, and $diff V = S$ its surface
+  ]
+)[
+  Suppose $V$ is a subset of $RR^n$ which is compact and has a piecewise smooth boundary $S$ (also indicated with $diff V = S$). If $bold(F)$ is a continuously differentiable vector field defined on a neighborhood of $V$, then:
+
+  $ integral.triple_V (bold(nabla) dot bold(F)) dif V = integral.surf_S (bold(F) dot bold(hat(n))) dif S $
+]```
+)
 
 #showybox(
   footer-style: (

@@ -1,161 +1,351 @@
-#import "@preview/showybox:1.1.0": showybox
+#import "@preview/codelst:1.0.0": *
+#import "../showy.typ": *
 
-#set par(justify: true)
+#set text(font: "HK Grotesk", size: 12pt)
+#set heading(numbering: "I.")
 
-/*
- * Examples in Usage section
- */
+= Stokes' theorem example
 
-// Simple showybox
+#sourcecode(```typ
 #showybox(
-  [Hello world!]
-)
+  title: "Stokes' theorem",
+  frame: (
+    border-color: blue,
+    title-color: blue.lighten(30%),
+    body-color: blue.lighten(95%),
+    footer-color: blue.lighten(80%)
+  ),
+  footer: "Information extracted from a well-known public encyclopedia"
+)[
+  Let $Sigma$ be a smooth oriented surface in $RR^3$ with boundary $diff Sigma equiv Gamma$. If a vector field $bold(F)(x,y,z)=(F_x(x,y,z), F_y(x,y,z), F_z(x,y,z))$ is defined and has continuous first order partial derivatives in a region containing $Sigma$, then
 
-// Showybox with title
+  $ integral.double_Sigma (bold(nabla) times bold(F)) dot bold(Sigma) = integral.cont_(diff Sigma) bold(F) dot dif bold(Gamma) $
+]
+```)
+
+#showybox(
+  title: "Stokes' theorem",
+  frame: (
+    border-color: blue,
+    title-color: blue.lighten(30%),
+    body-color: blue.lighten(95%),
+    footer-color: blue.lighten(80%)
+  ),
+  footer: "Information extracted from a well-known public encyclopedia"
+)[
+  Let $Sigma$ be a smooth oriented surface in $RR^3$ with boundary $diff Sigma equiv Gamma$. If a vector field $bold(F)(x,y,z)=(F_x(x,y,z), F_y(x,y,z), F_z(x,y,z))$ is defined and has continuous first order partial derivatives in a region containing $Sigma$, then
+
+  $ integral.double_Sigma (bold(nabla) times bold(F)) dot bold(Sigma) = integral.cont_(diff Sigma) bold(F) dot dif bold(Gamma) $
+]
+
+= Gauss's Law example
+
+#sourcecode(
+```typ
 #showybox(
   frame: (
-    title-color: red.darken(40%),
-    body-color: red.lighten(90%),
-    border-color: black,
-    thickness: 2pt
+    border-color: red.darken(30%),
+    title-color: red.darken(30%),
+    radius: 0pt,
+    thickness: 2pt,
+    body-inset: 2em,
+    dash: "densely-dash-dotted"
   ),
-  title: "Hello world! - An example",
-  [
-    Hello world!
-  ]
+  title: "Gauss's Law"
+)[
+  The net electric flux through any hypothetical closed surface is equal to $1/epsilon_0$ times the net electric charge enclosed within that closed surface. The closed surface is also referred to as Gaussian surface. In its integral form:
+
+  $ Phi_E = integral.surf_S bold(E) dot dif bold(A) = Q/epsilon_0 $
+]
+```
 )
 
-// Showybox with two sections
 #showybox(
   frame: (
-    dash: "dotted",
-    border-color: red.darken(40%)
+    border-color: red.darken(30%),
+    title-color: red.darken(30%),
+    radius: 0pt,
+    thickness: 2pt,
+    body-inset: 2em,
+    dash: "densely-dash-dotted"
   ),
-  body-style: (
+  title: "Gauss's Law"
+)[
+  The net electric flux through any hypothetical closed surface is equal to $1/epsilon_0$ times the net electric charge enclosed within that closed surface. The closed surface is also referred to as Gaussian surface. In its integral form:
+
+  $ Phi_E = integral.surf_S bold(E) dot dif bold(A) = Q/epsilon_0 $
+]
+
+= Carnot's cycle efficency example
+
+#sourcecode(
+```typ
+#showybox(
+  title-style: (
+    weight: 900,
+    color: red.darken(40%),
+    sep-thickness: 0pt,
     align: center
   ),
-  sep: (
-    dash: "dashed"
+  frame: (
+    title-color: red.lighten(80%),
+    border-color: red.darken(40%),
+    thickness: (left: 1pt),
+    radius: 0pt
   ),
+  title: "Carnot cycle's efficency"
+)[
+  Inside a Carnot cycle, the efficiency $eta$ is defined to be:
+
+  $ eta = W/Q_H = frac(Q_H + Q_C, Q_H) = 1 - T_C/T_H $
+]
+```
+)
+
+#showybox(
+  title-style: (
+    weight: 900,
+    color: red.darken(40%),
+    sep-thickness: 0pt,
+    align: center
+  ),
+  frame: (
+    title-color: red.lighten(80%),
+    border-color: red.darken(40%),
+    thickness: (left: 1pt),
+    radius: 0pt
+  ),
+  title: "Carnot cycle's efficency"
+)[
+  Inside a Carnot cycle, the efficiency $eta$ is defined to be:
+
+  $ eta = W/Q_H = frac(Q_H + Q_C, Q_H) = 1 - T_C/T_H $
+]
+
+= Clairaut's theorem example
+
+#sourcecode(
+```typ
+#showybox(
+  title-style: (
+    boxed-style: (
+      anchor: (
+        x: center,
+        y: horizon
+      ),
+      radius: (top-left: 10pt, bottom-right: 10pt, rest: 0pt),
+    )
+  ),
+  frame: (
+    title-color: green.darken(40%),
+    body-color: green.lighten(80%),
+    footer-color: green.lighten(60%),
+    border-color: green.darken(60%),
+    radius: (top-left: 10pt, bottom-right: 10pt, rest: 0pt)
+  ),
+  title: "Clairaut's theorem",
+  footer: text(size: 10pt, weight: 600, emph("This will be useful every time you want to interchange partial derivatives in the future."))
+)[
+  Let $f: A arrow RR$ with $A subset RR^n$ an open set such that its cross derivatives of any order exist and are continuous in $A$. Then for any point $(a_1, a_2, ..., a_n) in A$ it is true that
+
+  $ frac(diff^n f, diff x_i ... diff x_j)(a_1, a_2, ..., a_n) = frac(diff^n f, diff x_j ... diff x_i)(a_1, a_2, ..., a_n) $
+]
+```
+)
+
+#showybox(
+  title-style: (
+    boxed-style: (
+      anchor: (
+        x: center,
+        y: horizon
+      ),
+      radius: (top-left: 10pt, bottom-right: 10pt, rest: 0pt),
+    )
+  ),
+  frame: (
+    title-color: green.darken(40%),
+    body-color: green.lighten(80%),
+    footer-color: green.lighten(60%),
+    border-color: green.darken(60%),
+    radius: (top-left: 10pt, bottom-right: 10pt, rest: 0pt)
+  ),
+  title: "Clairaut's theorem",
+  footer: text(size: 10pt, weight: 600, emph("This will be useful every time you want to interchange partial derivatives in the future."))
+)[
+  Let $f: A arrow RR$ with $A subset RR^n$ an open set such that its cross derivatives of any order exist and are continuous in $A$. Then for any point $(a_1, a_2, ..., a_n) in A$ it is true that
+
+  $ frac(diff^n f, diff x_i ... diff x_j)(a_1, a_2, ..., a_n) = frac(diff^n f, diff x_j ... diff x_i)(a_1, a_2, ..., a_n) $
+]
+
+= Divergence theorem example
+
+#sourcecode(
+```typ
+#showybox(
+  footer-style: (
+    sep-thickness: 0pt,
+    align: right,
+    color: black
+  ),
+  title: "Divergence theorem",
+  footer: [
+    In the case of $n=3$, $V$ represents a volumne in three-dimensional space, and $diff V = S$ its surface
+  ]
+)[
+  Suppose $V$ is a subset of $RR^n$ which is compact and has a piecewise smooth boundary $S$ (also indicated with $diff V = S$). If $bold(F)$ is a continuously differentiable vector field defined on a neighborhood of $V$, then:
+
+  $ integral.triple_V (bold(nabla) dot bold(F)) dif V = integral.surf_S (bold(F) dot bold(hat(n))) dif S $
+]```
+)
+
+#showybox(
+  footer-style: (
+    sep-thickness: 0pt,
+    align: right,
+    color: black
+  ),
+  title: "Divergence theorem",
+  footer: [
+    In the case of $n=3$, $V$ represents a volumne in three-dimensional space, and $diff V = S$ its surface
+  ]
+)[
+  Suppose $V$ is a subset of $RR^n$ which is compact and has a piecewise smooth boundary $S$ (also indicated with $diff V = S$). If $bold(F)$ is a continuously differentiable vector field defined on a neighborhood of $V$, then:
+
+  $ integral.triple_V (bold(nabla) dot bold(F)) dif V = integral.surf_S (bold(F) dot bold(hat(n))) dif S $
+]
+
+= Coulomb's law example
+
+#sourcecode(
+```typ
+#showybox(
   shadow: (
-	offset: (x: 3pt, y: 8pt)
+    color: yellow.lighten(55%),
+    offset: 3pt
   ),
-  [This is an important message!],
-  [Be careful outside. There are dangerous bananas!]
-)
-
-/*
- * Examples in Gallery section
- */
-
-// Boxed title with custom width
-#showybox(
-  title: "Strawberry taste",
-  title-style: (
-    boxed: true,
-    boxed-align: left,
-    align: center,
-    weight: 900
-  ),
-  width: 50%,
-  align: center,
-  shadow: (:),
   frame: (
-    border-color: red,
-    title-color: red.lighten(25%),
-    thickness: 3pt
+    title-color: red.darken(30%),
+    border-color: red.darken(30%),
+    body-color: red.lighten(80%)
   ),
-  [Eating a strawberry is a unique experience. It brings you the sweetest natural flavour in the modern world straight into your mouth, and it's only 0,99 cents!]
+  title: "Coulomb's law"
+)[
+  Coulomb's law in vector form states that the electrostatic force $bold(F)$ experienced by a charge $q_1$ at position $bold(r)$ in the vecinity of another charge $q_2$ at position $bold(r')$, in a vacuum is equal to
+
+  $ bold(F) = frac(q_1 q_2, 4 pi epsilon_0) frac(bold(r) - bold(r'), bar.v bold(r) - bold(r') bar.v^3) $
+]```
 )
 
-// Information-box-like showybox
-/* Note:
- * Image of 'ivan' extracted from https://www.pinterest.com.mx/pin/696791373597276242/
- */
 #showybox(
-  width: 70%,
-  align: center,
+  shadow: (
+    color: yellow.lighten(55%),
+    offset: 3pt
+  ),
   frame: (
-    radius: 0pt,
-    border-color: blue.darken(40%),
-    thickness: (left: 3pt),
-    body-color: blue.lighten(80%),
-    title-color: blue.lighten(80%)
+    title-color: red.darken(30%),
+    border-color: red.darken(30%),
+    body-color: red.lighten(80%)
   ),
-  title-style: (
-    color: black,
-    sep-thickness: 0pt
-  ),
-  title: [_*Important information!*_],
-  grid(
-    columns: (2.5fr, 1fr),
-    column-gutter: 15pt,
-    par(justify: true)[During the past years an important issue has been concerning the local police. Apparently, a racoon, named _"Comrade Ivan, the vodkaholic"_ is draining all the vodka supplies in the city. A picture of the suspect is found at right:], image("ivan.jpg")
-  )
+  title: "Coulomb's law"
+)[
+  Coulomb's law in vector form states that the electrostatic force $bold(F)$ experienced by a charge $q_1$ at position $bold(r)$ in the vecinity of another charge $q_2$ at position $bold(r')$, in a vacuum is equal to
+
+  $ bold(F) = frac(q_1 q_2, 4 pi epsilon_0) frac(bold(r) - bold(r'), bar.v bold(r) - bold(r') bar.v^3) $
+]
+
+= Newton's second law example
+
+#sourcecode(
+```typ
+#block(
+  height: 4.5cm,
+  inset: 1em,
+  fill: luma(250),
+  stroke: luma(200),
+  breakable: false,
+  columns(2)[
+    #showybox(
+      title-style: (
+        boxed-style: (
+          anchor: (x: center, y: horizon)
+        )
+      ),
+      breakable: true,
+      width: 90%,
+      align: center,
+      title: "Newton's second law"
+    )[
+      If a body of mass $m$ experiments an acceleration $bold(a)$ due to a net force $sum bold(F)$, this acceleration is related to the mass and force by the following equation:
+
+      $ bold(a) = frac(sum bold(F), m) $
+    ]
+  ]
+)```
 )
 
-// Encapsulation
-#showybox(
-  frame: (title-color: yellow.darken(5%), body-color: yellow.lighten(90%)),
-  title-style: (color: black, weight: "regular"),
-  title: "Newton's Second Law",
-  [
-  #box(height: 6.2cm)[
-    #columns(2)[
-      According to ChatGPT, Newton's second law of motion is one of the fundamental principles of classical mechanics, formulated by Sir Isaac Newton. It describes the relationship between the motion of an object, the applied force on it, and its mass. The second law can be stated as follows:
-  
-      The acceleration of an object is directly proportional to the net force applied to it and inversely proportional to its mass. Mathematically, it can be expressed as shown in the box at the right.
-      #showybox(
-        frame: (
-          dash: "dotted",
-          body-color: yellow.lighten(90%)
-        ),
-        )[
-        
-        $ F = m dot a $
-  
-        Where:
-        - $F$ represents the net force acting on the object,
-        - $m$ represents the mass of the object, and
-        - $a$ represents the acceleration produced by the applied force.
-      ]
-      
-    _Don't forget to ask your nearest physicist if the information given by ChatGPT is right or is a consiparational theory._
-      
-      ]
+#block(
+  height: 4.5cm,
+  inset: 1em,
+  fill: luma(250),
+  stroke: luma(200),
+  breakable: false,
+  columns(2)[
+    #showybox(
+      title-style: (
+        boxed-style: (
+          anchor: (x: center, y: horizon)
+        )
+      ),
+      breakable: true,
+      width: 90%,
+      align: center,
+      title: "Newton's second law"
+    )[
+      If a body of mass $m$ experiments an acceleration $bold(a)$ due to a net force $sum bold(F)$, this acceleration is related to the mass and force by the following equation:
+
+      $ bold(a) = frac(sum bold(F), m) $
     ]
   ]
 )
 
-// Enabling breaking
-#{
-  set page(paper: "a8", flipped: true)
+= Encapsulation example
 
-  showybox(
-    body-style: (align: center), breakable: true,
-    title: [_Breaking_ news],
-    [
-      As you can guess, in this $space$ #box(fill: gray.lighten(80%), radius: 2pt, outset: 3pt)[`showybox()`] the option $space$#box(fill: gray.lighten(80%), radius: 2pt, outset: 3pt)[`breakable: `#text(red,`true`)] $space$would make it break into two separated boxes when the content doesn't fit in this page anymore. So, I'm going to keep typing to make this box break.
-  
-      As you can see, it broke!
-    ]
-  )
-}
+#sourcecode(
+```typ
+#showybox(
+  title: "Parent container",
+  lorem(10),
+  columns(2)[
+    #showybox(
+      title-style: (boxed-style: (:)),
+      title: "Child 1",
+      lorem(10)
+    )
+    #colbreak()
+    #showybox(
+      title-style: (boxed-style: (:)),
+      title: "Child 2",
+      lorem(10)
+    )
+  ]
+)```
+)
 
-// Custom radius
-#showybox(frame: (radius: 0pt, title-color:white), title: "Important equations for the test", title-style: (color: black, align: center),
-  box(height: 2.5cm)[
-    #columns(2)[
-      $ integral.cont.ccw_C  F dot dif r = limits(integral.double)_S (nabla times F) dot dif S $
-      
-      $ F = m dot a $
-      
-      
-      $ P V = n R T $
-      #v(2.199em)
-
-      $ frac(dif U, dif t) = sum_(k=1)^K dot(m)_k h_k + dot(Q) + dot(W) + dot(W)_s $
-    ]
-  ] +
-  v(1.037989em)
+#showybox(
+  title: "Parent container",
+  lorem(10),
+  columns(2)[
+    #showybox(
+      title-style: (boxed-style: (:)),
+      title: "Child 1",
+      lorem(10)
+    )
+    #colbreak()
+    #showybox(
+      title-style: (boxed-style: (:)),
+      title: "Child 2",
+      lorem(10)
+    )
+  ]
 )

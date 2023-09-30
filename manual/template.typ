@@ -1,6 +1,6 @@
-#import "showy.typ": *
+#import "../showy.typ": *
 
-#let version = "1.2.0"
+#let version = "2.0.0"
 
 #let front-page(body) = {
   set document(author: "Showybox Contributors", title: "Showybox Manual")
@@ -101,7 +101,7 @@
     height: 13pt,
     baseline: 3pt,
   )[
-    #image("assets/gradient.svg")
+    #image("../assets/gradient.svg")
     #place(
       center + horizon,
       text(

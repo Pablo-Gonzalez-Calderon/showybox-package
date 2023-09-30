@@ -1,4 +1,4 @@
-# Showybox (v1.2.0) -- In developing
+# Showybox (v2.0.0)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this repository contains the latest (development) version of t
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:1.2.0": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.0": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,14 +21,14 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```typst
-#import "@preview/showybox:1.2.0": showybox
+#import "@preview/showybox:2.0.0": showybox
 
 #showybox(
   [Hello world!]
 )
 ```
 <h3 align="center">
-  <img alt="Hello world! example" src="assets/hello-world-example.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Hello world! example" src="assets/hello-world.png" style="max-width: 95%; background-color: #FFFFFF; padding: 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 Looks quite simple, but the "magic" starts when adding a title, color and shadows. The following code creates two "unique" boxes with defined colors and custom borders:
@@ -36,21 +36,27 @@ Looks quite simple, but the "magic" starts when adding a title, color and shadow
 // First showybox
 #showybox(
   frame: (
-    title-color: red.darken(40%),
-    body-color: red.lighten(90%),
-    border-color: black,
-    thickness: 2pt
+    border-color: red.darken(50%),
+    title-color: red.lighten(60%),
+    body-color: red.lighten(80%)
   ),
-  title: "Hello world! - An example",
-  [
-    Hello world!
-  ]
+  title-style: (
+    color: black,
+    weight: "regular",
+    align: center
+  ),
+  shadow: (
+    offset: 3pt,
+  ),
+  title: "Red-ish showybox with separated sections!",
+  lorem(20),
+  lorem(12)
 )
 
 // Second showybox
 #showybox(
   frame: (
-    dash: "dotted",
+    dash: "dashed",
     border-color: red.darken(40%)
   ),
   body-style: (
@@ -60,14 +66,15 @@ Looks quite simple, but the "magic" starts when adding a title, color and shadow
     dash: "dashed"
   ),
   shadow: (
-	offset: 3pt
+	  offset: (x: 2pt, y: 3pt),
+    color: yellow.lighten(70%)
   ),
   [This is an important message!],
   [Be careful outside. There are dangerous bananas!]
 )
 ```
 <h3 align="center">
-  <img alt="Further examples" src="assets/further-examples.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Further examples" src="assets/two-easy-examples.png" style="max-width: 95%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ## Reference
@@ -139,33 +146,47 @@ The `showybox()` function can receive the following parameters:
 
 ## Gallery
 
-### Boxed title and custom width
+### Colors for title, body and footer example (Stokes' theorem)
 
 <h3 align="center">
-  <img alt="Encapsulation" src="assets/width-and-boxed-title.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Encapsulation" src="assets/stokes-example.png" style="max-width: 95%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
-### Information-box-like showybox
+### Boxed-title example (Clairaut's theorem)
 
 <h3 align="center">
-  <img alt="Encapsulation" src="assets/information-box-like.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Encapsulation" src="assets/clairaut-example.png" style="max-width: 95%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
-### Encapsulation
+### Encapsulation example
 
-May have some bugs
 <h3 align="center">
-  <img alt="Encapsulation" src="assets/encapsulation.png" style="max-width: 100%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Encapsulation" src="assets/encapsulation-example.png" style="max-width: 95%; background-color: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
-### Enabling breaking
+### Breakable showybox example (Newton's second law)
 <h3 align="center">
-  <img alt="Enabling breakable" src="assets/enabling-breakable.png" style="max-width: 100%; padding: 10px 10px; background-color: #E4E5EA; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Enabling breakable" src="assets/newton-example.png" style="max-width: 95%; padding: 10px 10px; background-color: #FFFFFF; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
-### Custom radius
+### Custom radius and title's separator thickness example (Carnot's cycle efficency)
 <h3 align="center">
-  <img alt="Custom radius" src="assets/custom-radius.png" style="max-width: 100%; background: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+  <img alt="Custom radius" src="assets/carnot-example.png" style="max-width: 95%; background: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+</h3>
+
+### Custom border dash and inset example (Gauss's law)
+<h3 align="center">
+  <img alt="Custom radius" src="assets/gauss-example.png" style="max-width: 95%; background: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+</h3>
+
+### Custom footer's separator thickness example (Divergence's theorem)
+<h3 align="center">
+  <img alt="Custom radius" src="assets/divergence-example.png" style="max-width: 95%; background: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
+</h3>
+
+### Colorful shadow example (Coulomb's law)
+<h3 align="center">
+  <img alt="Custom radius" src="assets/coulomb-example.png" style="max-width: 95%; background: #FFFFFF; padding: 10px 10px; box-shadow: 1pt 1pt 10pt 0pt #AAAAAA; border-radius: 4pt">
 </h3>
 
 ## Changelog
@@ -213,7 +234,9 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Added `sep-thickness` for title and footer
 - Refactored repository's files layout
 
-### Version 1.2.0
+### Version 2.0.0
+
+_Special thanks to Andrew Voynov (<https://github.com/Andrew15-5>) for the feedback while creating the new behaviours for boxed-titles_
 
 - Update ``type()`` conditionals to Typst 0.8.0 standards
 - Add ``boxed-style`` property, with ``anchor``, ``offset`` and ``radius`` properties.
