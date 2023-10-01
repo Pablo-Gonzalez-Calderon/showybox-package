@@ -12,15 +12,14 @@
 #import "func.typ": *
 
 /*
- * Function: showy-title()
+ * Function: showy-get-title-props()
  *
- * Description: Returns the title's block
+ * Description: Returns the title's properties
  *
  * Parameters:
  * + sbox-props: Showybox properties
- * + title: Title of the showybox
  */
-#let showy-title(sbox-props) = {
+#let showy-get-title-props(sbox-props) = {
   /*
    * Properties independent of `boxed`
    */
@@ -50,19 +49,28 @@
       stroke: showy-stroke(sbox-props.frame, bottom: sbox-props.title-style.sep-thickness)
     )
   }
+  return props
+}
 
-  return block(
-    ..props,
-    align(
-      sbox-props.title-style.align,
-      text(
-        sbox-props.title-style.color,
-        weight: sbox-props.title-style.weight,
-        sbox-props.title
-      )
+/*
+ * Function: showy-title()
+ *
+ * Description: Returns the title's block
+ *
+ * Parameters:
+ * + sbox-props: Showybox properties
+ */
+#let showy-title(sbox-props) = block(
+  ..showy-get-title-props(sbox-props),
+  align(
+    sbox-props.title-style.align,
+    text(
+      sbox-props.title-style.color,
+      weight: sbox-props.title-style.weight,
+      sbox-props.title
     )
   )
-}
+)
 
 /*
  * Function: showy-body()
