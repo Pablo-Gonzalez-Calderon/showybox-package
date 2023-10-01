@@ -155,6 +155,7 @@
   }
   let alignwrap( content ) = block(
     ..alignprops,
+    breakable: breakable,
     width: 100%,
     if "align" in body.named() and body.named().align != none {
       align(body.named().align, content)
@@ -214,7 +215,6 @@
             -my-state.final(loc)/2
           },
           block(
-            width: 100%,
             spacing: 0pt,
             inset: (x: 1em),
             showy-title(props)
