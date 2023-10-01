@@ -1,6 +1,6 @@
 #import "../showy.typ": *
 
-#let version = "2.0.0"
+#let version = "2.0.1"
 
 #let front-page(body) = {
   set document(author: "Showybox Contributors", title: "Showybox Manual")

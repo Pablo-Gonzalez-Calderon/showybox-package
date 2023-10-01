@@ -1,4 +1,4 @@
-# Showybox (v2.0.0)
+# Showybox (v2.0.1)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this repository contains the latest (development) version of t
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.0": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.1": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```typst
-#import "@preview/showybox:2.0.0": showybox
+#import "@preview/showybox:2.0.1": showybox
 
 #showybox(
   [Hello world!]
@@ -247,3 +247,9 @@ _Special thanks to Andrew Voynov (<https://github.com/Andrew15-5>) for the feedb
 - Fix bug while rendering separators with custom thickness. Now the thickness is gotten properly.
 - Fix bad shadow drawing in showyboxes with a boxed-title that has a "extreme" `offset` value.
 - Fix bad sizing while creating showyboxes with a `width` of less than `100%`, and a shadow.
+
+### Version 2.0.1
+
+- Fix bad behaviours of boxed-titles ``anchor`` inside a ``figure``
+- Fix wrong ``breakable`` behaviour of showyboxes inside a ``figure``
+- Fix Manual and README's Stokes theorem example
