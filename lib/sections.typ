@@ -84,13 +84,14 @@
 #let showy-body(sbox-props, ..body) = block(
     width: 100%,
     spacing: 0pt,
+    breakable: sbox-props.breakable,
     inset:  showy-section-inset("body", sbox-props.frame),
     align(
         sbox-props.body-style.align,
         text(
         sbox-props.body-style.color,
         body.pos()
-            .map(block.with(spacing:0pt, width: 100%))
+            .map(block.with(spacing:0pt, width: 100%, breakable: sbox-props.breakable))
             .join(
                 block(
                     spacing: sbox-props.sep.gutter,
