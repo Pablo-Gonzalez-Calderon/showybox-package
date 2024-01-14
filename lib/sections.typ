@@ -36,7 +36,7 @@
     props = props + (
       width: auto,
       radius: sbox-props.title-style.boxed-style.radius,
-      stroke: showy-stroke(sbox-props.frame),
+      stroke: showy-stroke(sbox-props.title-style.boxed-style), // Stroke may be custom
     )
   } else {
     props = props + (
@@ -46,7 +46,7 @@
         top-right: showy-value-in-direction("top-right", sbox-props.frame.radius, 5pt),
         bottom: 0pt
         ),
-      stroke: showy-stroke(sbox-props.frame, bottom: sbox-props.title-style.sep-thickness)
+      stroke: showy-stroke(sbox-props.frame, bottom: sbox-props.title-style.sep-thickness) // Stroke is inherited from frame
     )
   }
   return props

@@ -74,7 +74,10 @@
             x: title-style.boxed-style.at("offset", default: (:)).at("x", default: 0pt),
             y: title-style.boxed-style.at("offset", default: (:)).at("y", default: 0pt)
           ),
-          radius: title-style.boxed-style.at("radius", default: 5pt)
+          radius: title-style.boxed-style.at("radius", default: 5pt),
+          border-color: title-style.boxed-style.at("border-color", default: frame.at("border-color", default: black)),
+          dash: title-style.boxed-style.at("dash", default: frame.at("dash", default: "solid")),
+          thickness: title-style.boxed-style.at("thickness", default: frame.at("thickness", default: 1pt)),
         )
       } else {
         none
