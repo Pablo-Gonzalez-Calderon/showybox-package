@@ -1,6 +1,6 @@
 /*
  * ShowyBox - A package for Typst
- * Pablo González Calderón and Showybox Contributors (c) 2023
+ * Pablo González Calderón and Showybox Contributors (c) 2023-2024
  *
  * lib/shadows.typ -- The package's file containing all the
  * internal functions for drawing shadows.
@@ -23,21 +23,20 @@
  * + sbox-props: Showybox properties
  * + sbox: Pre-rendered showybox
  */
-#let showy-shadow(sbox-props, sbox) = locate(loc => {
+#let showy-shadow(sbox-props, sbox, id) = context {
   if sbox-props.shadow == none {
     return sbox
   }
-  let my-id = _showy-id.at(loc)
-  let my-state = _showy-state(my-id.first())
+  let my-state = state("showybox-" + id, 0pt)
 
   /* If it has a boxed sbox-props.title, leave some space
    * to avoid collisions with other elements next to the
    * showybox */
   if sbox-props.title != "" and sbox-props.title-style.boxed-style != none {
     if sbox-props.title-style.boxed-style.anchor.y == bottom {
-      v(my-state.at(loc))
+      v(my-state.at(here()))
     } else if sbox-props.title-style.boxed-style.anchor.y == horizon{
-      v(my-state.at(loc)/2)
+      v(my-state.at(here())/2)
     } // Otherwise, no space is needed
 
   }
@@ -59,9 +58,9 @@
         body height */
     if sbox-props.title != "" and sbox-props.title-style.boxed-style != none {
       if sbox-props.title-style.boxed-style.anchor.y == bottom {
-        v(-my-state.at(loc))
+        v(-my-state.at(here()))
       } else if sbox-props.title-style.boxed-style.anchor.y == horizon {
-        v(-my-state.at(loc)/2)
+        v(-my-state.at(here())/2)
       } // Otherwise do nothing
 
       sbox
@@ -69,7 +68,7 @@
       sbox
     }
   )
-})
+}
 
 /*
  * Function: showy-boxed-title-shadow()
@@ -80,23 +79,22 @@
  * + sbox-props: Showybox properties
  * + tbox: Pre-rendered boxed-title
  */
-#let showy-boxed-title-shadow(sbox-props) = locate(loc => {
+#let showy-boxed-title-shadow(sbox-props, id) = context {
   if sbox-props.shadow == none {
     return
   } else if sbox-props.title == "" or sbox-props.title-style.boxed-style == none {
     return
   }
 
-  let my-id = _showy-id.at(loc)
-  let my-state = _showy-state(my-id.first())
+  let my-state = state("showybox-" + id, 0pt)
 
   return place(
     top + sbox-props.title-style.boxed-style.anchor.x,
     dx: sbox-props.title-style.boxed-style.offset.x,
     dy: sbox-props.title-style.boxed-style.offset.y + if sbox-props.title-style.boxed-style.anchor.y == bottom {
-      -my-state.final(loc)
+      -my-state.final()
     } else if sbox-props.title-style.boxed-style.anchor.y == horizon {
-      -my-state.final(loc)/2
+      -my-state.final()/2
     },
     block(
       spacing: 0pt,
@@ -116,5 +114,5 @@
       )
     )
   )
-})
+}
 

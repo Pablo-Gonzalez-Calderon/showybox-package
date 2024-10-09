@@ -1,4 +1,4 @@
-# Showybox (v2.0.1)
+# Showybox (v2.0.2)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this repository contains the latest (development) version of t
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.1": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.2": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```typst
-#import "@preview/showybox:2.0.1": showybox
+#import "@preview/showybox:2.0.2": showybox
 
 #showybox(
   [Hello world!]
@@ -191,26 +191,34 @@ The `showybox()` function can receive the following parameters:
 
 ## Changelog
 
-### Version 0.1.0
-- Initial release
+### Version 2.0.2
+- Remove deprecated functions in Typst 0.12.0
 
-### Version 0.1.1
-- Changed package name from colorbox to showybox
-- Fixed a spacing bug in encapsulated showyboxes
-  - **Details:** When a showybox was encapsulated inside another, the spacing after that showybox was `0pt`, probably due to some "fixes" improved to manage default spacing between `rect` elements. The issue was solved by avoiding `#set` statements and adding a `#v(-1.1em)` to correct extra spacing between the title `rect` and the body `rect`.
+### Version 2.0.1
 
-### Version 0.2.0
-- Improved code documentation
-- Enabled an auto-break functionality for non-titled showyboxes
-- Created a separator functionality to separate content inside a showybox with a horizontal line
+- Fix bad behaviours of boxed-titles ``anchor`` inside a ``figure``
+- Fix wrong ``breakable`` behaviour of showyboxes inside a ``figure``
+- Fix Manual and README's Stokes theorem example
 
-### Version 0.2.1
+### Version 2.0.0
 
-_All changes listed here were performed by Jonas Neugebauer (<https://github.com/jneug>)_
+_Special thanks to Andrew Voynov (<https://github.com/Andrew15-5>) for the feedback while creating the new behaviours for boxed-titles_
 
-- Added the `shadow` option
-- Enabled auto-break (`breakable`) functionality for titled showyboxes
-- Removed a thin line that appears in showyboxes with no borders or dashed borders
+- Update ``type()`` conditionals to Typst 0.8.0 standards
+- Add ``boxed-style`` property, with ``anchor``, ``offset`` and ``radius`` properties.
+- Refactor ``showy-inset()`` for being general-purpose. Now it's called ``showy-value-in-direction()`` and has a default value for handling properties defaults
+- Now sharp corners can be set by giving a dictionary to frame ``radius`` (e.g. ``radius: (top: 5pt, bottom: 0pt)``). Before this only was possible for untitled showyboxes.
+- Refactor shadow functions to be in a separated file.
+- Fix bug of bad behaviour while writing too long titles.
+- Fix bug while rendering separators with custom thickness. Now the thickness is gotten properly.
+- Fix bad shadow drawing in showyboxes with a boxed-title that has a "extreme" `offset` value.
+- Fix bad sizing while creating showyboxes with a `width` of less than `100%`, and a shadow.
+
+### Version 1.1.0
+- Added `boxed` option in title styles
+- Added `boxed-align` in title styles
+- Added `sep-thickness` for title and footer
+- Refactored repository's files layout
 
 ### Version 1.0.0
 
@@ -228,28 +236,23 @@ _Changes below were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 - Added `footer` and `footer-style` options
 	- **Details:** The optional footer is added at the bottom of the box.
 
-### Version 1.1.0
-- Added `boxed` option in title styles
-- Added `boxed-align` in title styles
-- Added `sep-thickness` for title and footer
-- Refactored repository's files layout
+### Version 0.2.1
 
-### Version 2.0.0
+_All changes listed here were performed by Jonas Neugebauer (<https://github.com/jneug>)_
 
-_Special thanks to Andrew Voynov (<https://github.com/Andrew15-5>) for the feedback while creating the new behaviours for boxed-titles_
+- Added the `shadow` option
+- Enabled auto-break (`breakable`) functionality for titled showyboxes
+- Removed a thin line that appears in showyboxes with no borders or dashed borders
 
-- Update ``type()`` conditionals to Typst 0.8.0 standards
-- Add ``boxed-style`` property, with ``anchor``, ``offset`` and ``radius`` properties.
-- Refactor ``showy-inset()`` for being general-purpose. Now it's called ``showy-value-in-direction()`` and has a default value for handling properties defaults
-- Now sharp corners can be set by giving a dictionary to frame ``radius`` (e.g. ``radius: (top: 5pt, bottom: 0pt)``). Before this only was possible for untitled showyboxes.
-- Refactor shadow functions to be in a separated file.
-- Fix bug of bad behaviour while writing too long titles.
-- Fix bug while rendering separators with custom thickness. Now the thickness is gotten properly.
-- Fix bad shadow drawing in showyboxes with a boxed-title that has a "extreme" `offset` value.
-- Fix bad sizing while creating showyboxes with a `width` of less than `100%`, and a shadow.
+### Version 0.2.0
+- Improved code documentation
+- Enabled an auto-break functionality for non-titled showyboxes
+- Created a separator functionality to separate content inside a showybox with a horizontal line
 
-### Version 2.0.1
+### Version 0.1.1
+- Changed package name from colorbox to showybox
+- Fixed a spacing bug in encapsulated showyboxes
+  - **Details:** When a showybox was encapsulated inside another, the spacing after that showybox was `0pt`, probably due to some "fixes" improved to manage default spacing between `rect` elements. The issue was solved by avoiding `#set` statements and adding a `#v(-1.1em)` to correct extra spacing between the title `rect` and the body `rect`.
 
-- Fix bad behaviours of boxed-titles ``anchor`` inside a ``figure``
-- Fix wrong ``breakable`` behaviour of showyboxes inside a ``figure``
-- Fix Manual and README's Stokes theorem example
+### Version 0.1.0
+- Initial release

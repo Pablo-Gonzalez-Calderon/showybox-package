@@ -1,6 +1,6 @@
 /*
  * ShowyBox - A package for Typst
- * Pablo González Calderón and Showybox Contributors (c) 2023
+ * Pablo González Calderón and Showybox Contributors (c) 2023-2024
  *
  * lib/pre-rendering.typ -- The package's file containing all
  * the internal functions used for pre-rendering some components
@@ -22,40 +22,17 @@
  * Parameters:
  * + sbox-props: Showybox properties
  */
-#let showy-pre-render-title(sbox-props) = style(styles => {
-    locate(loc => {
-      let my-id = _showy-id.at(loc)
-      let my-state = _showy-state(my-id.first())
+#let showy-pre-render-title(sbox-props, id) = context{
+    let my-state = state("showybox-" + id, 0pt)
 
-      if type(sbox-props.width) == ratio {
-        layout(size => {
-          // Get full container's width in a length type
-          let container-width = size.width * sbox-props.width
+    if type(sbox-props.width) == ratio {
+      layout(size => {
+        // Get full container's width in a length type
+        let container-width = size.width * sbox-props.width
 
-          let pre-rendered = block(
-            spacing: 0pt,
-            width: container-width,
-            fill: yellow,
-            inset: (x: 1em),
-            showy-title(sbox-props)
-          )
-
-          place(
-            top,
-            hide(pre-rendered)
-          )
-
-          let rendered-size = measure(pre-rendered, styles)
-
-          // Store the height in the state
-          my-state.update(rendered-size.height)
-
-        })
-      } else {
-        // Pre-rendering "normally" will be effective
         let pre-rendered = block(
           spacing: 0pt,
-          width: sbox-props.width,
+          width: container-width,
           fill: yellow,
           inset: (x: 1em),
           showy-title(sbox-props)
@@ -66,12 +43,33 @@
           hide(pre-rendered)
         )
 
-        let rendered-size = measure(pre-rendered, styles)
+        let rendered-size = measure(pre-rendered)
+
+        // Store the height in the state
+        my-state.update(rendered-size.height)
+      })
+
+    } else {
+      // Pre-rendering "normally" will be effective
+      let pre-rendered = block(
+        spacing: 0pt,
+        width: sbox-props.width,
+        fill: yellow,
+        inset: (x: 1em),
+        showy-title(sbox-props)
+      )
+
+      place(
+        top,
+        hide(pre-rendered)
+      )
+
+      context {
+        let rendered-size = measure(pre-rendered)
 
         // Store the height in the state
         my-state.update(rendered-size.height)
       }
-
-      //v(-(my-state.final(loc) + sbox-props.frame.thickness)/2)
-  })
-})
+    }
+    //v(-(my-state.final(loc) + sbox-props.frame.thickness)/2)
+}
