@@ -10,7 +10,7 @@
  */
 
 #import "func.typ": *
-#import "state.typ": *
+#import "id.typ": *
 #import "sections.typ": *
 
 /*
