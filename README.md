@@ -193,6 +193,7 @@ The `showybox()` function can receive the following parameters:
 
 ### Version 2.0.2
 - Remove deprecated functions in Typst 0.12.0
+- Fix breakable box empty before new page
 
 ### Version 2.0.1
 

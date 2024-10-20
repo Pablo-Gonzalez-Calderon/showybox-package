@@ -1,6 +1,6 @@
 #import "../showy.typ": *
 #import "template.typ": *
-#import "@preview/codelst:1.0.0": sourcecode
+#import "@preview/codelst:2.0.1": sourcecode
 
 #show: front-page
 

@@ -127,12 +127,12 @@
     let id = str(_showy-id.get().first())
 
     /*
-         * Update title height in state.
-         *
-         * NOTE: Although a `place` and `hide` are used in the pre-render
-         * function, for avoiding nesting components inside unaccesible
-         * containers, we must call this function inside another `place`.
-         */
+     * Update title height in state.
+     *
+     * NOTE: Although a `place` and `hide` are used in the pre-render
+     * function, for avoiding nesting components inside unaccesible
+     * containers, we must call this function inside another `place`.
+     */
 
     if title != "" and props.title-style.boxed-style != none {
       place(top, showy-pre-render-title(props, id))
@@ -161,6 +161,43 @@
     let showyblock = context {
       let my-state = state("showybox-" + id, 0pt)
 
+      /*
+       * Decide wheter add a page break or not, based on the remaining
+       * space in the page. For calculating it, we substract the page
+       * margin to the page size. Later, we estimate a minimum size of
+       * the showybox, adding the frame thickness, the frame inset,
+       * and the size of 1 line of text.
+       */
+      let abs-margin = if page.margin == auto {
+        let small-side = calc.min(page.height, page.width)
+        (2.5/21) * small-side  // According to docs, this is the 'auto' margin
+      } else {
+        margin.at("y", default: margin.at("top", default: margin.rest))
+      }
+
+      let remaining = 0pt
+      let to-use = 0pt
+      remaining = page.height - location.position(here()).y - abs-margin
+      to-use += text.size.to-absolute()
+
+      if type(props.frame.thickness) == dictionary {
+        to-use += props.frame.thickness.at("y", default: props.frame.thickness.at("top", default: props.frame.inset.at("rest", default: .65em))).to-absolute()
+        to-use += props.frame.thickness.at("y", default: props.frame.thickness.at("bottom", default: props.frame.inset.at("rest", default: .65em))).to-absolute()
+      } else {
+        to-use += 2*props.frame.thickness
+      }
+
+      if type(props.frame.inset) == dictionary {
+        to-use += 4*props.frame.inset.at("y", default: props.frame.inset.at("top", default: props.frame.inset.at("rest", default: .65em))).to-absolute()
+      } else {
+        to-use += 4*props.frame.inset.to-absolute()
+      }
+
+      // Since we cannot add a pagebreak directly, add the to-use space,
+      // which would be greater than the remaining space.
+      if remaining - to-use <= 0pt {
+        v(to-use)
+      }
 
       if title != "" and props.title-style.boxed-style != none {
         if props.title-style.boxed-style.anchor.y == bottom {
@@ -189,8 +226,8 @@
         stroke: showy-stroke(props.frame),
       )[
         /*
-                 * Title of the showybox
-                 */
+         * Title of the showybox
+         */
         #if title != "" and props.title-style.boxed-style == none {
           showy-title(props)
         } else if title != "" and props.title-style.boxed-style != none {
@@ -213,13 +250,13 @@
         }
 
         /*
-                 * Body of the showybox
-                 */
+         * Body of the showybox
+         */
         #showy-body(props, ..body)
 
         /*
-                 * Footer of the showybox
-                 */
+         * Footer of the showybox
+         */
         #if footer != "" {
           showy-footer(props, footer)
         }

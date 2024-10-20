@@ -10,7 +10,7 @@
  * information see LICENSE on the package's main folder.
  */
 
-#import "state.typ": *
+#import "id.typ": *
 #import "sections.typ": *
 
 /*
