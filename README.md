@@ -191,7 +191,7 @@ The `showybox()` function can receive the following parameters:
 
 ## Changelog
 
-### Version 2.0.2
+### Version 2.0.3
 - Revert fix breakable box empty before new page. Layout didn't converge
 
 ### Version 2.0.2
