@@ -1,4 +1,4 @@
-# Showybox (v2.0.2)
+# Showybox (v2.0.3)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -190,6 +190,9 @@ The `showybox()` function can receive the following parameters:
 </h3>
 
 ## Changelog
+
+### Version 2.0.2
+- Revert fix breakable box empty before new page. Layout didn't converge
 
 ### Version 2.0.2
 - Remove deprecated functions in Typst 0.12.0
