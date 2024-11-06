@@ -62,13 +62,13 @@
     title-style: (
       color: title-style.at("color", default: white),
       weight: title-style.at("weight", default: "regular"),
-      align: title-style.at("align", default: left),
+      align: title-style.at("align", default: start),
       sep-thickness: title-style.at("sep-thickness", default: 1pt),
       boxed-style: if title-style.at("boxed-style", default: none) != none and type(title-style.at("boxed-style", default: none)) == dictionary {
         (
           anchor: (
             y: title-style.boxed-style.at("anchor", default: (:)).at("y", default: horizon),
-            x: title-style.boxed-style.at("anchor", default: (:)).at("x", default: left),
+            x: title-style.boxed-style.at("anchor", default: (:)).at("x", default: start),
           ),
           offset: (
             x: title-style.boxed-style.at("offset", default: (:)).at("x", default: 0pt),
@@ -82,12 +82,12 @@
     ),
     body-style: (
       color: body-style.at("color", default: black),
-      align: body-style.at("align", default: left),
+      align: body-style.at("align", default: start),
     ),
     footer-style: (
       color: footer-style.at("color", default: luma(85)),
       weight: footer-style.at("weight", default: "regular"),
-      align: footer-style.at("align", default: left),
+      align: footer-style.at("align", default: start),
       sep-thickness: footer-style.at("sep-thickness", default: 1pt),
     ),
     sep: (
