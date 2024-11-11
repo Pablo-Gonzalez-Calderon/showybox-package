@@ -252,7 +252,7 @@ Default is #line-raw("\"regular\"").
 
 How to align title's content. It can be an unidimensional alignment or a bidimensional alignment.
 
-Default is `left`.
+Default is `start`.
 
 === sep-thickness
 #type-block("length")
@@ -326,15 +326,17 @@ A #type-block("dictionary") with keys `x` and `y` indicating where to place the 
 
 For `x` anchor:
 - #line-raw("left"): Set the anchor to the left side of the boxed-title.
+- #line-raw("start"): Set the anchor to the start of the boxed-title (left for LTR text, right for RTL).
 - #line-raw("center"): Set the anchor to the center of the horizontal center of the boxed-title.
 - #line-raw("right"): Set the anchor to the right side of the boxed-title.
+- #line-raw("end"): Set the anchor to the end of the boxed-title (right for LTR text, left for RTL).
 
 For `y` anchor:
 - #line-raw("top"): Set the anchor to the top of the boxed-title.
 - #line-raw("horizon"): Set the anchor to the vertical center of the boxed-title.
 - #line-raw("bottom"): Set the anchor to the bottom of the boxed-title.
 
-Default is #line-raw("(x: left, y: horizon)").
+Default is #line-raw("(x: start, y: horizon)").
 
 === offset
 #type-block("dictionary")
@@ -428,7 +430,7 @@ Default is `black`.
 
 How to align body's content. It can be an unidimensional alignement or a bidimensional alignement.
 
-Default is `left`.
+Default is `start`.
 
 #sourcecode(
 ```typ
@@ -522,7 +524,7 @@ Default is #line-raw("\"regular\"").
 
 How to align footer's content. It can be an unidimensional alignment or a bidimensional alignment.
 
-Default is `left`.
+Default is `start`.
 
 === sep-thickness
 #type-block("length")
@@ -711,7 +713,7 @@ Default is #line-raw("100%").
 
 How to align showybox inside it's container (useful for showyboxes with #line-raw("width < 100%")).
 
-Default is `left`.
+Default inherits surrounding alignment (usually `start` unless overridden with `align(center)` and such).
 
 == Breakable #type-block("boolean")
 
