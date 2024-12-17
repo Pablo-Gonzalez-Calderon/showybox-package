@@ -38,12 +38,7 @@
           showy-title(sbox-props)
         )
 
-        place(
-          top,
-          hide(pre-rendered)
-        )
-
-        let rendered-size = measure(pre-rendered)
+        let rendered-size = measure(pre-rendered, ..size)
 
         // Store the height in the state
         my-state.update(rendered-size.height)
@@ -57,11 +52,6 @@
         fill: yellow,
         inset: (x: 1em),
         showy-title(sbox-props)
-      )
-
-      place(
-        top,
-        hide(pre-rendered)
       )
 
       context {
