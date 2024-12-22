@@ -27,9 +27,10 @@
 
   layout(size => {
     // Get full container's width in a length type
-    let container-width = sbox-props.width
-    if type(container-width) == ratio {
-      container-width *= size.width
+    let container-width = if type(sbox-props.width) == ratio {
+      sbox-props.width * size.width
+    } else {
+      sbox-props.width
     }
 
     let pre-rendered = block(
