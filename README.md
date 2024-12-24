@@ -1,4 +1,4 @@
-# Showybox (v2.0.3)
+# Showybox (v2.0.4)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```typst
-#import "@preview/showybox:2.0.2": showybox
+#import "@preview/showybox:2.0.4": showybox
 
 #showybox(
   [Hello world!]
@@ -190,6 +190,14 @@ The `showybox()` function can receive the following parameters:
 </h3>
 
 ## Changelog
+
+### Version 2.0.4
+
+_Special thanks to enklht (https://github.com/enklht) and PgBiel (https://github.com/PgBiel) for their collaboration with this version's changes_
+
+- Change default alignments to ``start``, instead of ``left``
+- Fix pre-rendering logic while creating boxed-titles
+  - This fixes a reported bug occurring while creating a ``counter`` inside a showybox declaration
 
 ### Version 2.0.3
 - Revert fix breakable box empty before new page. Layout didn't converge
