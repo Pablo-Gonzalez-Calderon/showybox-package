@@ -1,4 +1,4 @@
-#import "@preview/codelst:1.0.0": *
+#import "@preview/codelst:2.0.1": sourcecode
 #import "../showy.typ": *
 
 #set text(font: "HK Grotesk", size: 12pt)
