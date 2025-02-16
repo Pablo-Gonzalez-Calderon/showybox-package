@@ -112,7 +112,7 @@ The `showybox()` function can receive the following parameters:
 ### Title styles
 - `color`: Text color (default is `white`)
 - `weight`: Text weight (default is `bold`)
-- `align`: Text align (default is `left`)
+- `align`: Text align (default is `start`)
 - `sep-thickness`: Thickness of the separator between title and body (default is `1pt`)
 - `boxed-style`: If it's a dictionary of properties, indicates that the title must appear like a "floating box" above the showybox. If it's ``none``, the title appears normally (default is `none`)
 
@@ -120,18 +120,18 @@ The `showybox()` function can receive the following parameters:
 
 - `anchor`: Anchor of the boxed title
   - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
-  - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `left`)
+  - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `start`)
 - `offset`: How much to offset the boxed title in x and y direction as a dictionary with keys `x` and `y` (default is `0pt`)
 - ``radius``: Boxed title radius as a dictionary or relative length (default is `5pt`)
 
 ### Body styles
 - `color`: Text color (default is `black`)
-- `align`: Text align (default is `left`)
+- `align`: Text align (default is `start`)
 
 ### Footer styles
 - `color`: Text color (default is `luma(85)`)
 - `weight`: Text weight (default is `regular`)
-- `align`: Text align (default is `left`)
+- `align`: Text align (default is `start`)
 - `sep-thickness`: Thickness of the separator between body and footer (default is `1pt`)
 
 ### Separator properties
