@@ -1,4 +1,4 @@
-# Showybox (v2.0.3)
+# Showybox (v2.0.4)
 
 **Showybox** is a Typst package for creating colorful and customizable boxes.
 
@@ -6,7 +6,7 @@ _Please note that this repository contains the latest (development) version of t
 
 ## Usage
 
-To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.2": showybox` at the beginning of your Typst file.
+To use this library through the Typst package manager (for Typst 0.6.0 or greater), write `#import "@preview/showybox:2.0.4": showybox` at the beginning of your Typst file.
 
 Once imported, you can create an empty showybox by using the function `showybox()` and giving a default body content inside the parenthesis or outside them using squared brackets `[]`.
 
@@ -21,7 +21,7 @@ By default a `showybox` with these properties will be created:
 - `1pt` of border thickness
 
 ```typst
-#import "@preview/showybox:2.0.2": showybox
+#import "@preview/showybox:2.0.4": showybox
 
 #showybox(
   [Hello world!]
@@ -112,7 +112,7 @@ The `showybox()` function can receive the following parameters:
 ### Title styles
 - `color`: Text color (default is `white`)
 - `weight`: Text weight (default is `bold`)
-- `align`: Text align (default is `left`)
+- `align`: Text align (default is `start`)
 - `sep-thickness`: Thickness of the separator between title and body (default is `1pt`)
 - `boxed-style`: If it's a dictionary of properties, indicates that the title must appear like a "floating box" above the showybox. If it's ``none``, the title appears normally (default is `none`)
 
@@ -120,18 +120,18 @@ The `showybox()` function can receive the following parameters:
 
 - `anchor`: Anchor of the boxed title
   - `y`: Vertical anchor (`top`, `horizon` or `bottom` -- default is `horizon`)
-  - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `left`)
+  - `x`: Horizontal anchor (`left`, `start`, `center`, `right`, `end` -- default is `start`)
 - `offset`: How much to offset the boxed title in x and y direction as a dictionary with keys `x` and `y` (default is `0pt`)
 - ``radius``: Boxed title radius as a dictionary or relative length (default is `5pt`)
 
 ### Body styles
 - `color`: Text color (default is `black`)
-- `align`: Text align (default is `left`)
+- `align`: Text align (default is `start`)
 
 ### Footer styles
 - `color`: Text color (default is `luma(85)`)
 - `weight`: Text weight (default is `regular`)
-- `align`: Text align (default is `left`)
+- `align`: Text align (default is `start`)
 - `sep-thickness`: Thickness of the separator between body and footer (default is `1pt`)
 
 ### Separator properties
@@ -190,6 +190,14 @@ The `showybox()` function can receive the following parameters:
 </h3>
 
 ## Changelog
+
+### Version 2.0.4
+
+_Special thanks to enklht (https://github.com/enklht) and PgBiel (https://github.com/PgBiel) for their collaboration with this version's changes_
+
+- Change default alignments to ``start``, instead of ``left``
+- Fix pre-rendering logic while creating boxed-titles
+  - This fixes a reported bug occurring while creating a ``counter`` inside a showybox declaration
 
 ### Version 2.0.3
 - Revert fix breakable box empty before new page. Layout didn't converge
