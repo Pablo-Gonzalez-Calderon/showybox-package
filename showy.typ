@@ -58,13 +58,23 @@
       radius: frame.at("radius", default: 5pt),
       thickness: frame.at("thickness", default: 1pt),
       dash: frame.at("dash", default: "solid"),
+      break-style: if frame.at("break-style", default: none) != none
+        and type(frame.at("break-style", default: none)) == dictionary {
+        (
+          upper-break: frame.break-style.at("upper-break", default: none),
+          lower-break: frame.break-style.at("lower-break", default: none),
+        )
+      } else {
+        (upper-break: none, lower-break: none)
+      },
     ),
     title-style: (
       color: title-style.at("color", default: white),
       weight: title-style.at("weight", default: "regular"),
       align: title-style.at("align", default: start),
       sep-thickness: title-style.at("sep-thickness", default: 1pt),
-      boxed-style: if title-style.at("boxed-style", default: none) != none and type(title-style.at("boxed-style", default: none)) == dictionary {
+      boxed-style: if title-style.at("boxed-style", default: none) != none
+        and type(title-style.at("boxed-style", default: none)) == dictionary {
         (
           anchor: (
             y: title-style.boxed-style.at("anchor", default: (:)).at("y", default: horizon),
@@ -80,10 +90,7 @@
         none
       },
     ),
-    body-style: (
-      color: body-style.at("color", default: black),
-      align: body-style.at("align", default: start),
-    ),
+    body-style: (color: body-style.at("color", default: black), align: body-style.at("align", default: start)),
     footer-style: (
       color: footer-style.at("color", default: luma(85)),
       weight: footer-style.at("weight", default: "regular"),
@@ -97,15 +104,15 @@
     ),
     shadow: if shadow != none {
       if type(shadow.at("offset", default: 4pt)) != dictionary {
-        (offset: (
-          x: shadow.at("offset", default: 4pt),
-          y: shadow.at("offset", default: 4pt),
-        ), color: shadow.at("color", default: luma(128)))
+        (
+          offset: (x: shadow.at("offset", default: 4pt), y: shadow.at("offset", default: 4pt)),
+          color: shadow.at("color", default: luma(128)),
+        )
       } else {
-        (offset: (
-          x: shadow.at("offset").at("x", default: 4pt),
-          y: shadow.at("offset").at("y", default: 4pt),
-        ), color: shadow.at("color", default: luma(128)))
+        (
+          offset: (x: shadow.at("offset").at("x", default: 4pt), y: shadow.at("offset").at("y", default: 4pt)),
+          color: shadow.at("color", default: luma(128)),
+        )
       }
     } else {
       none
@@ -139,8 +146,8 @@
     }
 
     /*
-         *  Alignment wrapper
-         */
+     *  Alignment wrapper
+     */
     let alignprops = (:)
     for prop in ("spacing", "above", "below") {
       if prop in body.named() {
@@ -200,59 +207,44 @@
       // }
 
       if title != "" and props.title-style.boxed-style != none {
-        if props.title-style.boxed-style.anchor.y == bottom {
-          v(my-state.final())
-        } else if props.title-style.boxed-style.anchor.y == horizon {
-          v(my-state.final() / 2)
-        } // Otherwise don't add extra space
-
         // Add the boxed-title shadow before rendering the body
         if props.shadow != none {
           showy-boxed-title-shadow(props, id)
         }
       }
 
-      block(
-        width: if props.shadow == none {
-          width
-        } else {
-          100%
-        },
-        fill: props.frame.body-color,
-        radius: props.frame.radius,
-        inset: 0pt,
-        spacing: 0pt,
-        breakable: breakable,
-        stroke: showy-stroke(props.frame),
-      )[
+      let body-props = props
+
+      block(width: 100%, inset: 0pt, spacing: 0pt, breakable: breakable)[
         /*
          * Title of the showybox
          */
         #if title != "" and props.title-style.boxed-style == none {
           showy-title(props)
         } else if title != "" and props.title-style.boxed-style != none {
-          if props.title-style.boxed-style.anchor.y == top {
-            v(my-state.final())
+          let t-height = if props.title-style.boxed-style.anchor.y == bottom {
+            my-state.final()
           } else if props.title-style.boxed-style.anchor.y == horizon {
-            v(my-state.final() / 2)
-          }
-
-          place(
-            top + props.title-style.boxed-style.anchor.x,
-            dx: props.title-style.boxed-style.offset.x,
-            dy: props.title-style.boxed-style.offset.y + if props.title-style.boxed-style.anchor.y == bottom {
-              -my-state.final()
-            } else if props.title-style.boxed-style.anchor.y == horizon {
-              -my-state.final() / 2
-            },
-            block(spacing: 0pt, inset: (x: 1em), showy-title(props)),
+            my-state.final() / 2
+          } // Otherwise don't add extra space
+          body-props.insert("float-title-height", t-height)
+          body-props.insert(
+            "float-title",
+            place(
+              top + props.title-style.boxed-style.anchor.x,
+              dx: props.title-style.boxed-style.offset.x,
+              dy: props.title-style.boxed-style.offset.y,
+              block(spacing: 0pt, inset: (x: 1em), showy-title(props)),
+            ),
           )
         }
 
         /*
          * Body of the showybox
          */
-        #showy-body(props, ..body)
+        #body-props.insert("has_title", title != "" and props.title-style.boxed-style == none)
+        #body-props.insert("has_footer", footer != "")
+        #showy-body(body-props, ..body)
 
         /*
          * Footer of the showybox

@@ -48,6 +48,32 @@
 }
 
 /*
+ * Function: showy-resolve()
+ *
+ * Description: Takes an inset value or dictionary and resolves
+ * it into the final dictionary, with separate "top", "bottom",
+ * "left", and "right" values.
+ *
+ * Parameters:
+ * + start: The initial inset dictionary.
+ */
+#let showy-resolve(start) = {
+  let end = (:)
+  if type(start) != dictionary {
+    end.top = start
+    end.bottom = start
+    end.left = start
+    end.right = start
+  } else {
+    end.top = start.at("top", default: start.at("y", default: start.at("rest", default: 0em)))
+    end.bottom = start.at("bottom", default: start.at("y", default: start.at("rest", default: 0em)))
+    end.left = start.at("left", default: start.at("x", default: start.at("rest", default: 0em)))
+    end.right = start.at("right", default: start.at("x", default: start.at("rest", default: 0em)))
+  }
+  return end
+}
+
+/*
  * Function: showy-section-inset()
  *
  * Description: Gets the inset value for the given
@@ -60,11 +86,9 @@
  * + frame: The dictionary with frame settings
  */
 #let showy-section-inset(section, frame) = {
-  return frame.at(
-    section + "-inset",
-    default: frame.inset
-  )
+  return showy-resolve(frame.at(section + "-inset", default: frame.inset))
 }
+
 
 /*
  * Function: showy-line()
@@ -78,10 +102,7 @@
  */
 #let showy-line(frame) = {
   let inset = showy-section-inset("body", frame)
-  let inset = (
-    left: showy-value-in-direction(left, inset, 0pt),
-    right: showy-value-in-direction(right, inset, 0pt)
-  )
+  let inset = (left: showy-value-in-direction(left, inset, 0pt), right: showy-value-in-direction(right, inset, 0pt))
   let (start, end) = (0%, 0%)
 
   // For relative insets the original width needs to be calculated
@@ -99,10 +120,7 @@
     (start, end) = (-inset.left, 100% + inset.right)
   }
 
-  line.with(
-    start: (start, 0%),
-    end: (end, 0%)
-  )
+  line.with(start: (start, 0%), end: (end, 0%))
 }
 /*
  * Function: showy-stroke()
@@ -114,30 +132,25 @@
  * + frame: The dictionary with frame settings
  */
 #let showy-stroke(frame, ..overrides) = {
-  let (paint, dash, width) = (
-    frame.border-color,
-    frame.dash,
-    frame.thickness
-  )
+  let (paint, dash, width) = (frame.border-color, frame.dash, frame.thickness)
 
   let strokes = (:)
-  if type(width) != dictionary { // Set all borders at once
+  if type(width) != dictionary {
+    // Set all borders at once
     for side in ("top", "bottom", "left", "right") {
       strokes.insert(side, (paint: paint, dash: dash, thickness: width))
     }
-  } else { // Set each border individually
+  } else {
+    // Set each border individually
     for pair in width {
       strokes.insert(
         pair.first(), // key
-        (paint: paint, dash: dash, thickness: pair.last())
+        (paint: paint, dash: dash, thickness: pair.last()),
       )
     }
   }
   for pair in overrides.named() {
-    strokes.insert(
-      pair.first(),
-      (paint: paint, dash: dash, thickness: pair.last())
-    )
+    strokes.insert(pair.first(), (paint: paint, dash: dash, thickness: pair.last()))
   }
   return strokes
 }
