@@ -89,7 +89,7 @@ The `showybox()` function can receive the following parameters:
 - `sep`: A dictionary containing the separator's properties
 - `shadow`: A dictionary containing the shadow's properties
 - `width`: A relative length indicating the showybox's width
-- `align`: An unidimensional alignement for the showybox in the page
+- `align`: An unidimensional alignment for the showybox in the page
 - `breakable`: A boolean indicating whether a showybox can break if it reached an end of page
 - `spacing`: Space above and below the showybox
 - `above`: Space above the showybox
@@ -137,7 +137,7 @@ The `showybox()` function can receive the following parameters:
 ### Separator properties
 - `thickness`: Separator's thickness (default is `1pt`)
 - `dash`: Separator's style (as a `line` dash style, default is `"solid"`)
-- `gutter`: Separator's space above and below (defalut is `0.65em`)
+- `gutter`: Separator's space above and below (default is `0.65em`)
 
 ### Shadow properties
 - `color`: Shadow color (default is `black`)
